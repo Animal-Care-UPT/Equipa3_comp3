@@ -1,6 +1,7 @@
 package AnimalCareCentre.models;
 
 import AnimalCareCentre.enums.AnimalColor;
+import AnimalCareCentre.enums.AnimalGender;
 import AnimalCareCentre.enums.AnimalSize;
 import AnimalCareCentre.enums.AnimalType;
 import jakarta.persistence.*;
@@ -32,9 +33,9 @@ public class LostAnimal extends Animal {
   public LostAnimal() {
   }
 
-  public LostAnimal(String name, AnimalType type, String race, AnimalColor color, AnimalSize size, String description,
-      String location) {
-    super(name, type, race, size, color, description);
+  public LostAnimal(String name, AnimalType type, String race, AnimalColor color, AnimalSize size, AnimalGender gender, String description,
+                    int contact, String location) {
+    super(name, type, race, size, gender, color, description);
     this.location = location;
     this.contact = contact;
   }

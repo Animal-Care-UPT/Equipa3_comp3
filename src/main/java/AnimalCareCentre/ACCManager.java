@@ -1,7 +1,6 @@
 package AnimalCareCentre;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -181,11 +180,10 @@ public class ACCManager {
   }
 
   // Method to register animals as a Shelter
-  public void registerAnimal(Shelter shelter, String name, AnimalType type, String race, AnimalSize size, int age,
-      AnimalColor color,
-      String description, AdoptionType adoptionType) {
+  public void registerAnimal(Shelter shelter, String name, AnimalType type, String race, AnimalSize size, AnimalGender gender,
+                             int age, AnimalColor color, String description, AdoptionType adoptionType) {
     session.beginTransaction();
-    ShelterAnimal animal = new ShelterAnimal(name, type, race, color, false, size, adoptionType, description, shelter);
+    ShelterAnimal animal = new ShelterAnimal(name, type, race, color, false, size, gender, adoptionType, description, shelter);
     session.persist(animal);
     session.getTransaction().commit();
   }
@@ -307,73 +305,12 @@ public class ACCManager {
   /**
    * Registers a new lost animal.
    */
-  public void registerLostAnimal(Account user) {
-    Scanner in = new Scanner(System.in);
+  public void registerLostAnimal(User user, String name, AnimalType type, String race, AnimalColor color, AnimalSize size,
+                                 AnimalGender gender, String description, int contact, String location) {
+          session.beginTransaction();
+          LostAnimal animal = new  LostAnimal(name, type, race, color, size, gender, description, contact, location);
+          session.persist(animal);
+          session.getTransaction().commit();
 
-    session.beginTransaction();
-
-    System.out.println("Insert animal name:");
-    String animalName = in.nextLine();
-
-    System.out.print("Type (DOG, CAT or RABBIT): ");
-    String typeInput = in.nextLine().trim().toUpperCase();
-    AnimalType type = AnimalType.fromString(typeInput);
-    if (type == null) {
-      System.out.println("Invalid type.");
-      session.getTransaction().rollback();
-      registerLostAnimal(user);
-      return;
-    }
-
-    System.out.println("Available races for " + type + ":");
-    for (String race : type.getBreeds()) {
-      System.out.println(" - " + race);
-    }
-
-    System.out.print("Race: ");
-    String race = in.nextLine().trim();
-    if (!type.getBreeds().contains(race)) {
-      System.out.println("Invalid race.");
-      session.getTransaction().rollback();
-      registerLostAnimal(user);
-      return;
-    }
-
-    System.out.print("Size (SMALL, MEDIUM, LARGE): ");
-    AnimalSize size;
-    try {
-      size = AnimalSize.valueOf(in.nextLine().trim().toUpperCase());
-    } catch (IllegalArgumentException e) {
-      System.out.println("Invalid size.");
-      session.getTransaction().rollback();
-      registerLostAnimal(user);
-      return;
-    }
-
-    System.out.print("Color: ");
-    AnimalColor color;
-    try {
-      color = AnimalColor.valueOf(in.nextLine().trim().toUpperCase());
-    } catch (IllegalArgumentException e) {
-      System.out.println("Invalid color.");
-      session.getTransaction().rollback();
-      registerLostAnimal(user);
-      return;
-    }
-
-    System.out.print("Description: ");
-    String description = in.nextLine();
-
-    System.out.print("Last seen location: ");
-    String location = in.nextLine();
-
-    LostAnimal newAnimal = new LostAnimal(animalName, type, race, color, size, description, location);
-    newAnimal.setLost(true);
-    newAnimal.setAccount(user);
-
-    session.persist(newAnimal);
-    session.getTransaction().commit();
-
-    System.out.println("Lost animal registered successfully!");
   }
 }
