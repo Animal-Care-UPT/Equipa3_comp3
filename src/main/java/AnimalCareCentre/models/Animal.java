@@ -1,6 +1,7 @@
 package AnimalCareCentre.models;
 
 import AnimalCareCentre.enums.AnimalColor;
+import AnimalCareCentre.enums.AnimalGender;
 import AnimalCareCentre.enums.AnimalSize;
 import AnimalCareCentre.enums.AnimalType;
 
@@ -21,6 +22,9 @@ abstract class Animal {
 
   @Enumerated(EnumType.STRING)
   private AnimalSize size;
+
+  @Enumerated(EnumType.STRING)
+  private AnimalGender gender;
 
   @Enumerated(EnumType.STRING)
   private AnimalColor color;
@@ -62,7 +66,9 @@ abstract class Animal {
     return size;
   }
 
-  public Animal(String name, AnimalType type, String race, AnimalSize animalSize, AnimalColor animalColor,
+  public AnimalGender getGender() {return gender;}
+
+  public Animal(String name, AnimalType type, String race, AnimalSize animalSize, AnimalGender gender, AnimalColor animalColor,
       String description) {
     this.name = name;
     this.type = type;
@@ -70,6 +76,7 @@ abstract class Animal {
     this.size = animalSize;
     this.color = animalColor;
     this.description = description;
+    this.gender = gender;
   }
 
   public AnimalColor getColor() {
@@ -82,8 +89,8 @@ abstract class Animal {
 
   @Override
   public String toString() {
-    return "Name: " + name + "\nType: " + type + "\nRace: " + race + "\nSize: " + size + "\nColor: " + color
-        + "\nDescription: " + description;
+    return "Name: " + name + "\nType: " + type + "\nRace: " + race + "\nSize: " + size +  "\nGender: " + gender +
+            "\nColor: " + color + "\nDescription: " + description;
   }
 
 }

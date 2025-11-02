@@ -42,9 +42,8 @@ public class ShelterAnimal extends Animal {
    * @param description
    */
   public ShelterAnimal(String name, AnimalType type, String race, AnimalColor color, boolean isVacinated,
-      AnimalSize size,
-      AdoptionType listedFor, String description, Shelter shelter) {
-    super(name, type, race, size, color, description);
+      AnimalSize size, AnimalGender gender, AdoptionType listedFor, String description, Shelter shelter) {
+    super(name, type, race, size, gender, color, description);
     this.isVacinated = isVacinated;
     this.listedFor = listedFor;
     this.shelter = shelter;
