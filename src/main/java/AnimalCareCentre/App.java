@@ -358,12 +358,12 @@ public class App extends Application {
 
       case 2 -> {
         manager.adoptAnimal((User) loggedAcc, animal, AdoptionType.FOR_ADOPTION);
-        System.out.println("Congratulationssss!!!!! You just adopted " + animal.getName());
+        System.out.println("Congratulations! Your request to adopt " + animal.getName() + " has been submitted!");
       }
 
       case 3 -> {
         manager.adoptAnimal((User) loggedAcc, animal, AdoptionType.FOR_FOSTER);
-        System.out.println("Congratulationssss!!!!! You just fostered" + animal.getName());
+        System.out.println("Congratulations! Your request to foster " + animal.getName() + " has been submitted!");
       }
 
       case 0 -> {

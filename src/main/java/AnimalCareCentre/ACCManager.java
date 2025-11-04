@@ -28,8 +28,6 @@ public class ACCManager {
   public void adoptAnimal(User user, ShelterAnimal animal, AdoptionType type) {
     session.beginTransaction();
     Adoption adopt = new Adoption(user, animal, type);
-    animal.setListedFor(AdoptionType.NOT_AVAILABLE);
-    session.merge(animal);
     session.persist(adopt);
     session.getTransaction().commit();
   }
