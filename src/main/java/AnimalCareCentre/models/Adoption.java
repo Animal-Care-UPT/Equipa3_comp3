@@ -34,6 +34,8 @@ public class Adoption {
   private LocalDate date;
   @Enumerated(EnumType.STRING)
   private AdoptionType type;
+  @Column (nullable = false)
+  private boolean acceptance;
 
   /**
    * Constructor of class Adoption.
@@ -48,6 +50,7 @@ public class Adoption {
     this.animal = animal;
     this.type = type;
     date = LocalDate.now();
+    acceptance = false;
   }
 
   public Adoption() {}
@@ -69,8 +72,22 @@ public class Adoption {
     return type;
   }
 
-  @Override
-  public String toString() {
-    return "\nAdoption Date: " + date + "\nType: " + type + "\nUser: " + user + "\nDog Name: " + animal.getName();
+  public boolean isAcceptance() {
+    return acceptance;
   }
+
+  public void setAcceptance(boolean acceptance) {
+    this.acceptance = acceptance;
+  }
+
+    @Override
+    public String toString() {
+        return "Adoption{" +
+                "id=" + id +
+                ", user=" + user +
+                ", animal=" + animal.getName() +
+                ", date=" + date +
+                ", status=" + acceptance +
+                '}';
+    }
 }
