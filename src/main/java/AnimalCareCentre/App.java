@@ -344,6 +344,8 @@ public class App extends Application {
     System.out.println("1 - Sponsor Animal");
     System.out.println("2 - Adopt Animal");
     System.out.println("3 - Foster Animal");
+    System.out.println("4 - View My Adoption Requests");
+    System.out.println("5 - View My Fostering Requests");
     System.out.println("0 - Back");
     int opc = sc.nextInt();
     sc.nextLine();
@@ -364,6 +366,27 @@ public class App extends Application {
       case 3 -> {
         manager.adoptAnimal((User) loggedAcc, animal, AdoptionType.FOR_FOSTER);
         System.out.println("Congratulations! Your request to foster " + animal.getName() + " has been submitted!");
+      }
+
+      case 4 -> {
+          List<Adoption> adoptions = manager.getAdoptionsByUser((User) loggedAcc);
+
+          if(adoptions.size() == 0) {
+              System.out.println("Sorry, no adopt requests found!");
+              showMainMenu();
+              return;
+          }
+
+          else{
+              for(Adoption adopt : adoptions) {
+                  System.out.println(adopt.toString() + "\n");
+              }
+          }
+
+      }
+
+      case 5 -> {
+
       }
 
       case 0 -> {

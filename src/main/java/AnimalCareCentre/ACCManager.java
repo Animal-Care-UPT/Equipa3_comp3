@@ -156,6 +156,16 @@ public class ACCManager {
     }
   }
 
+  //Method to view Adoption request from the user's perspective
+    public List<Adoption> getAdoptionsByUser (User user) {
+      session.beginTransaction();
+      Query<Adoption> query = session.createQuery("FROM Adoption WHERE adoptionUser = :user", Adoption.class);
+      query.setParameter("user", user);
+      List<Adoption> adoptions = query.getResultList();
+      session.getTransaction().commit();
+      return adoptions;
+    }
+
   public List<ShelterAnimal> getAvailableAnimalsByShelter(Shelter shelter) {
     session.beginTransaction();
     Query<ShelterAnimal> query = session.createQuery(
