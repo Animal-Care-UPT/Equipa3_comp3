@@ -12,7 +12,7 @@ public enum AnimalType {
 
   DOG("Dog", List.of("Labrador Retriever", "Golden Retriever", "Pastor Alemão", "Poodle", "Bulldog Francês", "Beagle",
           "Chihuahua", "Husky Siberiano", "Dachshund", "Border Collie", "Boxer", "Rottweiler", "Cocker Spaniel",
-          "Shih Tzu", "Pug", "Doberman", "Schnauzer", "Maltês", "Akita Inu", "Samoyed", "Mixed breed")),
+          "Shih Tzu", "Pug", "Doberman", "Schnauzer", "Maltês", "Akita Inu", "Samoyed", "Mixed breed", "Doesn't apply")),
   CAT("Cat", List.of("Siamês", "Persa", "Maine Coon", "Bengal", "Sphynx", "British Shorthair", "Ragdoll", "Scottish Fold",
           "Abyssinian", "Norwegian Forest Cat")),
   RABBIT("Rabbit", List.of("Holland Lop", "Netherland Dwarf", "Lionhead", "Mini Rex", "Flemish Giant", "English Angora",
