@@ -384,13 +384,11 @@ public class App extends Application {
     System.out.println("2 - Adopt Animal");
     System.out.println("3 - Foster Animal");
     System.out.println("0 - Back");
-    int opc = sc.nextInt();
-    sc.nextLine();
+    int opc = readInt();
     switch (opc) {
       case 1 -> {
         System.out.println("Insert the amount of money you wish to give as a sponsorship");
-        float amount = sc.nextFloat();
-        sc.nextLine();
+        float amount = readFloat();
         User user = (User) loggedAcc;
         manager.createSponsorship(user, animal, amount);
       }
@@ -428,7 +426,7 @@ public class App extends Application {
     switch (opt) {
       case "Search by Keyword" -> {
         System.out.println("What would you like to search?");
-        String search = sc.nextLine();
+        String search = readLine();
         List<ShelterAnimal> animals = manager.searchAnimalByKeyword(search);
 
         if (animals == null || animals.isEmpty()) {
@@ -537,8 +535,7 @@ public class App extends Application {
         System.out.println("7 Lost and Found");
         System.out.println("0. Logout");
         System.out.print("Option: ");
-        option = sc.nextInt();
-        sc.nextLine();
+        option = readInt();
 
         switch (option) {
           case 1 -> {
@@ -572,7 +569,7 @@ public class App extends Application {
               javafx.application.Platform.runLater(this::adminHomePage);
               return;
             }
-            String[] requestAction = {"Ban Shelter, View info"};
+            String[] requestAction = { "Ban Shelter, View info" };
             String action = (String) chooseOption(requestAction, "Shelter");
             if (action == null) {
               javafx.application.Platform.runLater(this::adminHomePage);
@@ -598,7 +595,7 @@ public class App extends Application {
             adminHomePage();
             return;
           }
-          
+
           case 5 -> {
             System.out.println(manager.viewAllAdoptions(AdoptionType.FOR_ADOPTION));
             adminHomePage();
@@ -653,11 +650,10 @@ public class App extends Application {
         System.out.println("2. Search Shelter");
         System.out.println("3. See My Adoptions Requests");
         System.out.println("4. See My Foster Requests");
-        System.out.println("5 Lost and Found");
+        System.out.println("5. Lost and Found");
         System.out.println("0. Logout");
         System.out.print("Option: ");
-        option = sc.nextInt();
-        sc.nextLine();
+        option = readInt();
 
         switch (option) {
           case 1 -> {
@@ -735,8 +731,7 @@ public class App extends Application {
     System.out.println("4: Exit");
     int choice = 0;
     try {
-      choice = sc.nextInt();
-      sc.nextLine();
+      choice = readInt();
     } catch (Exception e) {
       System.out.println("Invalid input");
       lostAndFoundMenu();
@@ -752,7 +747,7 @@ public class App extends Application {
 
         System.out.println("\n=== REGISTER LOST ANIMAL ===");
         System.out.print("Name: ");
-        String name = sc.nextLine();
+        String name = readLine();
 
         // Animal Type
         AnimalType type = (AnimalType) chooseOption(AnimalType.values(), "Type");
@@ -774,7 +769,7 @@ public class App extends Application {
             System.out.println((i + 1) + ". " + breeds.get(i));
           }
           System.out.print("Enter race: ");
-          String input = sc.nextLine();
+          String input = readLine();
 
           try {
             int breedOption = Integer.parseInt(input);
@@ -811,14 +806,13 @@ public class App extends Application {
         }
 
         System.out.print("Description: ");
-        String description = sc.nextLine();
+        String description = readLine();
 
         System.out.print("Contact: ");
-        int contact = sc.nextInt();
-        sc.nextLine(); // limpa o \n
+        int contact = readInt(); // limpa o \n
 
         System.out.print("Location: ");
-        String location = sc.nextLine();
+        String location = readLine();
 
         manager.registerLostAnimal((User) loggedAcc, name, type, race, color, size, gender, description, contact,
             location);
@@ -851,7 +845,7 @@ public class App extends Application {
       }
 
       System.out.println("0. Back");
-      String input = sc.nextLine();
+      String input = readLine();
 
       try {
         int option = Integer.parseInt(input);
@@ -883,14 +877,13 @@ public class App extends Application {
         System.out.println("2. View My Animals");
         System.out.println("0. Logout");
         System.out.print("Option: ");
-        int option = sc.nextInt();
-        sc.nextLine();
+        int option = readInt();
 
         switch (option) {
           case 1 -> {
             System.out.println("\n=== REGISTER ANIMAL ===");
             System.out.print("Name: ");
-            String name = sc.nextLine();
+            String name = readLine();
 
             // Type
             AnimalType chosenType = (AnimalType) chooseOption(AnimalType.values(), "Type");
@@ -913,7 +906,7 @@ public class App extends Application {
               }
 
               System.out.print("Option: ");
-              String input = sc.nextLine();
+              String input = readLine();
 
               try {
                 int breedOption = Integer.parseInt(input);
@@ -942,8 +935,7 @@ public class App extends Application {
             }
 
             System.out.print("Age: ");
-            int age = sc.nextInt();
-            sc.nextLine();
+            int age = readInt();
 
             // Color
             AnimalColor color = (AnimalColor) chooseOption(AnimalColor.values(), "Color");
@@ -953,7 +945,7 @@ public class App extends Application {
             }
 
             System.out.print("Description: ");
-            String description = sc.nextLine();
+            String description = readLine();
 
             // Adoption Type
             AdoptionType adoptionType = (AdoptionType) chooseOption(AdoptionType.values(), "Adoption Type");
@@ -1016,8 +1008,30 @@ public class App extends Application {
 
     InputMismatchException e) {
       System.out.println("Please pick a valid option!");
-      sc.nextLine();
+      readLine();
       shelterHomepage();
+    }
+  }
+
+  private int readInt() {
+    synchronized (sc) {
+      int value = sc.nextInt();
+      sc.nextLine();
+      return value;
+    }
+  }
+
+  private String readLine() {
+    synchronized (sc) {
+      return sc.nextLine();
+    }
+  }
+
+  private float readFloat() {
+    synchronized (sc) {
+      float value = sc.nextFloat();
+      sc.nextLine();
+      return value;
     }
   }
 
