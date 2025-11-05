@@ -75,6 +75,27 @@ public class App extends Application {
 
   }
 
+  public void alternateShelterScreen(Status status) {
+    ACCScene scene = new ACCScene(stage, new ACCVBox());
+    Label label;
+    if (status == Status.PENDING) {
+      label = new Label("The Request to join AnimalCareCentre is pending. Please wait until it's validated!");
+    } else if (status == Status.REJECTED) {
+      label = new Label("We regret to inform you that the request to join AnimalCareCentre was denied!");
+    } else {
+      label = new Label("You have been banned from AnimalCareCentre!");
+    }
+    Button logout = new Button("Logout");
+    logout.setStyle("-fx-background-color: #333333; -fx-text-fill: white; -fx-font-size: 16px;");
+    scene.addItems(label, logout);
+
+    logout.setOnAction(e -> {
+      loggedAcc = null;
+      showMainMenu();
+      return;
+    });
+  }
+
   /**
    * This method shows the login screen
    */
@@ -96,9 +117,15 @@ public class App extends Application {
       if (acc != null) {
         loggedAcc = acc;
         if (loggedAcc instanceof Shelter) {
-          shelterHomepage();
+          if (((Shelter) loggedAcc).getStatus() == Status.ACCEPTED) {
+            shelterHomepage();
+          } else {
+            alternateShelterScreen(((Shelter) loggedAcc).getStatus());
+          }
         } else if (loggedAcc instanceof User) {
           userHomepage();
+        } else {
+          adminHomePage();
         }
       } else {
         System.out.println("Wrong credentials!");
@@ -378,7 +405,6 @@ public class App extends Application {
         System.out.println("Congratulations! Your request to foster " + animal.getName() + " has been submitted!");
       }
 
-
       case 0 -> {
         userHomepage();
         return;
@@ -488,6 +514,97 @@ public class App extends Application {
   }
 
   /**
+   * This method shows admin's homepage
+   */
+  private void adminHomePage() {
+    javafx.application.Platform.runLater(() -> showTerminalScreen());
+
+    try {
+
+      if (consoleThread != null && consoleThread.isAlive()) {
+        consoleThread.interrupt();
+      }
+      consoleThread = new Thread(() -> {
+        int option;
+
+        System.out.println("=== ADMIN MENU ===");
+        System.out.println("1. Search Animal");
+        System.out.println("5 Lost and Found");
+        System.out.println("0. Logout");
+        System.out.print("Option: ");
+        option = sc.nextInt();
+        sc.nextLine();
+
+        switch (option) {
+          case 1 -> {
+            searchAnimalMenu();
+            return;
+          }
+
+          case 2 -> {
+            searchShelter();
+            return;
+          }
+
+          case 3 -> {
+            List<Adoption> adoptions = manager.getAdoptionsByUser((User) loggedAcc, AdoptionType.FOR_ADOPTION);
+
+            if (adoptions.size() == 0) {
+              System.out.println("Sorry, no adopt requests found!");
+              userHomepage();
+              return;
+            }
+
+            else {
+              for (Adoption adopt : adoptions) {
+                System.out.println(adopt.toString() + "\n");
+              }
+              userHomepage();
+              return;
+            }
+          }
+          case 4 -> {
+            List<Adoption> fosters = manager.getAdoptionsByUser((User) loggedAcc, AdoptionType.FOR_FOSTER);
+
+            if (fosters.size() == 0) {
+              System.out.println("Sorry, no foster requests found!");
+              userHomepage();
+              return;
+            }
+
+            else {
+              for (Adoption f : fosters) {
+                System.out.println(f.toString() + "\n");
+              }
+              userHomepage();
+              return;
+            }
+          }
+
+          case 5 -> {
+            lostAndFoundMenu();
+            return;
+          }
+
+          case 0 -> {
+            System.out.println("Exiting terminal menu...");
+            Platform.runLater(() -> showMainMenu());
+            return;
+          }
+          default -> System.out.println("Invalid option!");
+        }
+      });
+      consoleThread.start();
+
+    } catch (
+
+    InputMismatchException e) {
+      System.out.println("Please pick a valid option!");
+      userHomepage();
+    }
+  }
+
+  /**
    * This method shows user's homepage
    */
   private void userHomepage() {
@@ -524,45 +641,44 @@ public class App extends Application {
           }
 
           case 3 -> {
-              List<Adoption> adoptions = manager.getAdoptionsByUser((User) loggedAcc, AdoptionType.FOR_ADOPTION);
+            List<Adoption> adoptions = manager.getAdoptionsByUser((User) loggedAcc, AdoptionType.FOR_ADOPTION);
 
-              if(adoptions.size() == 0) {
-                  System.out.println("Sorry, no adopt requests found!");
-                  userHomepage();
-                  return;
-              }
-
-              else{
-                  for(Adoption adopt : adoptions) {
-                      System.out.println(adopt.toString() + "\n");
-                  }
-                  userHomepage();
-                  return;
-              }
-          }
-          case 4 -> {
-              List<Adoption> fosters = manager.getAdoptionsByUser((User) loggedAcc, AdoptionType.FOR_FOSTER);
-
-              if(fosters.size() == 0) {
-                  System.out.println("Sorry, no foster requests found!");
-                  userHomepage();
-                  return;
-              }
-
-              else{
-                  for(Adoption f : fosters) {
-                      System.out.println(f.toString() + "\n");
-                  }
-                  userHomepage();
-                  return;
-              }
-          }
-
-            case 5 -> {
-                lostAndFoundMenu();
-                return;
+            if (adoptions.size() == 0) {
+              System.out.println("Sorry, no adopt requests found!");
+              userHomepage();
+              return;
             }
 
+            else {
+              for (Adoption adopt : adoptions) {
+                System.out.println(adopt.toString() + "\n");
+              }
+              userHomepage();
+              return;
+            }
+          }
+          case 4 -> {
+            List<Adoption> fosters = manager.getAdoptionsByUser((User) loggedAcc, AdoptionType.FOR_FOSTER);
+
+            if (fosters.size() == 0) {
+              System.out.println("Sorry, no foster requests found!");
+              userHomepage();
+              return;
+            }
+
+            else {
+              for (Adoption f : fosters) {
+                System.out.println(f.toString() + "\n");
+              }
+              userHomepage();
+              return;
+            }
+          }
+
+          case 5 -> {
+            lostAndFoundMenu();
+            return;
+          }
 
           case 0 -> {
             System.out.println("Exiting terminal menu...");
