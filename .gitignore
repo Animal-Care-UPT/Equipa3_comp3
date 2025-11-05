@@ -50,8 +50,18 @@ hibernate.cfg.xml
 # Ignore everything in documentation
 documentation/*
 
-# Except these file types
-!documentation/*.docx
+# Allow the user_stories folder itself
+!documentation/user_stories/
+
+# Inside user_stories, ignore everything
+documentation/user_stories/*
+
+# Explicitly keep only .tex and .pdf
+!documentation/user_stories/*.tex
+!documentation/user_stories/*.pdf
+
+# Allow these at documentation root
 !documentation/*.tex
 !documentation/*.pdf
+!documentation/*.docx
 !documentation/*.drawio

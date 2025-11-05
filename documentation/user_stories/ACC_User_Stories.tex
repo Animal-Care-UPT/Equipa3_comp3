@@ -30,6 +30,7 @@
 % ------------------ FONT & TEXT IMPROVEMENTS ------------------
 \usepackage{lmodern} % Improved font rendering
 \usepackage{microtype} % Better spacing and justification
+\usepackage[normalem]{ulem} % Underlines
 
 % ------------------ HYPERLINKS ------------------
 % \usepackage[colorlinks=true, linkcolor=blue, citecolor=red, urlcolor=blue]{hyperref} 
@@ -56,45 +57,45 @@
 Como utilizador quero criar uma conta de modo a aceder à plataforma.\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
-  \item Existe um botão no menu principal para criar conta.
   \item O utilizador deve selecionar o tipo de conta que está a criar.
   \item O cliente tem de introduzir o seu nome, e-mail, palavra-passe, data de nascimento, localização, pergunta secreta e contacto.
-  \item A palavra-passe deverá ter entre 8 e 16 caracteres e conter, pelo menos, um caractere especial ou um número.
+  \item A palavra-passe deverá ter entre 8 e 16 caracteres e conter, pelo menos, um caractere especial e um número.
   \item Caso a palavra-passe não esteja de acordo com os critérios estabelecidos, aparece uma mensagem de erro.
   \item Caso a data de nascimento seja no futuro, aparece uma mensagem de erro.
   \item Caso o e-mail já se encontre registado, aparece uma mensagem de erro.
+  \item \uline{A palavra-passe e resposta da pergunta secreta devem ser encriptadas.}
 \end{itemize}
 
 \subsection*{User Story 2}
 Como administrador quero criar uma conta de modo a aceder à plataforma.\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
-  \item Existe um botão no menu principal para criar conta.
   \item O administrador deve selecionar o tipo de conta que está a criar.
-  \item O cliente tem de introduzir o seu nome, e-mail, palavra-passe, data de nascimento, localização, pergunta secreta e código especial para administrador.
-  \item A palavra-passe deverá ter entre 8 e 16 caracteres e conter, pelo menos, um caractere especial ou um número.
+  \item O cliente tem de introduzir o seu nome, e-mail, palavra-passe, data de nascimento, localização, pergunta secreta e \uline{código especial} para administrador.
+  \item A palavra-passe deverá ter entre 8 e 16 caracteres e conter, pelo menos, um caractere especial e um número.
   \item Caso a palavra-passe não esteja de acordo com os critérios estabelecidos, aparece uma mensagem de erro.
   \item Caso a data de nascimento seja no futuro, aparece uma mensagem de erro.
   \item Caso o e-mail já se encontre registado, aparece uma mensagem de erro.
   \item Caso o código especial esteja errado, aparece uma mensagem de erro.
+  \item A palavra-passe e resposta da pergunta secreta devem ser encriptadas.
 \end{itemize}
 
 \subsection*{User Story 3}
 Como associação quero criar uma conta de modo a aceder à plataforma.\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
-  \item Existe um botão no menu principal para criar conta.
   \item A associação deve selecionar o tipo de conta que está a criar.
   \item A associação tem de introduzir o seu nome, e-mail, palavra-passe, ano de fundação, localização, pergunta secreta e contacto.
-  \item A palavra-passe deverá ter entre 8 e 16 caracteres e conter, pelo menos, um caractere especial ou um número.
+  \item A palavra-passe deverá ter entre 8 e 16 caracteres e conter, pelo menos, um caractere especial e um número.
   \item Caso a palavra-passe não esteja de acordo com os critérios estabelecidos, aparece uma mensagem de erro.
   \item Caso a data de nascimento seja no futuro, aparece uma mensagem de erro.
   \item Caso o e-mail já se encontre registado, aparece uma mensagem de erro.
   \item A conta fica pendente de verificação de um administrador.
+  \item A palavra-passe e resposta da pergunta secreta devem ser encriptadas.
 \end{itemize}
 
 \subsection*{User Story 4}
-Como administrador quero responder aos pedidos de adesão das associações de modo a permitir o seu acesso à plataforma.\\\\
+\uline{Como administrador quero responder aos pedidos de adesão das associações de modo a permitir o seu acesso à plataforma.}\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
   \item Deve existir uma opção na homepage do administrador que permita aceder aos pedidos de adesão das associações.
@@ -103,7 +104,7 @@ Como administrador quero responder aos pedidos de adesão das associações de m
 \end{itemize}
 
 \subsection*{User Story 5}
-Como administrador quero remover uma associação de modo a manter a confiabilidade da plataforma.\\\\
+\uline{Como administrador quero remover uma associação de modo a manter a confiabilidade da plataforma.}\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
   \item Deve existir um botão para remover a associação da plataforma na página de pesquisa por associação.
@@ -115,11 +116,9 @@ Como administrador quero remover uma associação de modo a manter a confiabilid
 Como utilizador quero recuperar a palavra-passe, de modo a manter o acesso à plataforma.\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
-  \item Existe um botão no menu de login para recuperar a palavra-passe.
-  \item Existe um botão na área do utilizador para alterar a palavra-passe.
-  \item O utilizador deve introduzir o seu e-mail e a resposta da pergunta secreta.
-  \item O utilizador recebe um e-mail com uma hiperligação para alterar a palavra-passe.
-  \item A nova palavra-passe deverá ter entre 8 e 16 caracteres e conter, pelo menos, um caractere especial ou um número.
+  \item Pode-se recuperar a palavra-passe a partir do menu de login e na área do utilizador.
+  \item O utilizador deve introduzir o seu e-mail e a \uline{resposta da pergunta secreta.}
+  \item A nova palavra-passe deverá ter entre 8 e 16 caracteres e conter, pelo menos, um caractere especial e um número.
   \item Caso o e-mail não se encontre registado aparece uma mensagem de erro.
   \item Caso a resposta da pergunta secreta esteja errada aparece uma mensagem de erro.
   \item Caso a palavra-passe não esteja de acordo com os critérios estabelecidos aparece uma mensagem de erro.
@@ -127,37 +126,7 @@ Como utilizador quero recuperar a palavra-passe, de modo a manter o acesso à pl
 \end{itemize}
 
 \subsection*{User Story 7}
-Como administrador quero recuperar a palavra-passe, de modo a manter o acesso à plataforma.\\\\
-\textbf{Critérios de Aceitação}:
-\begin{itemize}
-  \item Existe um botão no menu de login para recuperar a palavra-passe.
-  \item Existe um botão na área do administrador para alterar a palavra-passe.
-  \item O administrador deve introduzir o seu e-mail e a resposta da pergunta secreta.
-  \item O administrador recebe um e-mail com uma hiperligação para alterar a palavra-passe.
-  \item A nova palavra-passe deverá ter entre 8 e 16 caracteres e conter, pelo menos, um caractere especial ou um número.
-  \item Caso o e-mail não se encontre registado aparece uma mensagem de erro.
-  \item Caso a resposta da pergunta secreta esteja errada aparece uma mensagem de erro.
-  \item Caso a palavra-passe não esteja de acordo com os critérios estabelecidos aparece uma mensagem de erro.
-  \item Após trocar a palavra-passe aparece uma mensagem de sucesso.
-\end{itemize}
-
-\subsection*{User Story 8}
-Como associação quero recuperar a palavra-passe, de modo a manter o acesso à plataforma.\\\\
-\textbf{Critérios de Aceitação}:
-\begin{itemize}
-  \item Existe um botão no menu de login para recuperar a palavra-passe.
-  \item Existe um botão na área da associação para alterar a palavra-passe.
-  \item A associação deve introduzir o seu e-mail e a resposta da pergunta secreta.
-  \item A associação recebe um e-mail com uma hiperligação para alterar a palavra-passe.
-  \item A nova palavra-passe deverá ter entre 8 e 16 caracteres e conter, pelo menos, um caractere especial ou um número.
-  \item Caso o e-mail não se encontre registado aparece uma mensagem de erro.
-  \item Caso a resposta da pergunta secreta esteja errada aparece uma mensagem de erro.
-  \item Caso a palavra-passe não esteja de acordo com os critérios estabelecidos aparece uma mensagem de erro.
-  \item Após trocar a palavra-passe aparece uma mensagem de sucesso.
-\end{itemize}
-
-\subsection*{User Story 9}
-Como utilizador quero mudar a minha questão secreta a qualquer momento de modo a garantir que sei a resposta à pergunta.\\\\
+\uline{Como utilizador quero mudar a minha questão secreta a qualquer momento de modo a garantir que sei a resposta à pergunta.}\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
   \item Esta opção deverá aparecer na área do utilizador.
@@ -166,27 +135,7 @@ Como utilizador quero mudar a minha questão secreta a qualquer momento de modo 
   \item Após alterar a questão secreta aparece uma mensagem de sucesso.
 \end{itemize}
 
-\subsection*{User Story 10}
-Como administrador quero mudar a minha questão secreta a qualquer momento de modo a garantir que sei a resposta à pergunta.\\\\
-\textbf{Critérios de Aceitação}:
-\begin{itemize}
-  \item Esta opção deverá aparecer na área do administrador.
-  \item De modo a validar esta alteração, o administrador deve introduzir novamente a sua palavra-passe.
-  \item Caso a palavra-passe esteja errada aparece uma mensagem de erro.
-  \item Após alterar a questão secreta aparece uma mensagem de sucesso.
-\end{itemize}
-
-\subsection*{User Story 11}
-Como associação quero mudar a minha questão secreta a qualquer momento de modo a garantir que sei a resposta à pergunta.\\\\
-\textbf{Critérios de Aceitação}:
-\begin{itemize}
-  \item Esta opção deverá aparecer na área da associação.
-  \item De modo a validar esta alteração, a associação deve introduzir novamente a sua palavra-passe.
-  \item Caso a palavra-passe esteja errada aparece uma mensagem de erro.
-  \item Após alterar a questão secreta aparece uma mensagem de sucesso.
-\end{itemize}
-
-\subsection*{User Story 12}
+\subsection*{User Story 8}
 Como utilizador quero fazer login na plataforma, de modo a ter acesso às minhas funcionalidades.\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
@@ -196,27 +145,7 @@ Como utilizador quero fazer login na plataforma, de modo a ter acesso às minhas
   \item O sistema deve mostrar uma mensagem de erro caso o e-mail não esteja associado a nenhuma conta.
 \end{itemize}
 
-\subsection*{User Story 13}
-Como administrador quero fazer login na plataforma, de modo a ter acesso às minhas funcionalidades.\\\\
-\textbf{Critérios de Aceitação}:
-\begin{itemize}
-  \item Existe um botão no menu principal para fazer login.
-  \item O administrador deve inserir o seu e-mail e palavra-passe.
-  \item O sistema deve mostrar uma mensagem de erro caso a palavra-passe esteja errada.
-  \item O sistema deve mostrar uma mensagem de erro caso o e-mail não esteja associado a nenhuma conta.
-\end{itemize}
-
-\subsection*{User Story 14}
-Como associação quero fazer login na plataforma, de modo a ter acesso às minhas funcionalidades.\\\\
-\textbf{Critérios de Aceitação}:
-\begin{itemize}
-  \item Existe um botão no menu principal para fazer login.
-  \item A associação deve inserir o seu e-mail e palavra-passe.
-  \item O sistema deve mostrar uma mensagem de erro caso a palavra-passe esteja errada.
-  \item O sistema deve mostrar uma mensagem de erro caso o e-mail não esteja associado a nenhuma conta.
-\end{itemize}
-
-\subsection*{User Story 15}
+\subsection*{User Story 9}
 Como utilizador quero fazer logout da minha conta de modo a garantir a segurança dos meus dados.\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
@@ -224,64 +153,30 @@ Como utilizador quero fazer logout da minha conta de modo a garantir a seguranç
   \item Após o logout, o utilizador é automaticamente redirecionado para o menu inicial.
 \end{itemize}
 
-\subsection*{User Story 16}
-Como administrador quero fazer logout da minha conta de modo a garantir a segurança dos meus dados.\\\\
-\textbf{Critérios de Aceitação}:
-\begin{itemize}
-  \item Existe um botão para fazer logout na área do administrador.
-  \item Após o logout, o administrador é automaticamente redirecionado para o menu inicial.
-\end{itemize}
-
-\subsection{User Story 17}
-Como associação quero fazer logout da minha conta de modo a garantir a segurança dos meus dados.\\\\
-\textbf{Critérios de Aceitação}:
-\begin{itemize}
-  \item Existe um botão para fazer logout na área da associação.
-  \item Após o logout, a associação é automaticamente redirecionada para o menu inicial.
-\end{itemize}
-
-\subsection*{User Story 18}
-Como associação quero responder a pedidos de entrega de animais, de modo a colocá-los para adoção.\\\\
-\textbf{Critérios de Aceitação}:
-\begin{itemize}
-  \item Existe uma opção na homepage associação para visualizar os pedidos de entrega de animais.
-  \item Existe um botão para aceitar e outro para rejeitar o animal.
-  \item Caso seja aceite, aparece um botão para registar o animal.
-\end{itemize}
-
-\subsection*{User Story 19}
+\subsection*{User Story 10}
 Como associação quero registar animais de modo a colocá-los para adoção.\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
   \item Existe uma opção na homepage da associação para registar um animal para adoção ou para acolhimento.
-  \item O animal deve ser registado com nome, tipo, raça, porte, idade, cor, descrição e imagem.
-  \item Existe a opção "não se aplica" para a raça e porte.
+  \item O animal deve ser registado com nome, tipo, raça, porte, \uline{género}, idade, cor, descrição e imagem.
+  \item \uline{Existe a opção "não se aplica"\ para a raça e porte.}
   \item Após o registo, o animal fica imediatamente disponível na página da associação.
 \end{itemize}
 
-\subsection*{User Story 20}
-Como associação quero visualizar os animais que tenho, de modo alterar os seus dados.\\\\
+\subsection*{User Story 11}
+\uline{Como associação quero visualizar os animais que tenho, de modo alterar os seus dados.}\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
   \item Existe uma opção na homepage da associação para visualizar um animal para adoção.
-  \item Existe um botão para filtrar os animais que estão para adoção, acolhimento ou todos.
+  \item É possível filtrar os animais que estão para adoção, acolhimento ou todos.
   \item Os animais são dispostos por ordem alfabética de tipo de animal e dentro de cada tipo são organizados do mais antigo para o mais recente.
-  \item Existe um botão para organizar os animais por idade (crescente e decrescente dentro de cada tipo) ou ordem alfabética de tipo (crescente ou decrescente).
-  \item Cada animal deve mostrar o seu nome, tipo, raça, porte, idade, cor, descrição, histórico, imagem, estado da vacinação, padrinhos, valor recebido em doações e acolhimento/adoção.
-  \item A associação pode alterar a idade, descrição, imagem e estado da vacinação.
+  \item É possível organizar os animais por idade (crescente e decrescente dentro de cada tipo) ou ordem alfabética de tipo (crescente ou decrescente).
+  \item Cada animal deve mostrar o seu nome, tipo, raça, porte, género, idade, cor, descrição, histórico, imagem, estado da vacinação, padrinhos, valor recebido em doações e acolhimento/adoção.
+  \item A associação pode alterar a idade, descrição, imagem, estado da vacinação e tipo de adoção.
 \end{itemize}
 
-\subsection*{User Story 21}
-Como associação quero remover um animal que tenho para adoção, de modo a mostrar na minha página apenas animais disponíveis.\\\\
-\textbf{Critérios de Aceitação}:
-\begin{itemize}
-  \item Existe um botão para remover um animal da associação no menu de visualização de animais da associação.
-  \item Após remoção, o animal deixa de ser visível para os utilizadores, mas continua visível para a associação.
-  \item A associação deve introduzir novamente a sua palavra-passe para confirmar a operação.
-\end{itemize}
-
-\subsection*{User Story 22}
-Como associação quero visualizar as doações recebidas, de modo a gerir os meus fundos.\\\\
+\subsection*{User Story 12}
+\uline{Como associação quero visualizar as doações recebidas, de modo a gerir os meus fundos.}\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
   \item Existe uma opção na homepage da associação para ver todas as doações feitas à associação.
@@ -289,12 +184,12 @@ Como associação quero visualizar as doações recebidas, de modo a gerir os me
   \item Cada doação deve mostrar somente a data e o montante.
 \end{itemize}
 
-\subsection*{User Story 23}
-Como utilizador quero solicitar um animal de modo a adotá-lo assim que ficar disponível.\\\\
+\subsection*{User Story 12}
+\uline{Como utilizador quero solicitar um animal de modo a adotá-lo assim que ficar disponível.}\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
   \item Existe uma opção na homepage do utilizador que permite solicitar animais para adoção.
-  \item O utilizador deve introduzir o tipo de animal, raça, localização e idade de preferência (<3 meses, de 3 meses a 1 ano, 1 a 3 anos, 3 a 5 anos, 5 a 10 anos).
+  \item O utilizador deve introduzir o tipo de animal, raça, género, localização e idade de preferência (<3 meses, de 3 meses a 1 ano, 1 a 3 anos, 3 a 5 anos, 5 a 10 anos).
   \item Todos os campos têm a opção "any", caso o utilizador não tenha preferência relativamente a esse campo.
   \item O sistema deve verificar automaticamente se existe algum animal numa associação que satisfaça as condições.
   \item Caso não exista nenhum animal que satisfaça as condições, o utilizador fica em lista de espera.
@@ -302,56 +197,56 @@ Como utilizador quero solicitar um animal de modo a adotá-lo assim que ficar di
   \item Após 6 meses em lista de espera a solicitação é removida.
 \end{itemize}
 
-\subsection*{User Story 24}
-Como utilizador quero visualizar os meus pedidos de adoção pendentes, de modo a verificar o seu estado.\\\\
+\subsection*{User Story 14}
+\uline{Como utilizador quero visualizar os meus pedidos de adoção pendentes, de modo a verificar o seu estado.}\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
   \item Existe uma secção com os pedidos de adoção e solicitações pendentes na área do utilizador.
 \end{itemize}
 
-\subsection*{User Story 25}
-Como utilizador quero visualizar os meus pedidos de adoção pendentes, de modo a verificar o seu estado.\\\\
+\subsection*{User Story 15}
+\uline{Como utilizador quero cancelar os meus pedidos de adoção pendentes, de modo a verificar o seu estado.}\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
-  \item Existe um botão na área do utilizador que permite cancelar os pedidos de adoção e solicitações de animais pendentes.
+  \item Existe uma opção na área do utilizador que permite cancelar os pedidos de adoção e solicitações de animais pendentes.
   \item Caso o utilizador tente cancelar, aparece um popup para confirmar o cancelamento.
 \end{itemize}
 
-\subsection*{User Story 26}
-Como administrador quero visualizar os apadrinhamentos de modo a supervisionar as operações da plataforma.\\\\
+\subsection*{User Story 16}
+\uline{Como administrador quero visualizar os apadrinhamentos de modo a supervisionar as operações da plataforma.}\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
-  \item Existe um botão na homepage do administrador para visualizar todos os apadrinhamentos de todos os animais que se encontrem na plataforma.
+  \item Existe uma opção na homepage do administrador para visualizar todos os apadrinhamentos de todos os animais que se encontrem na plataforma.
   \item Cada apadrinhamento deve mostrar o nome e tipo do animal, nome da associação à qual o animal pertence e o nome do padrinho.
 \end{itemize}
 
-\subsection*{User Story 27}
+\subsection*{User Story 17}
 Como utilizador quero procurar animais de modo a poder adotar um animal.\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
   \item No cabeçalho do portal existe um botão para pesquisar por animal.
   \item Ao clicar no botão de pesquisa por animal, aparece uma janela de pesquisa.
   \item A janela de pesquisa inclui uma caixa de pesquisa, filtros e um botão para pesquisar.
-  \item Os filtros são tipo, raça, porte, região, idade, estado (para adoção, para acolhimento ou ambos).
+  \item Os filtros são tipo, raça, porte, região, género, idade, estado (para adoção, para acolhimento ou ambos).
   \item Devem aparecer apenas animais que se encontrem disponíveis.
   \item A listagem de animais deve aparecer, por defeito, por ordem alfabética de tipo e, dentro do tipo, dos adicionados há mais tempo para os adicionados mais recentemente.
   \item Deve ser possível entrar no perfil do animal para ver informações adicionais ou pedir para adotar/acolher.
 \end{itemize}
 
-\subsection*{User Story 28}
+\subsection*{User Story 18}
 Como administrador quero procurar animais de modo a ver as suas informações.\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
   \item No cabeçalho do portal existe um botão para pesquisar por animal.
   \item Ao clicar no botão de pesquisa por animal, aparece uma janela de pesquisa.
   \item A janela de pesquisa inclui uma caixa de pesquisa, filtros e um botão para pesquisar.
-  \item Os filtros são tipo, raça, porte, região, idade, estado (para adoção, para acolhimento ou ambos).
+  \item Os filtros são tipo, raça, porte, região, género, idade, estado (para adoção, para acolhimento ou ambos).
   \item Devem aparecer apenas animais que se encontrem disponíveis.
   \item A listagem de animais deve aparecer, por defeito, por ordem alfabética de tipo e, dentro do tipo, dos adicionados há mais tempo para os adicionados mais recentemente.
   \item Deve ser possível entrar no perfil do animal para ver informações adicionais.
 \end{itemize}
 
-\subsection*{User Story 29}
+\subsection*{User Story 19}
 Como utilizador quero procurar associações de modo a visualizar o seu conteúdo.\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
@@ -362,7 +257,7 @@ Como utilizador quero procurar associações de modo a visualizar o seu conteúd
   \item Deve ser possível entrar no perfil da associação para ver informações adicionais ou doar fundos.
 \end{itemize}
 
-\subsection*{User Story 30}
+\subsection*{User Story 20}
 Como administrador quero procurar associações de modo a visualizar o seu conteúdo.\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
@@ -373,41 +268,39 @@ Como administrador quero procurar associações de modo a visualizar o seu conte
   \item Deve ser possível entrar no perfil da associação para ver informações adicionais.
 \end{itemize}
 
-\subsection*{User Story 31}
-Como utilizador quero fazer um pedido para adoção de modo a adotar um animal.\\\\
+\subsection*{User Story 21}
+Como utilizador quero fazer um \uline{pedido} para adoção de modo a adotar um animal.\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
-  \item O animal deve-se encontrar disponível para adoção.
   \item Deve existir uma opção no perfil do animal "Adotar".
   \item Enquanto o pedido não for aceite ou rejeitado, este deve aparecer na área do utilizador.
   \item Deve ser possível cancelar um pedido de adoção através de um botão na área do utilizador.
   \item O utilizador deve ser notificado da resposta ao pedido de adoção.
 \end{itemize}
 
-\subsection*{User Story 32}
-Como utilizador quero ter acesso ao meu histórico de adoções de modo a visualizar todas as adoções que já fiz.\\\\
+\subsection*{User Story 22}
+\uline{Como utilizador quero ter acesso ao meu histórico de adoções de modo a visualizar todas as adoções que já fiz.}\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
-  \item Deve existir um botão na homepage do utilizador a dizer histórico adoções.
+  \item Deve existir uma opção na homepage do utilizador a dizer histórico adoções.
   \item O histórico deve estar ordenado pela data de adoção.
 \end{itemize}
 
-\subsection*{User Story 33}
+\subsection*{User Story 23}
 Como utilizador quero poder apadrinhar um animal de modo a fazer uma doação periódica.\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
-  \item O animal deve estar disponível para apadrinhamento.
-  \item Um animal pode ter no máximo 3 padrinhos.
-  \item A doação deve ter um valor mínimo mensal de 5€ e um máximo de 1000€.
-  \item Deve existir uma opção no perfil do animal a dizer apadrinhar.
-  \item Se o limite for atingido, o botão “Apadrinhar” deve ficar indisponível.
+  \item \uline{Um animal pode ter no máximo 3 padrinhos.}
+  \item \uline{A doação deve ter um valor mínimo mensal de 5€ e um máximo de 1000€.}
+  \item \uline{Deve existir uma opção no perfil do animal a dizer apadrinhar.}
+  \item \uline{Se o limite for atingido, o botão “Apadrinhar” deve ficar indisponível.}
 \end{itemize}
 
-\subsection*{User Story 34}
-Como utilizador quero ter acesso ao meu histórico de doações de modo a visualizar o quanto já doei.\\\\
+\subsection*{User Story 24}
+\uline{Como utilizador quero ter acesso ao meu histórico de doações de modo a visualizar o quanto já doei.}\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
-  \item Existe um botão na homepage do utilizador que leva à página do histórico de doações.
+  \item Existe uma opção na homepage do utilizador que leva à página do histórico de doações.
   \item A página de doações deve ter duas secções: apadrinhamentos e doações.
   \item Na secção de apadrinhamentos devem ser visíveis os animais que o utilizador apadrinha atualmente, assim como, todos os apadrinhamentos anteriores, com datas de início ao fim.
   \item Na secção das doações devem aparecer todas as doações feitas pelo utilizador, incluindo as mensalidades de apadrinhamentos.
@@ -415,19 +308,19 @@ Como utilizador quero ter acesso ao meu histórico de doações de modo a visual
   \item Deve aparecer no máximo 30 doações por pagina.
   \item Cada doação deve identificar o nome da associação e, se aplicável, o nome do animal para quem foi doado.
   \item Se o limite for atingido, o botão “Apadrinhar” deve ficar indisponível.
-  \item Deve aparecer uma mensagem antes da lista de doações a agradecer o contributo da pessoa e a informar do total que ja foi doado.
+  \item Deve aparecer uma mensagem antes da lista de doações a agradecer o contributo da pessoa e a informar do total que já foi doado.
 \end{itemize}
 
-\subsection*{User Story 35}
-Como utilizador quero poder cancelar o apadrinhamento a qualquer momento de modo a parar de pagar o montante mensal.\\\\
+\subsection*{User Story 25}
+\uline{Como utilizador quero poder cancelar o apadrinhamento a qualquer momento de modo a parar de pagar o montante mensal.}\\\\
 \textbf{Critérios de Aceitação}:
 \begin{itemize}
   \item Deve existir um botão na pagina de doações que permite cancelar um apadrinhamento atual.
   \item Ao clicar para cancelar apadrinhamento o mesmo é automaticamente cancelado.
 \end{itemize}
 
-\subsection*{User Story 36}
-Como administrador quero consultar o histórico das doações realizadas de modo a supervisionar as operações da plataforma.\\\\
+\subsection*{User Story 26}
+\uline{Como administrador quero consultar o histórico das doações realizadas de modo a supervisionar as operações da plataforma.\\\\}
 \textbf{Critérios de aceitação:}
 \begin{itemize}
     \item Na homepage dos administradores deve existir uma opção para consultar doações.
@@ -437,8 +330,8 @@ Como administrador quero consultar o histórico das doações realizadas de modo
     \item Cada doação deve identificar a quantidade doada, a data em que foi realizada, a associação para quem foi realizada a doação e caso exista, o id do animal para quem foi doado.
 \end{itemize}
 
-\subsection*{User Story 37}
-Como associação quero consultar os pedidos de acolhimento de animais de modo a poder dar resposta aos pedidos.\\\\
+\subsection*{User Story 27}
+\uline{Como associação quero consultar os pedidos de acolhimento de animais de modo a poder dar resposta aos pedidos.\\\\}
 \textbf{Critérios de aceitação:}
 \begin{itemize}
     \item Na homepage da associação deve existir uma opção para consultar pedidos de acolhimento de animais.
@@ -447,8 +340,8 @@ Como associação quero consultar os pedidos de acolhimento de animais de modo a
     \item A listagem deve aparecer, por defeito, dos adicionados há mais tempo para os adicionados mais recentemente.
 \end{itemize}
 
-\subsection*{User Story 38}
-Como associação quero consultar os pedidos de adoção de animais de modo a poder dar resposta aos pedidos.\\\\
+\subsection*{User Story 28}
+\uline{Como associação quero consultar os pedidos de adoção de animais de modo a poder dar resposta aos pedidos.\\\\}
 \textbf{Critérios de aceitação:}
 \begin{itemize}
     \item Na homepage da associação deve existir uma opção para pedidos de adoção de animais.
@@ -457,8 +350,8 @@ Como associação quero consultar os pedidos de adoção de animais de modo a po
     \item A listagem deve aparecer, por defeito, dos adicionados há mais tempo para os adicionados mais recentemente.
 \end{itemize}
 
-\subsection*{User Story 39}
-Como administrador quero consultar os animais que foram acolhidos de modo a saber quantos animais se encontram acolhidos.\\\\
+\subsection*{User Story 29}
+\uline{Como administrador quero consultar os animais que foram acolhidos de modo a saber quantos animais se encontram acolhidos.\\\\}
 \textbf{Critérios de aceitação:}
 \begin{itemize}
     \item Na homepage do administrador deve existir uma opção para consultar acolhimentos.
@@ -469,8 +362,8 @@ Como administrador quero consultar os animais que foram acolhidos de modo a sabe
     \item Deve ser possível filtrar os animais acolhidos por região.
 \end{itemize}
 
-\subsection*{User Story 40}
-Como administrador quero consultar os animais que foram adotados de modo a saber quantos animais foram adotados.\\\\
+\subsection*{User Story 30}
+\uline{Como administrador quero consultar os animais que foram adotados de modo a saber quantos animais foram adotados.\\\\}
 \textbf{Critérios de aceitação:}
 \begin{itemize}
     \item Na homepage do administrador deve existir uma opção para consultar adoções.
@@ -481,21 +374,8 @@ Como administrador quero consultar os animais que foram adotados de modo a saber
     \item Deve ser possível filtrar os animais acolhidos por região.
 \end{itemize}
 
-\subsection*{User Story 41}
-Como utilizador quero procurar animais para acolhimento de modo a poder procurar um animal para acolher.\\\\
-\textbf{Critérios de aceitação:}
-\begin{itemize}
-    \item No menu do utilizador deve existir uma opção "Animais para acolher".
-    \item Na página "Animais para acolher" devem estar listados os diferentes animais que se encontram disponíveis para serem acolhidos.
-    \item Devem aparecer no máximo 30 animais por página.
-    \item A listagem de animais deve aparecer, por defeito, dos adicionados há mais tempo para os adicionados mais recentemente.
-    \item Deve ser possível alterar a ordem da listagem para aparecerem dos mais recentes para os mais antigos.
-    \item Deve ser possível alterar a ordem da listagem para aparecerem por ordem alfabética do nome.
-    \item Deve ser possível filtrar por região, tipo, idade, porte e raça.
-\end{itemize}
-
-\subsection*{User Story 42}
-Como utilizador quero acolher um animal de modo a poder acolhê-lo.\\\\
+\subsection*{User Story 31}
+\uline{Como utilizador quero acolher um animal de modo a poder acolhê-lo.}\\\\
 \textbf{Critérios de aceitação:}
 \begin{itemize}
     \item Em cada animal deve aparecer a opção "Saber mais".
@@ -505,90 +385,55 @@ Como utilizador quero acolher um animal de modo a poder acolhê-lo.\\\\
     \item Ao consentir com a partilha dos dados o utilizador deve receber uma mensagem a confirmar o pedido e a informar que a associação entrará brevemente em contacto com o utilizador.
 \end{itemize}
 
-\subsection*{User Story 43}
+\subsection*{User Story 32}
 Como utilizador quero registar um animal como perdido de modo a poder encontrá-lo.\\\\
 \textbf{Critérios de aceitação:}
 \begin{itemize}
   \item Existe um botão no cabeçalho que leva para a secção lost and found.
   \item Na página de lost and found, existe um botão "Registar perdido".
   \item O utilizador deve introduzir o nome, tipo, imagem e contacto telefónico.
-  \item O utilizador pode também introduzir a raça, porte, idade, cor e descrição.
+  \item O utilizador pode também introduzir a raça, porte, género, idade, cor e descrição.
   \item Após o registo, o animal fica imediatamente registado na lista de perdidos e na área do utilizador.
   \item O animal mantém-se na lista de perdidos até o utilizador o dar como encontrado.
 \end{itemize}
 
-\subsection*{User Story 44}
-Como administrador quero registar um animal como perdido de modo a poder encontrá-lo.\\\\
-\textbf{Critérios de aceitação:}
-\begin{itemize}
-  \item Existe um botão no cabeçalho que leva para a secção lost and found.
-  \item Na página de lost and found, existe um botão "Registar perdido".
-  \item O administrador deve introduzir o nome, tipo, imagem e contacto telefónico.
-  \item O administrador pode também introduzir a raça, porte, idade, cor e descrição.
-  \item Após o registo, o animal fica imediatamente registado na lista de perdidos e na área do administrador.
-  \item O animal mantém-se na lista de perdidos até o administrador o dar como encontrado.
-\end{itemize}
-
-\subsection*{User Story 45}
-Como associação quero registar um animal como perdido de modo a poder encontrá-lo.\\\\
-\textbf{Critérios de aceitação:}
-\begin{itemize}
-  \item Existe um botão no cabeçalho que leva para a secção lost and found.
-  \item Na página de lost and found, existe um botão "Registar perdido".
-  \item A associação deve introduzir o nome, tipo, imagem e contacto telefónico.
-  \item A associação pode também introduzir a raça, porte, idade, cor e descrição.
-  \item Após o registo, o animal fica imediatamente registado na lista de perdidos e na área da associação.
-  \item O animal mantém-se na lista de perdidos até a associação o dar como encontrado.
-\end{itemize}
-
-\subsection*{User Story 46}
+\subsection*{User Story 33}
 Como utilizador quero consultar a lista de animais perdidos de modo a poder ajudar na procura.\\\\
 \textbf{Critérios de aceitação:}
 \begin{itemize}
   \item Existe um botão no cabeçalho que leva para a secção lost and found.
   \item Na página de lost and found, existe um botão "Ver perdidos".
   \item Na página dos animais perdidos aparecem as informações que foram registadas do animal, assim como o contacto do dono.
+  \item \uline{Existe uma opção para avisar o dono de que o utilizador encontrou o animal.}
 \end{itemize}
 
-\subsection*{User Story 47}
-Como administrador quero consultar a lista de animais perdidos de modo a poder ajudar na procura.\\\\
-\textbf{Critérios de aceitação:}
-\begin{itemize}
-  \item Existe um botão no cabeçalho que leva para a secção lost and found.
-  \item Na página de lost and found, existe um botão "Ver perdidos".
-  \item Na página dos animais perdidos aparecem as informações que foram registadas do animal, assim como o contacto do dono.
-\end{itemize}
-
-\subsection*{User Story 48}
-Como associação quero consultar a lista de animais perdidos de modo a poder ajudar na procura.\\\\
-\textbf{Critérios de aceitação:}
-\begin{itemize}
-  \item Existe um botão no cabeçalho que leva para a secção lost and found.
-  \item Na página de lost and found, existe um botão "Ver perdidos".
-  \item Na página dos animais perdidos aparecem as informações que foram registadas do animal, assim como o contacto do dono.
-\end{itemize}
-
-\subsection*{User Story 49}
-Como utilizador quero dar um animal como encontrado de modo a removê-lo da lista de perdidos.\\\\
+\subsection*{User Story 34}
+Como utilizador quero remover animal o meu animal perdido de modo a removê-lo da lista de perdidos.\\\\
 \textbf{Critérios de aceitação:}
 \begin{itemize}
   \item Na área do utilizador existe um botão para notificar o sistema de que o animal foi encontrado.
   \item O animal é imediatamente removido da lista de perdidos.
 \end{itemize}
 
-\subsection*{User Story 50}
-Como administrador quero dar um animal como encontrado de modo a removê-lo da lista de perdidos.\\\\
+\subsection*{User Story 35}
+\uline{Como utilizador quero registar um animal encontrado de modo a encontrar o seu dono.}\\\\
 \textbf{Critérios de aceitação:}
 \begin{itemize}
-  \item Na área do administrador existe um botão para notificar o sistema de que o animal foi encontrado.
-  \item O animal é imediatamente removido da lista de perdidos.
+  \item Existe um botão no cabeçalho que leva para a secção lost and found.
+  \item Na página de lost and found, existe um botão "Registar encontrado".
+  \item O utilizador deve introduzir o nome, tipo, imagem e contacto telefónico.
+  \item O utilizador pode também introduzir a raça, porte, género, idade, cor e descrição.
+  \item Após o registo, o animal fica imediatamente registado na lista de perdidos e na área do utilizador.
+  \item O animal mantém-se na lista de encontrados até o utilizador o dar como entregue.
 \end{itemize}
 
-\subsection*{User Story 51}
-Como associação quero dar um animal como encontrado de modo a removê-lo da lista de perdidos.\\\\
+\subsection*{User Story 36}
+\uline{Como utilizador quero consultar a lista de animais encontrados de modo a verificar se o meu animal foi encontrado.}\\\\
 \textbf{Critérios de aceitação:}
 \begin{itemize}
-  \item Na área da associação existe um botão para notificar o sistema de que o animal foi encontrado.
-  \item O animal é imediatamente removido da lista de perdidos.
+  \item Existe um botão no cabeçalho que leva para a secção lost and found.
+  \item Na página de lost and found, existe um botão "Ver encontrados".
+  \item Na página dos animais perdidos aparecem as informações que foram registadas do animal, assim como um contacto da pessoa que o encontrou.
+  \item Existe uma opção para o utilizador avisar que o animal encontrado é dele.
 \end{itemize}
 \end{document}
