@@ -36,7 +36,7 @@ public class Adoption {
   @Enumerated(EnumType.STRING)
   private AdoptionType type;
   @Enumerated(EnumType.STRING)
-  private RequestStatus status;
+  private Status status;
 
   /**
    * Constructor of class Adoption.
@@ -51,7 +51,7 @@ public class Adoption {
     this.animal = animal;
     this.type = type;
     requestDate = LocalDate.now();
-    status = RequestStatus.PENDING;
+    status = Status.PENDING;
 
   }
 
@@ -72,9 +72,9 @@ public class Adoption {
 
   public void setAdoptionDate(LocalDate adoptionDate) { this.adoptionDate = adoptionDate; }
 
-  public RequestStatus getStatus() { return status; }
+  public Status getStatus() { return status; }
 
-  public void setStatus(RequestStatus status) { this.status = status; }
+  public void setStatus(Status status) { this.status = status; }
 
   public AdoptionType getType() {
     return type;

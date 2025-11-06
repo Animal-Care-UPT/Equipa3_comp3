@@ -1,7 +1,12 @@
 package AnimalCareCentre.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import AnimalCareCentre.enums.*;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 /**
@@ -15,7 +20,9 @@ public class Shelter extends Account {
   private int foundationYear;
   private int contact;
   private boolean isVerified;
-  // private ArrayList<Animal> animals; commented for now
+  private Status status;
+  @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<ShelterAnimal> animals = new ArrayList<>();
 
   /**
    * Constructor for the class Shelter
@@ -29,6 +36,7 @@ public class Shelter extends Account {
     this.foundationYear = foundationYear;
     this.contact = contact;
     isVerified = true;
+    status = Status.PENDING;
   }
 
   protected Shelter() {
@@ -37,6 +45,10 @@ public class Shelter extends Account {
   // Getters
   public int getFoundationYear() {
     return foundationYear;
+  }
+
+  public Status getStatus() {
+    return status;
   }
 
   public long getId() {
@@ -49,6 +61,10 @@ public class Shelter extends Account {
 
   public boolean getVerification() {
     return isVerified;
+  }
+
+  public void setStatus(Status status) {
+      this.status = status;
   }
 
   @Override

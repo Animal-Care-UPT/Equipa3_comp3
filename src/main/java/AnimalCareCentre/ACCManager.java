@@ -45,6 +45,17 @@ public class ACCManager {
     return query.getResultList();
   }
 
+  public List<ShelterAnimal> viewAllAnimals() {
+    Query<ShelterAnimal> query = session.createQuery("FROM ShelterAnimal", ShelterAnimal.class);
+    return query.getResultList();
+  }
+
+  public List<Adoption> viewAllAdoptions(AdoptionType type) {
+    Query<Adoption> query = session.createQuery("FROM Adoption WHERE type = :type", Adoption.class);
+    query.setParameter("type", type);
+    return query.getResultList();
+  }
+
   /**
    * This method searches animals by a keyword
    *
@@ -64,8 +75,14 @@ public class ACCManager {
     return query.getResultList();
   }
 
+  public List<Sponsorship> viewAllSponsorships() {
+    Query<Sponsorship> query = session.createQuery("FROM Sponsorship", Sponsorship.class);
+    return query.getResultList();
+  }
+
   public List<Shelter> searchShelters() {
-    Query<Shelter> query = session.createQuery("FROM Shelter", Shelter.class);
+    Query<Shelter> query = session.createQuery("FROM Shelter WHERE status = :status", Shelter.class);
+    query.setParameter("status", Status.ACCEPTED);
     return query.getResultList();
   }
 
@@ -115,6 +132,19 @@ public class ACCManager {
     }
   }
 
+  public List<Shelter> showShelterRequests() {
+    Query<Shelter> query = session.createQuery("FROM Shelter WHERE status = :status", Shelter.class);
+    query.setParameter("status", Status.PENDING);
+    return query.getResultList();
+  }
+  
+  public void changeShelterStatus(Shelter shelter, Status status) {
+    session.beginTransaction();
+    shelter.setStatus(status);
+    session.merge(shelter);
+    session.getTransaction().commit();
+  }
+
   public void createUserAccount(String name, String email, String password, String location,
       SecurityQuestion securityQuestion, String answer, LocalDate birthDate, int contact) {
     String encryptedPw = encript(password);
@@ -140,7 +170,8 @@ public class ACCManager {
     String encryptedPw = encript(password);
     String encryptedAnswer = encript(answer);
     session.beginTransaction();
-    Shelter shelter = new Shelter(name, email, encryptedPw, location, securityQuestion, encryptedAnswer, foundationYear, contact);
+    Shelter shelter = new Shelter(name, email, encryptedPw, location, securityQuestion, encryptedAnswer, foundationYear,
+        contact);
     session.persist(shelter);
     session.getTransaction().commit();
   }
@@ -156,28 +187,29 @@ public class ACCManager {
     }
   }
 
-  //Method to view Adoption request from the user's perspective
-    public List<Adoption> getAdoptionsByUser (User user) {
-      session.beginTransaction();
-      Query<Adoption> query = session.createQuery("FROM Adoption WHERE user = :user AND type = :type", Adoption.class);
-      query.setParameter("user", user);
-      query.setParameter("type", AdoptionType.FOR_ADOPTION);
-      List<Adoption> adoptions = query.getResultList();
-      session.getTransaction().commit();
-      return adoptions;
-    }
+  /**
+   * This method returns the adoptions by user
+   *
+   * @param user 
+   * @param type 
+   * @return 
+   */
+  public List<Adoption> getAdoptionsByUser(User user, AdoptionType type) {
+    session.beginTransaction();
+    Query<Adoption> query = session.createQuery("FROM Adoption WHERE user = :user AND type = :type", Adoption.class);
+    query.setParameter("user", user);
+    query.setParameter("type", type);
+    List<Adoption> adoptions = query.getResultList();
+    session.getTransaction().commit();
+    return adoptions;
+  }
 
-    //Method to view Foster request from the user's perspective
-    public List<Adoption> getFostersByUser (User user) {
-        session.beginTransaction();
-        Query<Adoption> query = session.createQuery("FROM Adoption WHERE user = :user AND type = :type", Adoption.class);
-        query.setParameter("user", user);
-        query.setParameter("type", AdoptionType.FOR_FOSTER);
-        List<Adoption> fosters = query.getResultList();
-        session.getTransaction().commit();
-        return fosters;
-    }
-
+  /**
+   * This method returns the avaiable animals from a shelter
+   *
+   * @param shelter 
+   * @return 
+   */
   public List<ShelterAnimal> getAvailableAnimalsByShelter(Shelter shelter) {
     session.beginTransaction();
     Query<ShelterAnimal> query = session.createQuery(
@@ -190,7 +222,12 @@ public class ACCManager {
     return animals;
   }
 
-  // Method to get the animals from a shelter
+  /**
+   * This method returns the animals of a shelter
+   *
+   * @param shelter 
+   * @return 
+   */
   public List<ShelterAnimal> getAnimalsByShelter(Shelter shelter) {
     session.beginTransaction();
     Query<ShelterAnimal> query = session.createQuery("FROM ShelterAnimal WHERE shelter = :shelter",
@@ -201,7 +238,20 @@ public class ACCManager {
     return animals;
   }
 
-  // Method to register animals as a Shelter
+  /**
+   * This method registers animals on a shelter
+   *
+   * @param shelter 
+   * @param name 
+   * @param type 
+   * @param race 
+   * @param size 
+   * @param gender 
+   * @param age 
+   * @param color 
+   * @param description 
+   * @param adoptionType 
+   */
   public void registerAnimal(Shelter shelter, String name, AnimalType type, String race, AnimalSize size,
       AnimalGender gender,
       int age, AnimalColor color, String description, AdoptionType adoptionType) {

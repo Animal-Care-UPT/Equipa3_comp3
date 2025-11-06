@@ -75,6 +75,27 @@ public class App extends Application {
 
   }
 
+  public void alternateShelterScreen(Status status) {
+    ACCScene scene = new ACCScene(stage, new ACCVBox());
+    Label label;
+    if (status == Status.PENDING) {
+      label = new Label("The Request to join AnimalCareCentre is pending. Please wait until it's validated!");
+    } else if (status == Status.REJECTED) {
+      label = new Label("We regret to inform you that the request to join AnimalCareCentre was denied!");
+    } else {
+      label = new Label("You have been banned from AnimalCareCentre!");
+    }
+    Button logout = new Button("Logout");
+    logout.setStyle("-fx-background-color: #333333; -fx-text-fill: white; -fx-font-size: 16px;");
+    scene.addItems(label, logout);
+
+    logout.setOnAction(e -> {
+      loggedAcc = null;
+      showMainMenu();
+      return;
+    });
+  }
+
   /**
    * This method shows the login screen
    */
@@ -96,9 +117,15 @@ public class App extends Application {
       if (acc != null) {
         loggedAcc = acc;
         if (loggedAcc instanceof Shelter) {
-          shelterHomepage();
+          if (((Shelter) loggedAcc).getStatus() == Status.ACCEPTED) {
+            shelterHomepage();
+          } else {
+            alternateShelterScreen(((Shelter) loggedAcc).getStatus());
+          }
         } else if (loggedAcc instanceof User) {
           userHomepage();
+        } else {
+          adminHomePage();
         }
       } else {
         System.out.println("Wrong credentials!");
@@ -159,22 +186,22 @@ public class App extends Application {
     accType.getItems().addAll("User", "Admin", "Shelter");
     Label nameLabel = new Label("Name:");
     TextField name = new TextField();
-    name.setMaxWidth(150);
+    name.setMaxWidth(250);
     Label emailLabel = new Label("Email:");
     TextField email = new TextField();
     email.setMaxWidth(250);
     Label passLabel = new Label("Password:");
     PasswordField password = new PasswordField();
-    password.setMaxWidth(150);
+    password.setMaxWidth(250);
     Label locationLabel = new Label("Location:");
     TextField location = new TextField();
-    location.setMaxWidth(150);
+    location.setMaxWidth(250);
     Label secLabel = new Label("Security Question:");
     ComboBox<SecurityQuestion> sec = new ComboBox<>();
     sec.getItems().addAll(SecurityQuestion.values());
     Label answerLabel = new Label("Answer:");
     TextField answer = new TextField();
-    answer.setMaxWidth(200);
+    answer.setMaxWidth(250);
 
     VBox vbox = new VBox();
     vbox.setAlignment(Pos.CENTER_LEFT);
@@ -185,14 +212,18 @@ public class App extends Application {
     vbox.setSpacing(10);
     scene.addItems(vbox);
 
+    PasswordField adminCode = new PasswordField();
+    adminCode.setMaxWidth(250);
     Label birthLabel = new Label("Birthdate:");
     DatePicker birthDate = new DatePicker();
+    birthDate.setMaxWidth(250);
     Label contactLabel = new Label("Contact:");
     TextField contact = new TextField();
-    contact.setMaxWidth(150);
+    contact.setMaxWidth(250);
     Label foundYear = new Label("Foundation year:");
     TextField year = new TextField();
-    year.setMaxWidth(80);
+    year.setMaxWidth(250);
+    Label adminLabel = new Label("Admin code:");
 
     year.setTextFormatter(new TextFormatter<>(change -> {
       String num = change.getControlNewText();
@@ -258,8 +289,14 @@ public class App extends Application {
 
         if (sec.getValue() == null
             || !manager.validateFields(name.getText(), email.getText(), password.getText(), location.getText(),
-                sec.getValue().toString(), answer.getText())) {
+                sec.getValue().toString(), answer.getText(), adminCode.getText())) {
           showAlert(AlertType.ERROR, "Empty Fields!", "All fields are required!");
+          return;
+        }
+
+        if (!adminCode.getText().equals("lasagna")) {
+          showAlert(AlertType.ERROR, "Wrong Admin Code", "The Admin code is wrong! Returning...");
+          showMainMenu();
           return;
         }
 
@@ -303,6 +340,8 @@ public class App extends Application {
         vbox.getChildren().addAll(birthLabel, birthDate, contactLabel, contact);
       } else if (selected.equals("Shelter")) {
         vbox.getChildren().addAll(contactLabel, contact, foundYear, year);
+      } else {
+        vbox.getChildren().addAll(adminLabel, adminCode);
       }
     });
 
@@ -345,13 +384,11 @@ public class App extends Application {
     System.out.println("2 - Adopt Animal");
     System.out.println("3 - Foster Animal");
     System.out.println("0 - Back");
-    int opc = sc.nextInt();
-    sc.nextLine();
+    int opc = readInt();
     switch (opc) {
       case 1 -> {
         System.out.println("Insert the amount of money you wish to give as a sponsorship");
-        float amount = sc.nextFloat();
-        sc.nextLine();
+        float amount = readFloat();
         User user = (User) loggedAcc;
         manager.createSponsorship(user, animal, amount);
       }
@@ -365,7 +402,6 @@ public class App extends Application {
         manager.adoptAnimal((User) loggedAcc, animal, AdoptionType.FOR_FOSTER);
         System.out.println("Congratulations! Your request to foster " + animal.getName() + " has been submitted!");
       }
-
 
       case 0 -> {
         userHomepage();
@@ -390,7 +426,7 @@ public class App extends Application {
     switch (opt) {
       case "Search by Keyword" -> {
         System.out.println("What would you like to search?");
-        String search = sc.nextLine();
+        String search = readLine();
         List<ShelterAnimal> animals = manager.searchAnimalByKeyword(search);
 
         if (animals == null || animals.isEmpty()) {
@@ -476,6 +512,126 @@ public class App extends Application {
   }
 
   /**
+   * This method shows admin's homepage
+   */
+  private void adminHomePage() {
+    javafx.application.Platform.runLater(() -> showTerminalScreen());
+
+    try {
+
+      if (consoleThread != null && consoleThread.isAlive()) {
+        consoleThread.interrupt();
+      }
+      consoleThread = new Thread(() -> {
+        int option;
+
+        System.out.println("=== ADMIN MENU ===");
+        System.out.println("1. View Shelter Requests");
+        System.out.println("2. View Available Shelters");
+        System.out.println("3. View All Sponsorships");
+        System.out.println("4. View All Animals");
+        System.out.println("5. View All Adoptions");
+        System.out.println("6. View All Fosters");
+        System.out.println("7 Lost and Found");
+        System.out.println("0. Logout");
+        System.out.print("Option: ");
+        option = readInt();
+
+        switch (option) {
+          case 1 -> {
+            List<Shelter> shelters = manager.showShelterRequests();
+            Shelter choice = (Shelter) chooseOption(shelters.toArray(), "Shelter Request");
+            if (choice == null) {
+              javafx.application.Platform.runLater(this::adminHomePage);
+              return;
+            }
+            String[] requestAction = { "Accept", "Reject" };
+            String action = (String) chooseOption(requestAction, "Shelter Request");
+            if (action == null) {
+              javafx.application.Platform.runLater(this::adminHomePage);
+              return;
+            }
+            if (action.equals("Accept")) {
+              manager.changeShelterStatus(choice, Status.ACCEPTED);
+              System.out.println("Shelter accepted");
+            } else {
+              manager.changeShelterStatus(choice, Status.REJECTED);
+              System.out.println("Shelter rejected");
+            }
+            adminHomePage();
+            return;
+          }
+
+          case 2 -> {
+            List<Shelter> shelters = manager.searchShelters();
+            Shelter choice = (Shelter) chooseOption(shelters.toArray(), "Shelter");
+            if (choice == null) {
+              javafx.application.Platform.runLater(this::adminHomePage);
+              return;
+            }
+            String[] requestAction = { "Ban Shelter, View info" };
+            String action = (String) chooseOption(requestAction, "Shelter");
+            if (action == null) {
+              javafx.application.Platform.runLater(this::adminHomePage);
+              return;
+            }
+            if (action.equals("Ban Shelter")) {
+              manager.changeShelterStatus(choice, Status.BANNED);
+            } else {
+              System.out.println(choice); // for now it only prints shelter info
+            }
+            adminHomePage();
+            return;
+          }
+
+          case 3 -> {
+            System.out.println(manager.viewAllSponsorships());
+            adminHomePage();
+            return;
+          }
+
+          case 4 -> {
+            System.out.println(manager.viewAllAnimals());
+            adminHomePage();
+            return;
+          }
+
+          case 5 -> {
+            System.out.println(manager.viewAllAdoptions(AdoptionType.FOR_ADOPTION));
+            adminHomePage();
+            return;
+          }
+
+          case 6 -> {
+            System.out.println(manager.viewAllAdoptions(AdoptionType.FOR_FOSTER));
+            adminHomePage();
+            return;
+          }
+
+          case 7 -> {
+            lostAndFoundMenu();
+            return;
+          }
+
+          case 0 -> {
+            System.out.println("Exiting terminal menu...");
+            Platform.runLater(() -> showMainMenu());
+            return;
+          }
+          default -> System.out.println("Invalid option!");
+        }
+      });
+      consoleThread.start();
+
+    } catch (
+
+    InputMismatchException e) {
+      System.out.println("Please pick a valid option!");
+      userHomepage();
+    }
+  }
+
+  /**
    * This method shows user's homepage
    */
   private void userHomepage() {
@@ -494,11 +650,10 @@ public class App extends Application {
         System.out.println("2. Search Shelter");
         System.out.println("3. See My Adoptions Requests");
         System.out.println("4. See My Foster Requests");
-        System.out.println("5 Lost and Found");
+        System.out.println("5. Lost and Found");
         System.out.println("0. Logout");
         System.out.print("Option: ");
-        option = sc.nextInt();
-        sc.nextLine();
+        option = readInt();
 
         switch (option) {
           case 1 -> {
@@ -512,45 +667,44 @@ public class App extends Application {
           }
 
           case 3 -> {
-              List<Adoption> adoptions = manager.getAdoptionsByUser((User) loggedAcc);
+            List<Adoption> adoptions = manager.getAdoptionsByUser((User) loggedAcc, AdoptionType.FOR_ADOPTION);
 
-              if(adoptions.size() == 0) {
-                  System.out.println("Sorry, no adopt requests found!");
-                  userHomepage();
-                  return;
-              }
-
-              else{
-                  for(Adoption adopt : adoptions) {
-                      System.out.println(adopt.toString() + "\n");
-                  }
-                  userHomepage();
-                  return;
-              }
-          }
-          case 4 -> {
-              List<Adoption> fosters = manager.getFostersByUser((User) loggedAcc);
-
-              if(fosters.size() == 0) {
-                  System.out.println("Sorry, no foster requests found!");
-                  userHomepage();
-                  return;
-              }
-
-              else{
-                  for(Adoption f : fosters) {
-                      System.out.println(f.toString() + "\n");
-                  }
-                  userHomepage();
-                  return;
-              }
-          }
-
-            case 5 -> {
-                lostAndFoundMenu();
-                return;
+            if (adoptions.size() == 0) {
+              System.out.println("Sorry, no adopt requests found!");
+              userHomepage();
+              return;
             }
 
+            else {
+              for (Adoption adopt : adoptions) {
+                System.out.println(adopt.toString() + "\n");
+              }
+              userHomepage();
+              return;
+            }
+          }
+          case 4 -> {
+            List<Adoption> fosters = manager.getAdoptionsByUser((User) loggedAcc, AdoptionType.FOR_FOSTER);
+
+            if (fosters.size() == 0) {
+              System.out.println("Sorry, no foster requests found!");
+              userHomepage();
+              return;
+            }
+
+            else {
+              for (Adoption f : fosters) {
+                System.out.println(f.toString() + "\n");
+              }
+              userHomepage();
+              return;
+            }
+          }
+
+          case 5 -> {
+            lostAndFoundMenu();
+            return;
+          }
 
           case 0 -> {
             System.out.println("Exiting terminal menu...");
@@ -577,8 +731,7 @@ public class App extends Application {
     System.out.println("4: Exit");
     int choice = 0;
     try {
-      choice = sc.nextInt();
-      sc.nextLine();
+      choice = readInt();
     } catch (Exception e) {
       System.out.println("Invalid input");
       lostAndFoundMenu();
@@ -594,7 +747,7 @@ public class App extends Application {
 
         System.out.println("\n=== REGISTER LOST ANIMAL ===");
         System.out.print("Name: ");
-        String name = sc.nextLine();
+        String name = readLine();
 
         // Animal Type
         AnimalType type = (AnimalType) chooseOption(AnimalType.values(), "Type");
@@ -616,7 +769,7 @@ public class App extends Application {
             System.out.println((i + 1) + ". " + breeds.get(i));
           }
           System.out.print("Enter race: ");
-          String input = sc.nextLine();
+          String input = readLine();
 
           try {
             int breedOption = Integer.parseInt(input);
@@ -653,14 +806,13 @@ public class App extends Application {
         }
 
         System.out.print("Description: ");
-        String description = sc.nextLine();
+        String description = readLine();
 
         System.out.print("Contact: ");
-        int contact = sc.nextInt();
-        sc.nextLine(); // limpa o \n
+        int contact = readInt(); // limpa o \n
 
         System.out.print("Location: ");
-        String location = sc.nextLine();
+        String location = readLine();
 
         manager.registerLostAnimal((User) loggedAcc, name, type, race, color, size, gender, description, contact,
             location);
@@ -693,7 +845,7 @@ public class App extends Application {
       }
 
       System.out.println("0. Back");
-      String input = sc.nextLine();
+      String input = readLine();
 
       try {
         int option = Integer.parseInt(input);
@@ -725,14 +877,13 @@ public class App extends Application {
         System.out.println("2. View My Animals");
         System.out.println("0. Logout");
         System.out.print("Option: ");
-        int option = sc.nextInt();
-        sc.nextLine();
+        int option = readInt();
 
         switch (option) {
           case 1 -> {
             System.out.println("\n=== REGISTER ANIMAL ===");
             System.out.print("Name: ");
-            String name = sc.nextLine();
+            String name = readLine();
 
             // Type
             AnimalType chosenType = (AnimalType) chooseOption(AnimalType.values(), "Type");
@@ -755,7 +906,7 @@ public class App extends Application {
               }
 
               System.out.print("Option: ");
-              String input = sc.nextLine();
+              String input = readLine();
 
               try {
                 int breedOption = Integer.parseInt(input);
@@ -784,8 +935,7 @@ public class App extends Application {
             }
 
             System.out.print("Age: ");
-            int age = sc.nextInt();
-            sc.nextLine();
+            int age = readInt();
 
             // Color
             AnimalColor color = (AnimalColor) chooseOption(AnimalColor.values(), "Color");
@@ -795,7 +945,7 @@ public class App extends Application {
             }
 
             System.out.print("Description: ");
-            String description = sc.nextLine();
+            String description = readLine();
 
             // Adoption Type
             AdoptionType adoptionType = (AdoptionType) chooseOption(AdoptionType.values(), "Adoption Type");
@@ -858,8 +1008,30 @@ public class App extends Application {
 
     InputMismatchException e) {
       System.out.println("Please pick a valid option!");
-      sc.nextLine();
+      readLine();
       shelterHomepage();
+    }
+  }
+
+  private int readInt() {
+    synchronized (sc) {
+      int value = sc.nextInt();
+      sc.nextLine();
+      return value;
+    }
+  }
+
+  private String readLine() {
+    synchronized (sc) {
+      return sc.nextLine();
+    }
+  }
+
+  private float readFloat() {
+    synchronized (sc) {
+      float value = sc.nextFloat();
+      sc.nextLine();
+      return value;
     }
   }
 

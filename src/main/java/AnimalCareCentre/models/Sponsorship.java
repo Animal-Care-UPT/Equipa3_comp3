@@ -74,7 +74,7 @@ public class Sponsorship {
 
   @Override
   public String toString() {
-    return "\nUser: " + user + "\nStart date: " + startDate + "\nAmount: " + amount;
+    return "\nUser: " + user.getName() + "\nStart date: " + startDate + "\nAmount: " + amount + "\nAnimal: " + animal.getName() + "\nShelter: " + animal.getShelter().getName();
   }
 
     public float getAmount() {
