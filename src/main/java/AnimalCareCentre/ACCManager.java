@@ -436,4 +436,43 @@ public class ACCManager {
 
     return result.toString();
   }
+
+    /**
+     * Returns pending adoption/foster requests for a specific shelter
+     *
+     * @param shelter
+     * @param type
+     */
+    public List<Adoption> getPendingRequestsByShelter(Shelter shelter, AdoptionType type) {
+        session.beginTransaction();
+        Query<Adoption> query = session.createQuery(
+                "FROM Adoption WHERE animal.shelter = :shelter AND type = :type AND status = :status",
+                Adoption.class);
+        query.setParameter("shelter", shelter);
+        query.setParameter("type", type);
+        query.setParameter("status", Status.PENDING); // Assumes you have this enum
+        List<Adoption> adoptions = query.getResultList();
+        session.getTransaction().commit();
+        return adoptions;
+    }
+
+    /**
+     * Changes the status of an adoption request
+     *
+     * @param adoption
+     * @param status
+     */
+    public void changeAdoptionStatus(Adoption adoption, Status status) {
+        session.beginTransaction();
+        adoption.setStatus(status);
+        if (status == Status.ACCEPTED) {
+            // Mark animal as not available
+            adoption.getAnimal().setListedFor(AdoptionType.NOT_AVAILABLE);
+            session.merge(adoption.getAnimal());
+        }
+        session.merge(adoption);
+        session.getTransaction().commit();
+    }
+
+
 }

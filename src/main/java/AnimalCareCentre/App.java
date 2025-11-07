@@ -875,6 +875,9 @@ public class App extends Application {
         System.out.println("=== SHELTER MENU ===");
         System.out.println("1. Register Animal");
         System.out.println("2. View My Animals");
+        System.out.println("3. View Pending Requests");
+        System.out.println("4. View Adoptions Made");
+        System.out.println("5. View Fosters");
         System.out.println("0. Logout");
         System.out.print("Option: ");
         int option = readInt();
@@ -988,6 +991,74 @@ public class App extends Application {
             shelterHomepage();
             return;
           }
+
+          case 3 -> {
+              // View Pending Adoption Requests
+              List<Adoption> pendingAdoptions = manager.getPendingRequestsByShelter((Shelter) loggedAcc, AdoptionType.FOR_ADOPTION);
+              if (pendingAdoptions.isEmpty()) {
+                  System.out.println("No pending adoption requests.");
+              } else {
+                  Adoption choice = (Adoption) chooseOption(pendingAdoptions.toArray(), "Adoption Request");
+                  if (choice == null) {
+                      javafx.application.Platform.runLater(this::shelterHomepage);
+                      return;
+                  }
+
+                  System.out.println("1. Accept");
+                  System.out.println("2. Reject");
+                  System.out.println("0. Back");
+                  System.out.print("Option: ");
+                  int action = readInt();
+                  if (action == 0) {
+                        javafx.application.Platform.runLater(this::shelterHomepage);
+                        return;
+                    }
+
+                  if (action == 1) {
+                      manager.changeAdoptionStatus(choice, Status.ACCEPTED);
+                      System.out.println("Adoption request accepted!");
+                  } else {
+                      manager.changeAdoptionStatus(choice, Status.REJECTED);
+                      System.out.println("Adoption request rejected.");
+                  }
+              }
+              shelterHomepage();
+              return;
+            }
+
+          case 4 -> {
+              // View Pending Foster Requests (similar to case 3)
+              List<Adoption> pendingFosters = manager.getPendingRequestsByShelter((Shelter) loggedAcc, AdoptionType.FOR_FOSTER);
+              if (pendingFosters.isEmpty()) {
+                  System.out.println("No pending foster requests.");
+              } else {
+                  Adoption choice = (Adoption) chooseOption(pendingFosters.toArray(), "Foster Request");
+                  if (choice == null) {
+                      javafx.application.Platform.runLater(this::shelterHomepage);
+                      return;
+                  }
+
+                  System.out.println("1. Accept");
+                  System.out.println("2. Reject");
+                  System.out.println("0. Back");
+                  System.out.print("Option: ");
+                  int action = readInt();
+                  if (action == 0) {
+                      javafx.application.Platform.runLater(this::shelterHomepage);
+                       return;
+                  }
+
+                  if (action == 1) {
+                      manager.changeAdoptionStatus(choice, Status.ACCEPTED);
+                      System.out.println("Foster request accepted!");
+                  } else {
+                      manager.changeAdoptionStatus(choice, Status.REJECTED);
+                      System.out.println("Foster request rejected.");
+                  }
+              }
+              shelterHomepage();
+              return;
+            }
 
           case 0 -> {
             System.out.println("Exiting terminal menu...");
