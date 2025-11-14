@@ -1,4 +1,4 @@
-package AnimalCareCentre.utils;
+package AnimalCareCentre.util;
 
 import org.passay.CharacterData;
 

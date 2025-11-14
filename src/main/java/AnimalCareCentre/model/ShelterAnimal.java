@@ -1,4 +1,4 @@
-package AnimalCareCentre.models;
+package AnimalCareCentre.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,6 +118,6 @@ public class ShelterAnimal extends Animal {
   // toString from the class
   @Override
   public String toString() {
-    return super.toString();
+      return super.toString() + "\n" + "Listed for: " + listedFor;
   }
 }

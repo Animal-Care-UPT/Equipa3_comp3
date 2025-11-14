@@ -1,4 +1,4 @@
-package AnimalCareCentre.models;
+package AnimalCareCentre.model;
 
 import java.time.LocalDate;
 

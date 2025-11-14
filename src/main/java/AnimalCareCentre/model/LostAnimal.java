@@ -1,4 +1,4 @@
-package AnimalCareCentre.models;
+package AnimalCareCentre.model;
 
 import AnimalCareCentre.enums.AnimalColor;
 import AnimalCareCentre.enums.AnimalGender;

@@ -1,4 +1,4 @@
-package AnimalCareCentre.utils;
+package AnimalCareCentre.util;
 
 import java.util.Arrays;
 import java.util.Properties;

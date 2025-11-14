@@ -1,3 +1,6 @@
+.env
+env.sh
+
 # Maven
 target/
 pom.xml.tag
