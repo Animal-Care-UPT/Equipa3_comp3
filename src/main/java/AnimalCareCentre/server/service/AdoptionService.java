@@ -2,13 +2,15 @@ package AnimalCareCentre.server.service;
 
 import org.springframework.stereotype.Service;
 
+import AnimalCareCentre.server.repository.AdoptionRepository;
+
 @Service
 public class AdoptionService {
 
-  private final AdoptionService adoptionService;
+  private final AdoptionRepository adoptionRepository;
 
-  public AdoptionService(AdoptionService adoptionService) {
-    this.adoptionService = adoptionService;
+  public AdoptionService(AdoptionRepository adoptionRepository) {
+    this.adoptionRepository = adoptionRepository;
   }
 
 }
