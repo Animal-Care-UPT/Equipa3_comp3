@@ -1,9 +1,6 @@
-package AnimalCareCentre.model;
+package AnimalCareCentre.server.model;
 
-import AnimalCareCentre.enums.AnimalColor;
-import AnimalCareCentre.enums.AnimalGender;
-import AnimalCareCentre.enums.AnimalSize;
-import AnimalCareCentre.enums.AnimalType;
+import AnimalCareCentre.server.enums.*;
 
 import jakarta.persistence.*;
 

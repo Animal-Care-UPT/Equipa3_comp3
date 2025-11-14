@@ -1,10 +1,10 @@
-package AnimalCareCentre.model;
+package AnimalCareCentre.server.model;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import AnimalCareCentre.enums.*;
+import AnimalCareCentre.server.enums.*;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

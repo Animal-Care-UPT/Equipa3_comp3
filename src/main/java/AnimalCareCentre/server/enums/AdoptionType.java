@@ -1,4 +1,4 @@
-package AnimalCareCentre.enums;
+package AnimalCareCentre.server.enums;
 
 /**
  * This enum lists all the possible types of ways an animal can be rescued.

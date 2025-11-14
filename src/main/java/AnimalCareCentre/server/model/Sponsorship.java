@@ -1,4 +1,4 @@
-package AnimalCareCentre.model;
+package AnimalCareCentre.server.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

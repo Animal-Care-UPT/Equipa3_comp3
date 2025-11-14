@@ -1,4 +1,4 @@
-package AnimalCareCentre.enums;
+package AnimalCareCentre.server.enums;
 
 
 import java.util.ArrayList;
