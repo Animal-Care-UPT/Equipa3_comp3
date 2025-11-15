@@ -19,7 +19,7 @@ public class Shelter extends Account {
 
   private Integer foundationYear;
   private Integer contact;
-  private Status status = Status.PENDING;
+  private Status status;
   @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ShelterAnimal> animals = new ArrayList<>();
 
@@ -34,6 +34,7 @@ public class Shelter extends Account {
     super(name, email, password, location, securityQuestion, answer);
     this.foundationYear = foundationYear;
     this.contact = contact;
+    status = Status.PENDING;
   }
 
   protected Shelter() {

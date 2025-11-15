@@ -1,14 +1,19 @@
 package AnimalCareCentre.server.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import AnimalCareCentre.server.enums.Status;
 import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.service.AccountService;
 import AnimalCareCentre.server.service.ShelterService;
@@ -58,4 +63,17 @@ public class ShelterController {
     return ResponseEntity.status(201).body(s);
   }
 
+  @PutMapping("/status")
+  public Shelter changeStatus(@RequestBody Shelter shelter, @RequestParam Status status) {
+    return shelterService.changeStatus(shelter, status);
+  }
+
+  @GetMapping
+  public ResponseEntity<?> getPendingShelters() {
+    List<Shelter> shelters = shelterService.getPendingShelters();
+    if (shelters.isEmpty()) {
+      return ResponseEntity.status(404).body("There are no pending Shelters!");
+    }
+      return ResponseEntity.ok(shelters);
+  }
 }

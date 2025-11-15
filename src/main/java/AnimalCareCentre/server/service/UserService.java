@@ -20,4 +20,9 @@ public class UserService {
     return userRepository.save(user);
   }
 
+  public User changePassword(User user, String password) {
+    user.setPassword(ACCPasswordEncryption.encrypt(password));
+    return userRepository.save(user);
+  }
+
 }

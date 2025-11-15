@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +29,31 @@ public class AccountController {
 
   public AccountController(AccountService accountService) {
     this.accountService = accountService;
+  }
+
+  @PutMapping("/changepw")
+  public ResponseEntity<?> changePassword(@RequestParam String email, @RequestParam String newPW, @RequestParam String answer) {
+
+    if (accountService.findAccount(email) == null) {
+      return ResponseEntity.status(404).body("Account not registered!");
+    }
+
+    if (email == null || newPW == null || answer == null) {
+      return ResponseEntity.badRequest().body("All fields are required!");
+    }
+
+    if (!accountService.verifySecurityAnswer(email, answer)) {
+      return ResponseEntity.status(403).body("Invalid answer!");
+    }
+
+    String pwError = passwordValidator.validate(newPW);
+    if (pwError != null) {
+      return ResponseEntity.badRequest().body(pwError);
+    }
+
+    accountService.changePassword(email, newPW);
+
+    return ResponseEntity.ok("Password changed successfully");
   }
 
   @PostMapping("/create")
@@ -54,6 +80,7 @@ public class AccountController {
     if (accountService.findAccount(account.getEmail()) != null) {
       return ResponseEntity.status(409).body("Email already registered!");
     }
+
     Account acc = accountService.createAccount(account);
     acc.setPassword(null);
     return ResponseEntity.status(201).body(acc);
