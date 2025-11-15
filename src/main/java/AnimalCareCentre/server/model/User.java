@@ -7,9 +7,6 @@ import java.util.List;
 import AnimalCareCentre.server.enums.*;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -19,16 +16,15 @@ import jakarta.persistence.Table;
  *
  */
 @Entity
-@Table(name ="Users")
+@Table(name = "Users")
 public class User extends Account {
 
-  private int contact;
+  private Integer contact;
   private LocalDate birthDate;
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Adoption> adoptions;
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Sponsorship> sponsorships = new ArrayList<>();
-  
 
   /**
    * Constructor for the class User
@@ -49,15 +45,16 @@ public class User extends Account {
     this.contact = contact;
   }
 
-  protected User() {}
+  protected User() {
+  }
 
   // Getter from the contact of the user
-  public int getContact() {
+  public Integer getContact() {
     return contact;
   }
-  
+
   public void addSponsor(Sponsorship sponsor) {
-	sponsorships.add(sponsor);
+    sponsorships.add(sponsor);
     sponsor.setUser(this);
   }
 
@@ -66,9 +63,12 @@ public class User extends Account {
     return super.toString() + "\nContact: " + contact;
   }
 
-public long getId() {
-	return id;
-}
-  
-  
+  public long getId() {
+    return id;
+  }
+
+  public LocalDate getBirthDate() {
+    return birthDate;
+  }
+
 }
