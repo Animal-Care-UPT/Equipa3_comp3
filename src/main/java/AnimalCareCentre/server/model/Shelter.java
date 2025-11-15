@@ -17,10 +17,9 @@ import jakarta.persistence.Table;
 @Table(name = "Shelters")
 public class Shelter extends Account {
 
-  private int foundationYear;
-  private int contact;
-  private boolean isVerified;
-  private Status status;
+  private Integer foundationYear;
+  private Integer contact;
+  private Status status = Status.PENDING;
   @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ShelterAnimal> animals = new ArrayList<>();
 
@@ -35,15 +34,13 @@ public class Shelter extends Account {
     super(name, email, password, location, securityQuestion, answer);
     this.foundationYear = foundationYear;
     this.contact = contact;
-    isVerified = true;
-    status = Status.PENDING;
   }
 
   protected Shelter() {
   }
 
   // Getters
-  public int getFoundationYear() {
+  public Integer getFoundationYear() {
     return foundationYear;
   }
 
@@ -55,12 +52,8 @@ public class Shelter extends Account {
     return id;
   }
 
-  public int getContact() {
+  public Integer getContact() {
     return contact;
-  }
-
-  public boolean getVerification() {
-    return isVerified;
   }
 
   public void setStatus(Status status) {

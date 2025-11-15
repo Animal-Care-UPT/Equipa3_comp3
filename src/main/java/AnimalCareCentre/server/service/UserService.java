@@ -2,7 +2,9 @@ package AnimalCareCentre.server.service;
 
 import org.springframework.stereotype.Service;
 
+import AnimalCareCentre.server.model.User;
 import AnimalCareCentre.server.repository.UserRepository;
+import AnimalCareCentre.server.util.*;
 
 @Service
 public class UserService {
@@ -11,6 +13,11 @@ public class UserService {
 
   public UserService(UserRepository userRepository) {
     this.userRepository = userRepository;
+  }
+
+  public User createUser(User user) {
+    user.setPassword(ACCPasswordEncryption.encrypt(user.getPassword()));
+    return userRepository.save(user);
   }
 
 }
