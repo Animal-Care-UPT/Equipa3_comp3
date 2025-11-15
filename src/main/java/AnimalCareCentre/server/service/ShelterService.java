@@ -38,4 +38,7 @@ public class ShelterService {
     return shelterRepository.save(shelter);
   }
 
+  public List<Shelter> getShelters() {
+    return shelterRepository.findAll();
+  }
 }

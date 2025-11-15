@@ -68,12 +68,21 @@ public class ShelterController {
     return shelterService.changeStatus(shelter, status);
   }
 
-  @GetMapping
+  @GetMapping("/pending")
   public ResponseEntity<?> getPendingShelters() {
     List<Shelter> shelters = shelterService.getPendingShelters();
     if (shelters.isEmpty()) {
       return ResponseEntity.status(404).body("There are no pending Shelters!");
     }
       return ResponseEntity.ok(shelters);
+  }
+
+  @GetMapping
+  public ResponseEntity<?> viewShelters() {
+    List<Shelter> shelters = shelterService.getShelters();
+    if (shelters.isEmpty()) {
+      return ResponseEntity.status(404).body("There are no registered shelters!");
+    }
+    return ResponseEntity.ok(shelters);
   }
 }
