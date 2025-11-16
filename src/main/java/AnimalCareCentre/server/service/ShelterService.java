@@ -19,8 +19,9 @@ public class ShelterService {
     this.shelterRepository = shelterRepository;
   }
 
-    public Optional<Shelter> findById(Long id) {
-        return shelterRepository.findById(id);
+    public Shelter findById(Long id) {
+
+      return shelterRepository.findById(id).orElse(null);
     }
 
   public Shelter createShelter(Shelter shelter) {

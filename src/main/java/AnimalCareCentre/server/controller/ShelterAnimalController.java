@@ -33,9 +33,7 @@ public class ShelterAnimalController {
             return ResponseEntity.badRequest().body("All fields are required!");
         }
 
-        Shelter shelter = shelterService.findById(shelterAnimal.getShelter().getId())
-                .orElseThrow(() -> new RuntimeException("Shelter not found with id: " +
-                        shelterAnimal.getShelter().getId()));
+        Shelter shelter = shelterService.findById(shelterAnimal.getShelter().getId());
 
         shelterAnimal.setShelter(shelter);
         ShelterAnimal savedAnimal = shelterAnimalService.registerShelterAnimal(shelterAnimal);
