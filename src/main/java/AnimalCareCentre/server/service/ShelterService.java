@@ -1,6 +1,7 @@
 package AnimalCareCentre.server.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,10 @@ public class ShelterService {
   public ShelterService(ShelterRepository shelterRepository) {
     this.shelterRepository = shelterRepository;
   }
+
+    public Optional<Shelter> findById(Long id) {
+        return shelterRepository.findById(id);
+    }
 
   public Shelter createShelter(Shelter shelter) {
     shelter.setPassword(ACCPasswordEncryption.encrypt(shelter.getPassword()));

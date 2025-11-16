@@ -92,7 +92,11 @@ public class ShelterAnimal extends Animal {
     return shelter;
   }
 
-  // public List<Adoption> getAdoptions() {
+    public void setShelter(Shelter shelter) {
+        this.shelter = shelter;
+    }
+
+    // public List<Adoption> getAdoptions() {
   // return adoptions;
   // }
 
