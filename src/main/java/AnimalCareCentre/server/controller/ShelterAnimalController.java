@@ -14,30 +14,34 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/shelteranimals/")
 public class ShelterAnimalController {
 
-    private final ShelterAnimalService shelterAnimalService;
-    private final ShelterService shelterService;
+  private final ShelterAnimalService shelterAnimalService;
+  private final ShelterService shelterService;
 
-    public ShelterAnimalController(ShelterAnimalService shelterAnimalService,
-                                   ShelterService shelterService) {
-        this.shelterAnimalService = shelterAnimalService;
-        this.shelterService = shelterService;
+  public ShelterAnimalController(ShelterAnimalService shelterAnimalService,
+      ShelterService shelterService) {
+    this.shelterAnimalService = shelterAnimalService;
+    this.shelterService = shelterService;
+  }
+
+  @PostMapping("/register")
+  public ResponseEntity<?> registerShelterAnimal(@RequestBody ShelterAnimal shelterAnimal) {
+    if (shelterAnimal.getShelter() == null || shelterAnimal.getShelter().getId() == 0 ||
+        shelterAnimal.getColor() == null || shelterAnimal.getName() == null ||
+        shelterAnimal.getListedFor() == null || shelterAnimal.getRace() == null ||
+        shelterAnimal.getSize() == null || shelterAnimal.getType() == null ||
+        shelterAnimal.getGender() == null) {
+      return ResponseEntity.badRequest().body("All fields are required!");
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> registerShelterAnimal(@RequestBody ShelterAnimal shelterAnimal) {
-        if(shelterAnimal.getShelter() == null || shelterAnimal.getShelter().getId() == 0 ||
-                shelterAnimal.getColor() == null || shelterAnimal.getName() == null ||
-                shelterAnimal.getListedFor() == null || shelterAnimal.getRace() == null ||
-                shelterAnimal.getSize() == null || shelterAnimal.getType() == null ||
-                shelterAnimal.getGender() == null) {
-            return ResponseEntity.badRequest().body("All fields are required!");
-        }
+    Shelter shelter = shelterService.findById(shelterAnimal.getShelter().getId());
 
-        Shelter shelter = shelterService.findById(shelterAnimal.getShelter().getId());
-
-        shelterAnimal.setShelter(shelter);
-        ShelterAnimal savedAnimal = shelterAnimalService.registerShelterAnimal(shelterAnimal);
-        return ResponseEntity.status(201).body(savedAnimal);
+    if (shelter == null) {
+      return ResponseEntity.status(404).body("The shelter doesn't exist!");
     }
+
+    shelterAnimal.setShelter(shelter);
+    ShelterAnimal savedAnimal = shelterAnimalService.registerShelterAnimal(shelterAnimal);
+    return ResponseEntity.status(201).body(savedAnimal);
+  }
 
 }
