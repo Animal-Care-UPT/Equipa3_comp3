@@ -4,7 +4,12 @@ import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.model.ShelterAnimal;
 import AnimalCareCentre.server.service.ShelterService;
 import AnimalCareCentre.server.service.ShelterAnimalService;
+
+import java.util.List;
+
+import org.checkerframework.common.reflection.qual.GetMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,5 +48,16 @@ public class ShelterAnimalController {
     ShelterAnimal savedAnimal = shelterAnimalService.registerShelterAnimal(shelterAnimal);
     return ResponseEntity.status(201).body(savedAnimal);
   }
+
+  @GetMapping("/search")
+  public ResponseEntity<?> searchShelterAnimals() {
+    List<ShelterAnimal> results = shelterAnimalService.searchAll();
+    if (!results.isEmpty()) {
+      return ResponseEntity.ok().body(results);
+    }
+    return ResponseEntity.status(404).body("There are no registered animals");
+  }
+
+
 
 }

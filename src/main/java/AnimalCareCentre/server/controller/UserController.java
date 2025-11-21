@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import AnimalCareCentre.server.model.User;
 import AnimalCareCentre.server.service.AccountService;
 import AnimalCareCentre.server.service.UserService;
-import AnimalCareCentre.server.util.*;
 import jakarta.validation.Valid;
 
 @RestController
@@ -18,7 +17,6 @@ public class UserController {
 
   private final UserService userService;
   private final AccountService accountService;
-  private final ACCPasswordValidator passwordValidator = new ACCPasswordValidator();
 
   public UserController(UserService userService, AccountService accountService) {
     this.userService = userService;
@@ -28,7 +26,7 @@ public class UserController {
   @PostMapping("/create")
   public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
 
-    String pwError = passwordValidator.validate(user.getPassword());
+    String pwError = accountService.verifyPasswordRules(user.getPassword());
     if (pwError != null) {
       return ResponseEntity.badRequest().body(pwError);
     }

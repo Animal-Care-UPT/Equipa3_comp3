@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  * This class describes the model of a User from the system, its attributes and
@@ -22,10 +23,9 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "Users")
 public class User extends Account {
 
-  @Max(value = 999999999, message = "Please enter a valid phone number")
-  @Min(value = 100000000, message = "Please enter a valid phone number!")
+  @Size(min = 9, max = 9)
   @NotNull(message = "Contact is mandatory!")
-  private Integer contact;
+  private String contact;
   @NotNull(message = "Birthdate is mandatory!")
   private LocalDate birthDate;
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -46,7 +46,7 @@ public class User extends Account {
    */
   public User(String name, String email, String password, String location, SecurityQuestion securityQuestion,
       String answer,
-      LocalDate birthDate, int contact) {
+      LocalDate birthDate, String contact) {
     super(name, email, password, location, securityQuestion, answer);
     this.birthDate = birthDate;
     this.contact = contact;
@@ -56,7 +56,7 @@ public class User extends Account {
   }
 
   // Getter from the contact of the user
-  public Integer getContact() {
+  public String getContact() {
     return contact;
   }
 
