@@ -25,51 +25,36 @@ public class ShelterAnimalService {
 
   public List<ShelterAnimal> searchByKeyword(String search) {
     String keyword = "%" + search + "%";
-    List<ShelterAnimal> results = shelterAnimalRepository.findByKeyword(keyword, Status.ACCEPTED);
-    if (!results.isEmpty()) {
-      return results;
-    }
-    return null;
+    return shelterAnimalRepository.findByKeyword(keyword, Status.AVAILABLE);
   }
 
   public List<ShelterAnimal> searchByGender(AnimalGender gender) {
-    List<ShelterAnimal> results = shelterAnimalRepository.findByGender(gender);
-    if (!results.isEmpty()) {
-      return results;
-    }
-    return null;
+    return shelterAnimalRepository.findByGenderAndStatus(gender, Status.AVAILABLE);
   }
 
   public List<ShelterAnimal> searchByType(AnimalType type) {
-    List<ShelterAnimal> results = shelterAnimalRepository.findByType(type);
-    if (!results.isEmpty()) {
-      return results;
-    }
-    return null;
+    return shelterAnimalRepository.findByTypeAndStatus(type, Status.AVAILABLE);
   }
 
   public List<ShelterAnimal> searchAvailableByShelter(Shelter shelter) {
-    List<ShelterAnimal> results = shelterAnimalRepository.findByStatusAndShelter(Status.ACCEPTED, shelter);
-    if (!results.isEmpty()) {
-      return results;
-    }
-    return null;
+    return shelterAnimalRepository.findByStatusAndShelter(Status.AVAILABLE, shelter);
   }
 
   public List<ShelterAnimal> searchByShelter(Shelter shelter) {
-    List<ShelterAnimal> results = shelterAnimalRepository.findByShelter(shelter);
-    if (!results.isEmpty()) {
-      return results;
-    }
-    return null;
+    return shelterAnimalRepository.findByShelter(shelter);
   }
 
   public List<ShelterAnimal> searchAll() {
-    List<ShelterAnimal> results = shelterAnimalRepository.findAll();
-    if (!results.isEmpty()) {
-      return results;
-    }
-    return null;
+    return shelterAnimalRepository.findAll();
+  }
+
+  public List<ShelterAnimal> searchFosterAnimals() {
+    return shelterAnimalRepository.findByAdoptionTypeAndStatus(AdoptionType.FOR_FOSTER,
+        Status.AVAILABLE);
+  }
+
+  public List<ShelterAnimal> searchAdoptionAnimals() {
+    return shelterAnimalRepository.findByAdoptionTypeAndStatus(AdoptionType.FOR_ADOPTION, Status.AVAILABLE);
   }
 
 }

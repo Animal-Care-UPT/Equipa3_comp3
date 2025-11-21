@@ -19,33 +19,15 @@ public class ShelterAnimal extends Animal {
 
   private boolean isVacinated;
 
+  private Status status;
+
   @Enumerated(EnumType.STRING)
-  private AdoptionType listedFor;
+  private AdoptionType adoptionType;
 
   @OneToMany(mappedBy = "animal")
   List<Adoption> adoptions = new ArrayList<>();
   @OneToMany(mappedBy = "animal", cascade = CascadeType.ALL, orphanRemoval = true)
   List<Sponsorship> sponsors = new ArrayList<>();
-
-  /**
-   * Constructor for the class Animal.
-   *
-   * @param name
-   * @param type
-   * @param race
-   * @param color
-   * @param isVacinated
-   * @param size
-   * @param listedFor
-   * @param description
-   */
-  public ShelterAnimal(String name, AnimalType type, String race, AnimalColor color, boolean isVacinated,
-      AnimalSize size, AnimalGender gender, AdoptionType listedFor, String description, Shelter shelter) {
-    super(name, type, race, size, gender, color, description);
-    this.isVacinated = isVacinated;
-    this.listedFor = listedFor;
-    this.shelter = shelter;
-  }
 
   public ShelterAnimal() {
     super();
@@ -80,8 +62,8 @@ public class ShelterAnimal extends Animal {
     return super.getSize();
   }
 
-  public AdoptionType getListedFor() {
-    return listedFor;
+  public AdoptionType getAdoptionType() {
+    return adoptionType;
   }
 
   public String getDescription() {
@@ -92,13 +74,17 @@ public class ShelterAnimal extends Animal {
     return shelter;
   }
 
-    public void setShelter(Shelter shelter) {
-        this.shelter = shelter;
-    }
+  public Status getStatus() {
+    return status;
+  }
 
-    // public List<Adoption> getAdoptions() {
-  // return adoptions;
-  // }
+  public void setStatus(Status status) {
+    this.status = status;
+  }
+
+  public void setShelter(Shelter shelter) {
+    this.shelter = shelter;
+  }
 
   public List<Sponsorship> getSponsors() {
     return sponsors;
@@ -113,13 +99,13 @@ public class ShelterAnimal extends Animal {
     isVacinated = vacinated;
   }
 
-  public void setListedFor(AdoptionType listedFor) {
-    this.listedFor = listedFor;
+  public void setAdoptionType(AdoptionType adoptionType) {
+    this.adoptionType = adoptionType;
   }
 
   // toString from the class
   @Override
   public String toString() {
-      return super.toString() + "\n" + "Listed for: " + listedFor;
+    return super.toString() + "\n" + "Listed for: " + adoptionType;
   }
 }

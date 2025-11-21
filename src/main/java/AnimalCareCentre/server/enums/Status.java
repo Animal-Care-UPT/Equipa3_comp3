@@ -1,7 +1,7 @@
 package AnimalCareCentre.server.enums;
 
 /**
- * This enum lists all the possible states a request or shelter can have.
+ * This enum lists all the possible states a request, shelter or animal can have.
  *
  */
 public enum Status {
@@ -10,6 +10,8 @@ public enum Status {
   ACCEPTED("Accepted"),
   REJECTED("Rejected"),
   CANCELLED("Cancelled"),
+  AVAILABLE("Available"),
+  UNAVAILABLE("Unavailable"),
   BANNED("BANNED");
 
   private final String status;
