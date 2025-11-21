@@ -1,7 +1,6 @@
 package AnimalCareCentre.server.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -19,10 +18,10 @@ public class ShelterService {
     this.shelterRepository = shelterRepository;
   }
 
-    public Shelter findById(Long id) {
+  public Shelter findById(Long id) {
 
-      return shelterRepository.findById(id).orElse(null);
-    }
+    return shelterRepository.findById(id).orElse(null);
+  }
 
   public Shelter createShelter(Shelter shelter) {
     shelter.setPassword(ACCPasswordEncryption.encrypt(shelter.getPassword()));
@@ -45,6 +44,6 @@ public class ShelterService {
   }
 
   public List<Shelter> getShelters() {
-    return shelterRepository.findAll();
+    return shelterRepository.findByStatus(Status.AVAILABLE);
   }
 }
