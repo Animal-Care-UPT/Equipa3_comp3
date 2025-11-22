@@ -3,6 +3,8 @@ package AnimalCareCentre.server.model;
 import AnimalCareCentre.server.enums.*;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @MappedSuperclass
 abstract class Animal {
@@ -11,21 +13,30 @@ abstract class Animal {
   @Column(name = "animal_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @NotBlank(message = "Name is required!")
   private String name;
+
   @Enumerated(EnumType.STRING)
+  @NotNull(message = "Animal Type is required!")
   private AnimalType type;
 
+  @NotBlank(message = "Animal Race is required!")
   private String race;
 
   @Enumerated(EnumType.STRING)
+  @NotNull(message = "Size is required!")
   private AnimalSize size;
 
   @Enumerated(EnumType.STRING)
+  @NotNull(message = "Gender is required!")
   private AnimalGender gender;
 
   @Enumerated(EnumType.STRING)
+  @NotNull(message = "Color is required!")
   private AnimalColor color;
 
+  @NotBlank(message = "Description is required!")
   private String description;
 
   public Animal() {

@@ -4,6 +4,7 @@ import AnimalCareCentre.server.enums.*;
 import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.model.ShelterAnimal;
 import AnimalCareCentre.server.service.ShelterService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import AnimalCareCentre.server.service.ShelterAnimalService;
@@ -32,17 +33,10 @@ public class ShelterAnimalController {
   }
 
   @PostMapping("/register")
-  public ResponseEntity<?> registerShelterAnimal(@RequestBody ShelterAnimal shelterAnimal) {
-    if (shelterAnimal.getShelter() == null || shelterAnimal.getShelter().getId() == 0 ||
-        shelterAnimal.getColor() == null || shelterAnimal.getName() == null ||
-        shelterAnimal.getAdoptionType() == null || shelterAnimal.getRace() == null ||
-        shelterAnimal.getSize() == null || shelterAnimal.getType() == null ||
-        shelterAnimal.getGender() == null) {
-      return ResponseEntity.badRequest().body("All fields are required!");
-    }
+  public ResponseEntity<?> registerShelterAnimal(@Valid @RequestBody ShelterAnimal shelterAnimal, @RequestParam long id) {
 
-    Shelter shelter = shelterService.findById(shelterAnimal.getShelter().getId());
 
+    Shelter shelter = shelterService.findById(id);
     if (shelter == null) {
       return ResponseEntity.status(404).body("The shelter doesn't exist!");
     }

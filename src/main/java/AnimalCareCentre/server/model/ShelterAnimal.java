@@ -5,6 +5,7 @@ import java.util.List;
 
 import AnimalCareCentre.server.enums.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * This class describes the model of an Animal.
@@ -19,9 +20,11 @@ public class ShelterAnimal extends Animal {
 
   private boolean isVacinated;
 
+  @Enumerated(EnumType.STRING)
   private Status status;
 
   @Enumerated(EnumType.STRING)
+  @NotNull(message = "Adoption Type is required!")
   private AdoptionType adoptionType;
 
   @OneToMany(mappedBy = "animal")
