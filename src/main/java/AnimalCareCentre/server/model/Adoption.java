@@ -38,23 +38,6 @@ public class Adoption {
   @Enumerated(EnumType.STRING)
   private Status status;
 
-  /**
-   * Constructor of class Adoption.
-   *
-   * @param user
-   * @param animal
-   * @param type
-   */
-  public Adoption(User user, ShelterAnimal animal, AdoptionType type) {
-
-    this.user = user;
-    this.animal = animal;
-    this.type = type;
-    requestDate = LocalDate.now();
-    status = Status.PENDING;
-
-  }
-
   public Adoption() {}
 
   // Getters and setters area

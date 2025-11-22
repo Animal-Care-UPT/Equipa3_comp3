@@ -16,7 +16,6 @@ import AnimalCareCentre.server.enums.Status;
 import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.service.AccountService;
 import AnimalCareCentre.server.service.ShelterService;
-import AnimalCareCentre.server.util.*;
 import jakarta.validation.Valid;
 
 @RestController
@@ -25,7 +24,6 @@ public class ShelterController {
 
   private final ShelterService shelterService;
   private final AccountService accountService;
-  private final ACCPasswordValidator passwordValidator = new ACCPasswordValidator();
 
   public ShelterController(ShelterService shelterService, AccountService accountService) {
     this.shelterService = shelterService;
@@ -39,7 +37,7 @@ public class ShelterController {
       return ResponseEntity.badRequest().body("Foundation year cannot be in the future!");
     }
 
-    String pwError = passwordValidator.validate(shelter.getPassword());
+    String pwError = accountService.verifyPasswordRules(shelter.getPassword());
     if (pwError != null) {
       return ResponseEntity.badRequest().body(pwError);
     }

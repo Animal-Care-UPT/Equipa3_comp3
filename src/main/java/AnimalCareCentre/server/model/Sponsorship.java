@@ -40,20 +40,6 @@ public class Sponsorship {
   @OneToMany(mappedBy = "sponsorship", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Donation> donations = new ArrayList<>();
 
-  /**
-   * Constructor for the class Sponsorship
-   *
-   * @param user
-   * @param animal
-   */
-  
-  public Sponsorship(User user, ShelterAnimal animal, float amount) {
-    this.user = user;
-    this.animal = animal;
-    this.amount = amount;
-    startDate = LocalDate.now();
-  }
-
   public Sponsorship() {
   }
 
@@ -66,8 +52,7 @@ public class Sponsorship {
     return animal;
   }
 
-  public void addDonation() {
-    Donation donation = new Donation(amount);
+  public void addDonation(Donation donation) {
     donations.add(donation);
     donation.setSponsorship(this);
   }

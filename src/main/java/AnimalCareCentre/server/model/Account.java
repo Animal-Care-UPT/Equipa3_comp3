@@ -37,7 +37,7 @@ public class Account {
   @NotBlank(message = "Name is mandatory!")
   private String name;
   @NotBlank(message = "Email is mandatory!")
-  @Email(message = "Please enter a valid email address")
+  @Email(message = "Please enter a valid email address!")
   private String email;
   @NotBlank(message = "Password is mandatory!")
   @Size(min = 8, max = 16)
@@ -51,25 +51,6 @@ public class Account {
   private String answer;
   @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<LostAnimal> lostAnimals = new ArrayList<>();
-
-  /**
-   * Constructor for class Account.
-   *
-   * @param name
-   * @param email
-   * @param password
-   * @param location
-   * @param securityQuestion
-   */
-  public Account(String name, String email, String password, String location, SecurityQuestion securityQuestion,
-      String answer) {
-    this.name = name;
-    this.email = email;
-    this.password = password;
-    this.location = location;
-    this.securityQuestion = securityQuestion;
-    this.answer = answer;
-  }
 
   protected Account() {
   }

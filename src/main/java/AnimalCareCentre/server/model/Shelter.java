@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  * This class describes the model of a Shelter.
@@ -24,26 +25,11 @@ public class Shelter extends Account {
   @Min(value = 1900, message = "Must enter a valid year!")
   private Integer foundationYear;
   @NotNull(message = "Contact is mandatory!")
-  @Max(value = 999999999, message = "Please enter a valid phone number")
-  @Min(value = 100000000, message = "Please enter a valid phone number!")
-  private Integer contact;
+  @Size(min = 9, max = 9)
+  private String contact;
   private Status status;
   @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ShelterAnimal> animals = new ArrayList<>();
-
-  /**
-   * Constructor for the class Shelter
-   *
-   * @param foundationYear
-   * @param contact
-   */
-  public Shelter(String name, String email, String password, String location, SecurityQuestion securityQuestion,
-      String answer, int foundationYear, int contact) {
-    super(name, email, password, location, securityQuestion, answer);
-    this.foundationYear = foundationYear;
-    this.contact = contact;
-    status = Status.PENDING;
-  }
 
   protected Shelter() {
   }
@@ -61,12 +47,12 @@ public class Shelter extends Account {
     return id;
   }
 
-  public Integer getContact() {
+  public String getContact() {
     return contact;
   }
 
   public void setStatus(Status status) {
-      this.status = status;
+    this.status = status;
   }
 
   @Override

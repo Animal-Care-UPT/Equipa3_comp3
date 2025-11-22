@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>Equipa3</groupId>
-	<artifactId>AnimalCareCentre</artifactId>
+	<artifactId>Equipa3_comp2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>AnimalCareCentre</name>
 	<description>A pet adoption portal developed as a group as part of the Programming Lab module.</description>

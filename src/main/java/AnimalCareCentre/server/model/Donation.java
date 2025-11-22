@@ -28,18 +28,6 @@ public class Donation {
   @JoinColumn(name = "Sponsorship_id")
   private Sponsorship sponsorship;
 
-  /**
-   * Constructor for the class Donation.
-   *
-   * @param amount
-   * @param donationDate
-   */
-  
-  public Donation(float amount) {
-    this.amount = amount;
-    donationDate = LocalDate.now();
-  }
-
   public Donation() {  
   }
   

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import AnimalCareCentre.server.enums.*;
 import AnimalCareCentre.server.model.Account;
 import AnimalCareCentre.server.repository.AccountRepository;
-import AnimalCareCentre.server.util.ACCPasswordEncryption;
+import AnimalCareCentre.server.util.*;
 
 @Service
 public class AccountService {
@@ -14,6 +14,8 @@ public class AccountService {
   @Value("${admin.secret.word}")
   private String adminSecretWord;
   private final AccountRepository accountRepository;
+  private final ACCPasswordValidator passwordValidator = new ACCPasswordValidator();
+
 
   public AccountService(AccountRepository accountRepository) {
     this.accountRepository = accountRepository;
@@ -58,6 +60,12 @@ public class AccountService {
       return true;
     }
     return false;
+  }
+
+  public String verifyPasswordRules(String password) {
+    String pwError = passwordValidator.validate(password);
+    return pwError;
+
   }
 
 }

@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  * This class describes the model of a User from the system, its attributes and
@@ -22,10 +23,9 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "Users")
 public class User extends Account {
 
-  @Max(value = 999999999, message = "Please enter a valid phone number")
-  @Min(value = 100000000, message = "Please enter a valid phone number!")
+  @Size(min = 9, max = 9)
   @NotNull(message = "Contact is mandatory!")
-  private Integer contact;
+  private String contact;
   @NotNull(message = "Birthdate is mandatory!")
   private LocalDate birthDate;
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -33,30 +33,11 @@ public class User extends Account {
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Sponsorship> sponsorships = new ArrayList<>();
 
-  /**
-   * Constructor for the class User
-   *
-   * @param name
-   * @param email
-   * @param password
-   * @param location
-   * @param securityQuestion
-   * @param birthDate
-   * @param contact
-   */
-  public User(String name, String email, String password, String location, SecurityQuestion securityQuestion,
-      String answer,
-      LocalDate birthDate, int contact) {
-    super(name, email, password, location, securityQuestion, answer);
-    this.birthDate = birthDate;
-    this.contact = contact;
-  }
-
   protected User() {
   }
 
   // Getter from the contact of the user
-  public Integer getContact() {
+  public String getContact() {
     return contact;
   }
 

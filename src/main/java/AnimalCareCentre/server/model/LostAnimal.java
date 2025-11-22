@@ -25,13 +25,6 @@ public class LostAnimal extends Animal {
   public LostAnimal() {
   }
 
-  public LostAnimal(String name, AnimalType type, String race, AnimalColor color, AnimalSize size, AnimalGender gender, String description,
-                    int contact, String location) {
-    super(name, type, race, size, gender, color, description);
-    this.location = location;
-    this.contact = contact;
-  }
-
   public String getLocation() {
     return location;
   }
