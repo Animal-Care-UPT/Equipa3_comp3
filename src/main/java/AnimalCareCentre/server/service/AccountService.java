@@ -1,9 +1,10 @@
 package AnimalCareCentre.server.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import AnimalCareCentre.server.enums.*;
 import AnimalCareCentre.server.model.Account;
 import AnimalCareCentre.server.repository.AccountRepository;
 import AnimalCareCentre.server.util.*;
@@ -15,20 +16,17 @@ public class AccountService {
   private String adminSecretWord;
   private final AccountRepository accountRepository;
   private final ACCPasswordValidator passwordValidator = new ACCPasswordValidator();
+  @Autowired
+  private final PasswordEncoder passwordEncoder;
 
-
-  public AccountService(AccountRepository accountRepository) {
+  public AccountService(AccountRepository accountRepository, PasswordEncoder passwordEncoder) {
     this.accountRepository = accountRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   public Account createAccount(Account account) {
-    account.setPassword(ACCPasswordEncryption.encrypt(account.getPassword()));
+    account.setPassword(passwordEncoder.encode(account.getPassword()));
     return accountRepository.save(account);
-  }
-
-  public Account login(String email, String password) {
-    password = ACCPasswordEncryption.encrypt(password);
-    return accountRepository.findByEmailAndPassword(email, password);
   }
 
   public Account findAccount(String email) {
@@ -40,8 +38,7 @@ public class AccountService {
     if (acc == null) {
       return null;
     }
-    password = ACCPasswordEncryption.encrypt(password);
-    acc.setPassword(password);
+    acc.setPassword(passwordEncoder.encode(password));
     return accountRepository.save(acc);
   }
 

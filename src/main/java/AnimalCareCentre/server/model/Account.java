@@ -40,7 +40,6 @@ public class Account {
   @Email(message = "Please enter a valid email address!")
   private String email;
   @NotBlank(message = "Password is mandatory!")
-  @Size(min = 8, max = 16)
   private String password;
   @NotBlank(message = "Location is mandatory!")
   private String location;

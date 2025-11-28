@@ -59,4 +59,9 @@ public class User extends Account {
     return birthDate;
   }
 
+  public static Object builder() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'builder'");
+  }
+
 }
