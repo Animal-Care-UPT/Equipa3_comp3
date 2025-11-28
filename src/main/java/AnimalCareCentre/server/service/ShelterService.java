@@ -21,8 +21,11 @@ public class ShelterService {
   }
 
   public Shelter findById(Long id) {
-
     return shelterRepository.findById(id).orElse(null);
+  }
+
+  public Shelter findByEmail(String email) {
+    return shelterRepository.findByEmail(email);
   }
 
   public Shelter createShelter(Shelter shelter) {

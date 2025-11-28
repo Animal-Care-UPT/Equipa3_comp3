@@ -10,4 +10,5 @@ import AnimalCareCentre.server.model.Shelter;
 public interface ShelterRepository extends JpaRepository<Shelter, Long> {
 
   public List<Shelter> findByStatus(Status status);
+  public Shelter findByEmail(String email);
 }
