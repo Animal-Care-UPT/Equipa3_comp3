@@ -84,7 +84,7 @@
           <artifactId>javafx-maven-plugin</artifactId>
           <version>0.0.8</version>
           <configuration>
-            <mainClass>AnimalCareCentre.App</mainClass>
+            <mainClass>AnimalCareCentre.client.App</mainClass>
             <options>
                 <!-- just a bug fix for macOS -->
                 <option>-Djavafx.disableAccessibility=true</option>
