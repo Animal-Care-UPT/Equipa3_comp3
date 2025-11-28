@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import AnimalCareCentre.server.dto.LoginRequest;
+import AnimalCareCentre.server.dto.AdminSecretDTO;
+import AnimalCareCentre.server.dto.ChangePasswordDTO;
+import AnimalCareCentre.server.dto.LoginRequestDTO;
 import AnimalCareCentre.server.model.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import AnimalCareCentre.server.service.AccountService;
 
 @RestController
@@ -38,9 +38,9 @@ public class AccountController {
   }
 
   @PostMapping("/create")
-  public ResponseEntity<?> createAccount(@Valid @RequestBody Account account, @RequestParam String secret) {
+  public ResponseEntity<?> createAccount(@Valid @RequestBody Account account, @Valid @RequestBody AdminSecretDTO secret) {
 
-    if (!accountService.verifyAdminSecret(secret)) {
+    if (!accountService.verifyAdminSecret(secret.getAnswer())) {
       return ResponseEntity.status(403).body("Invalid admin secret word!");
 
     }
@@ -59,29 +59,28 @@ public class AccountController {
   }
 
   @PutMapping("/changepw")
-  public ResponseEntity<?> changePassword(@Email @NotBlank @RequestParam String email,
-      @NotBlank @RequestParam String newPW, @NotBlank @RequestParam String answer) {
+  public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDTO pwRequest) {
 
-    if (accountService.findAccount(email) == null) {
+    if (accountService.findAccount(pwRequest.getEmail()) == null) {
       return ResponseEntity.status(404).body("Account not registered!");
     }
 
-    if (!accountService.verifySecurityAnswer(email, answer)) {
+    if (!accountService.verifySecurityAnswer(pwRequest.getEmail(), pwRequest.getAnswer())) {
       return ResponseEntity.status(403).body("Invalid answer!");
     }
 
-    String pwError = accountService.verifyPasswordRules(newPW);
+    String pwError = accountService.verifyPasswordRules(pwRequest.getNewPassword());
     if (pwError != null) {
       return ResponseEntity.badRequest().body(pwError);
     }
 
-    accountService.changePassword(email, newPW);
+    accountService.changePassword(pwRequest.getEmail(), pwRequest.getNewPassword());
 
     return ResponseEntity.ok("Password changed successfully");
   }
 
   @PostMapping("/login")
-  public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request, HttpServletRequest httpRequest) {
+  public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDTO request, HttpServletRequest httpRequest) {
     try {
 
       UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(request.getEmail(),

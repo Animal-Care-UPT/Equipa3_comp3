@@ -2,7 +2,7 @@ package AnimalCareCentre.server.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class LoginRequest {
+public class LoginRequestDTO {
 
   @NotBlank(message = "Email is required")
   private String email;
