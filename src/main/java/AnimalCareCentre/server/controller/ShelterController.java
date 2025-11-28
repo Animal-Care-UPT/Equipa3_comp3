@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,6 +51,7 @@ public class ShelterController {
     return ResponseEntity.status(201).body(s);
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/status")
   public ResponseEntity<?> changeStatus(@RequestParam long id, @RequestParam Status status) {
     Shelter shelter = shelterService.findById(id);
@@ -60,6 +62,7 @@ public class ShelterController {
     return ResponseEntity.status(404).body("Shelter not found!");
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @GetMapping("/pending")
   public ResponseEntity<?> getPendingShelters() {
     List<Shelter> shelters = shelterService.getPendingShelters();
@@ -69,6 +72,7 @@ public class ShelterController {
     return ResponseEntity.ok(shelters);
   }
 
+  @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
   @GetMapping
   public ResponseEntity<?> viewShelters() {
     List<Shelter> shelters = shelterService.getShelters();

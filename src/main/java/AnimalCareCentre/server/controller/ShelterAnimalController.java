@@ -50,6 +50,7 @@ public class ShelterAnimalController {
     return ResponseEntity.status(201).body(savedAnimal);
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @GetMapping("/search/all")
   public ResponseEntity<?> getAnimals() {
     List<ShelterAnimal> results = shelterAnimalService.searchAll();
@@ -59,6 +60,7 @@ public class ShelterAnimalController {
     return ResponseEntity.status(404).body("There are no registered animals");
   }
 
+  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
   @GetMapping("/search")
   public ResponseEntity<?> getAnimalsByKeyword(@NotBlank @RequestParam String keyword) {
     List<ShelterAnimal> results = shelterAnimalService.searchByKeyword(keyword);
@@ -68,6 +70,7 @@ public class ShelterAnimalController {
     return ResponseEntity.status(404).body("No matching animals!");
   }
 
+  @PreAuthorize("hasRole('SHELTER')")
   @GetMapping("/search/shelter")
   public ResponseEntity<?> getShelterAnimals(@NotNull @RequestParam long id) {
     Shelter shelter = shelterService.findById(id);
@@ -82,6 +85,7 @@ public class ShelterAnimalController {
     return ResponseEntity.status(404).body("No available Animals!");
   }
 
+  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
   @GetMapping("/search/shelter/available")
   public ResponseEntity<?> getAvailableShelterAnimals(@NotNull @RequestParam long id) {
     Shelter shelter = shelterService.findById(id);
@@ -96,6 +100,7 @@ public class ShelterAnimalController {
     return ResponseEntity.status(404).body("This shelter has no available animals!");
   }
 
+  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
   @GetMapping("/search/gender")
   public ResponseEntity<?> getAnimalsByGender(@NotNull @RequestParam AnimalGender gender) {
     List<ShelterAnimal> animals = shelterAnimalService.searchByGender(gender);
@@ -105,6 +110,7 @@ public class ShelterAnimalController {
     return ResponseEntity.status(404).body("There are no animals of this gender!");
   }
 
+  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
   @GetMapping("/search/type")
   public ResponseEntity<?> getAnimalsByType(@NotNull @RequestParam AnimalType type) {
     List<ShelterAnimal> animals = shelterAnimalService.searchByType(type);
@@ -114,6 +120,7 @@ public class ShelterAnimalController {
     return ResponseEntity.status(404).body("There are no animals of the chosen type!");
   }
 
+  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
   @GetMapping("/search/foster")
   public ResponseEntity<?> getFosterAnimals() {
     List<ShelterAnimal> animals = shelterAnimalService.searchFosterAnimals();
@@ -123,6 +130,7 @@ public class ShelterAnimalController {
     return ResponseEntity.status(404).body("There are no animals available for foster!");
   }
 
+  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
   @GetMapping("/search/adoption")
   public ResponseEntity<?> getAdoptionAnimals() {
     List<ShelterAnimal> animals = shelterAnimalService.searchAdoptionAnimals();
