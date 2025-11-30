@@ -19,8 +19,13 @@ public class ShelterAnimalService {
   }
 
   public ShelterAnimal registerShelterAnimal(ShelterAnimal shelterAnimal) {
+<<<<<<< HEAD
       shelterAnimal.setStatus(Status.AVAILABLE);
       return shelterAnimalRepository.save(shelterAnimal);
+=======
+    shelterAnimal.setStatus(Status.AVAILABLE);
+    return shelterAnimalRepository.save(shelterAnimal);
+>>>>>>> 16e186a331ca81e617edb8f74bde3d453e235be3
   }
 
   public List<ShelterAnimal> searchByKeyword(String search) {
@@ -57,7 +62,7 @@ public class ShelterAnimalService {
     return shelterAnimalRepository.findByAdoptionTypeAndStatus(AdoptionType.FOR_ADOPTION, Status.AVAILABLE);
   }
 
-  public ShelterAnimal findByShelterAnimalById(Long id) {
+  public ShelterAnimal findShelterAnimalById(Long id) {
       return shelterAnimalRepository.findById(id).orElse(null);
     }
 
@@ -65,5 +70,6 @@ public class ShelterAnimalService {
   public void save(ShelterAnimal animal) {
       shelterAnimalRepository.save(animal);
   }
+
 
 }

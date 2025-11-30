@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * This class describes the model of a sponsorhip to the animals and how it
@@ -36,7 +37,8 @@ public class Sponsorship {
   @JoinColumn(name = "animal_id")
   private ShelterAnimal animal;
   private LocalDate startDate;
-  private float amount;
+  @NotNull(message = "The amount is mandatory")
+  private Float amount;
   @OneToMany(mappedBy = "sponsorship", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Donation> donations = new ArrayList<>();
 

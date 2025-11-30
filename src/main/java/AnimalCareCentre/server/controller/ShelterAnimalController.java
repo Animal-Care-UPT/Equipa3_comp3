@@ -38,8 +38,6 @@ public class ShelterAnimalController {
   @PreAuthorize("hasRole('SHELTER')")
   @PostMapping("/register")
   public ResponseEntity<?> registerShelterAnimal(@Valid @RequestBody ShelterAnimal shelterAnimal) {
-
-
     String email = SecurityContextHolder.getContext().getAuthentication().getName();
     Shelter shelter = shelterService.findByEmail(email);
     if (shelter == null) {

@@ -1,6 +1,8 @@
 package AnimalCareCentre.client;
 
 import java.awt.Toolkit;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map;
@@ -9,6 +11,7 @@ import java.util.Scanner;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import AnimalCareCentre.client.views.*;
+import AnimalCareCentre.server.enums.AnimalType;
 import AnimalCareCentre.server.enums.SecurityQuestion;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -30,6 +33,7 @@ public class App extends Application {
   private static Stage stage;
   private static Scanner sc = new Scanner(System.in);
   private Thread consoleThread;
+  private static String loggedRole;
 
   public void start(Stage stage) {
     App.stage = stage;
@@ -83,7 +87,7 @@ public class App extends Application {
     enter.setOnAction(e -> {
       String json = jsonString("email", email.getText(), "password", password.getText());
 
-      ApiResponse response = ApiClient.post("/accounts/login", json);
+      ApiResponse response = ApiClient.login("/accounts/login", json);
 
       if (!response.isSuccess()) {
         showAlert(AlertType.ERROR, "Error", response.getBody());
@@ -262,6 +266,102 @@ public class App extends Application {
   }
 
   /**
+   * This method shows the search animals menu
+   */
+  public void searchAnimalMenu() {
+    System.out.println("\n=== SEARCH ANIMAL ===");
+
+    String[] options = { "Search by Keyword", "Search by Type", "Search by Color", "Search by Gender" };
+    String opt = (String) chooseOption(options, "Search Option");
+    if (opt == null) {
+      Platform.runLater(this::userHomepage);
+      return;
+    }
+
+    switch (opt) {
+      case "Search by Keyword" -> {
+        System.out.println("What would you like to search?");
+        String search = readLine();
+        String encodedSearch = URLEncoder.encode(search, StandardCharsets.UTF_8);
+        ApiResponse response = ApiClient.get("/shelteranimals/search?keyword=" + encodedSearch);
+
+        System.out.println(response.getBody());
+
+        // if (animals == null || animals.isEmpty()) {
+        // System.out.println("\nNo matches! Returning...");
+        // } else {
+        // ShelterAnimal choice = (ShelterAnimal) chooseOption(animals.toArray(),
+        // "Animal");
+        // if (choice == null) {
+        // javafx.application.Platform.runLater(this::userHomepage);
+        // return;
+        // }
+        // showAnimal(choice);
+        // }
+        searchAnimalMenu();
+        return;
+      }
+
+      case "Search by Type" -> {
+        AnimalType chosenType = (AnimalType) chooseOption(AnimalType.values(), "Type");
+        if (chosenType == null) {
+          javafx.application.Platform.runLater(this::userHomepage);
+          return;
+        }
+
+        ApiResponse response = ApiClient.get("/shelteranimals/search/type?type=" + chosenType.name());
+        System.out.println(response.getBody());
+
+        // System.out.println(response.getBody());
+        //
+        // if (animals == null || animals.isEmpty()) {
+        // System.out.println("\nNo matches! Returning...");
+        // } else {
+        // ShelterAnimal choice = (ShelterAnimal) chooseOption(animals.toArray(),
+        // "Animal");
+        // if (choice == null) {
+        // javafx.application.Platform.runLater(this::userHomepage);
+        // return;
+        // }
+        // showAnimal(choice);
+        // return;
+        // }
+        searchAnimalMenu();
+        return;
+      }
+
+      case "Search by Color" -> {
+        // AnimalColor chosenColor = (AnimalColor) chooseOption(AnimalColor.values(),
+        // "Color");
+        // if (chosenColor == null) {
+        // javafx.application.Platform.runLater(this::userHomepage);
+        // }
+        // List<ShelterAnimal> animals = manager.searchAnimalByParameter("color",
+        // chosenColor);
+        //
+        // if (animals == null || animals.isEmpty()) {
+        // System.out.println("\nNo matches! Returning...");
+        // } else {
+        // ShelterAnimal choice = (ShelterAnimal) chooseOption(animals.toArray(),
+        // "Animal");
+        // if (choice == null) {
+        // javafx.application.Platform.runLater(this::userHomepage);
+        // return;
+        // }
+        // showAnimal(choice);
+        // }
+        searchAnimalMenu();
+        return;
+      }
+
+      case "Search by Gender" -> {
+        searchAnimalMenu();
+        return;
+      }
+    }
+  }
+
+  /**
    * This method shows shelter's homepage
    */
   private void shelterHomepage() {
@@ -361,7 +461,7 @@ public class App extends Application {
 
         switch (option) {
           case 1 -> {
-            // searchAnimalMenu();
+            searchAnimalMenu();
             userHomepage();
             return;
           }
@@ -495,6 +595,7 @@ public class App extends Application {
     logout.setOnAction(e -> {
       ApiResponse response = ApiClient.post("/accounts/logout", "");
       System.out.println(response.getBody());
+      ApiClient.clearSession();
       showMainMenu();
       return;
     });
@@ -530,6 +631,36 @@ public class App extends Application {
     } catch (Exception e) {
       e.printStackTrace();
       return null;
+    }
+  }
+
+  /**
+   * Method to choose an option
+   */
+  private Object chooseOption(Object[] values, String title) {
+    while (true) {
+      System.out.println("\n\n\n");
+      System.out.println("Select " + title + ":");
+      System.out.println("\n");
+
+      for (int i = 0; i < values.length; i++) {
+        System.out.println((i + 1) + ". " + values[i] + "\n");
+      }
+
+      System.out.println("0. Back");
+      String input = readLine();
+
+      try {
+        int option = Integer.parseInt(input);
+        if (option == 0)
+          return null;
+        if (option >= 1 && option <= values.length) {
+          return values[option - 1];
+        }
+      } catch (NumberFormatException ignored) {
+      }
+
+      System.out.println("Invalid option, please try again.");
     }
   }
 
