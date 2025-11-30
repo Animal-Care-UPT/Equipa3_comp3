@@ -44,14 +44,25 @@ public class AdoptionService {
     }
 
 
-    public Adoption changeStatus(Adoption adoption, Status status) {
-        adoption.setStatus(status);
-        if (status == Status.ACCEPTED) {
-            animalNotAvailable(adoption.getAnimal());
+    //To change the status of a pending adoption request
+    public void changeStatus(Adoption adoption, Status newStatus) {
+
+        // If the request is rejected we delete it
+        if (newStatus == Status.REJECTED) {
+            adoptionRepository.delete(adoption);
+            return;
+        }
+
+        adoption.setStatus(newStatus);
+
+        if (newStatus == Status.ACCEPTED) {
             adoption.setAdoptionDate(LocalDate.now());
         }
-        return adoptionRepository.save(adoption);
+
+        adoptionRepository.save(adoption);
     }
+
+
 
     private void animalNotAvailable(ShelterAnimal animal) {
         animal.setAdoptionType(AdoptionType.NOT_AVAILABLE);
@@ -81,9 +92,6 @@ public class AdoptionService {
     }
 
 
-
-
-
     //So the shelters can see their pending requests
     public List<AdoptionResponseDTO> getPendingRequestsByShelter(Long shelterId) {
         List<Adoption> adoptions = adoptionRepository.findByAnimalShelterIdAndStatus(shelterId, Status.PENDING);
@@ -105,3 +113,5 @@ public class AdoptionService {
         return adoptionRepository.findById(id).orElse(null);
     }
 }
+
+

@@ -1,5 +1,6 @@
 package AnimalCareCentre.server.controller;
 
+import AnimalCareCentre.server.dto.AdoptionChangeStatusDTO;
 import AnimalCareCentre.server.dto.AdoptionRequestDTO;
 import AnimalCareCentre.server.dto.AdoptionResponseDTO;
 import AnimalCareCentre.server.dto.AdoptionsUserDTO;
@@ -38,7 +39,7 @@ public class AdoptionController {
     }
 
 
-    // Pedido de adoção
+    // Adoption request
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/request")
     public ResponseEntity<?> requestAdoption(@Valid @RequestBody AdoptionRequestDTO dto) {
@@ -53,22 +54,30 @@ public class AdoptionController {
         return ResponseEntity.status(201).body(adoption);
     }
 
-    // Alterar estado do pedido
-    @PostMapping("/changeStatus")
-    public ResponseEntity<?> changeStatus(@RequestParam Long adoptionId, @RequestParam Status status) {
+    // Change the status of an adoption/foster request
+    @PreAuthorize("hasRole('SHELTER')")
+    @PutMapping("/change-status")
+    public ResponseEntity<?> changeStatus(@RequestBody AdoptionChangeStatusDTO status) {
 
-        Adoption adoption = adoptionService.findAdoptionById(adoptionId);
+        Adoption adoption = adoptionService.findAdoptionById(status.getAdoptionId());
+
         if (adoption == null) {
-            return ResponseEntity.status(404).body("That Id doesn't correspond to any adoption!");
+            return ResponseEntity.status(404).body("Adoption request not found!");
         }
 
-        Adoption changedAdoption = adoptionService.changeStatus(adoption, status);
+        // Validation to make sure only the pending requests have their status changed
+        if (adoption.getStatus() != Status.PENDING) {
+            return ResponseEntity.status(400).body("Only pending requests can be updated.");
+        }
 
-        return ResponseEntity.ok().body(changedAdoption);
+        adoptionService.changeStatus(adoption, status.getNewStatus());
+
+        return ResponseEntity.ok("Status updated successfully.");
     }
 
 
-    // Pedidos pendentes de um shelter
+
+    // Pending request to the shelter
     @PreAuthorize("hasRole('SHELTER')")
     @GetMapping("/pending")
     public List<AdoptionResponseDTO> pendingRequests(@RequestParam Long shelterId) {
