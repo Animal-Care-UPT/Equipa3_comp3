@@ -5,8 +5,6 @@ import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.model.ShelterAnimal;
 
 import java.util.List;
-
-import AnimalCareCentre.server.util.ACCPasswordEncryption;
 import org.springframework.stereotype.Service;
 
 import AnimalCareCentre.server.repository.ShelterAnimalRepository;

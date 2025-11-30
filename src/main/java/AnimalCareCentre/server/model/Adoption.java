@@ -45,7 +45,8 @@ public class Adoption {
     return user;
   }
 
-  public void setType(AdoptionType type) {this.type = type;}
+  public void setAdoptionType(AdoptionType type) {this.type = type;}
+
 
     public long getId() {return id;}
 
@@ -75,6 +76,8 @@ public class Adoption {
         this.animal = animal;
     }
 
+
+
     public void setRequestDate(LocalDate requestDate) {
         this.requestDate = requestDate;
     }
@@ -89,4 +92,6 @@ public class Adoption {
                 ", status=" + status +
                 '}';
     }
+
+
 }

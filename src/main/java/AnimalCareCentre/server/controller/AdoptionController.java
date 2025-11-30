@@ -1,13 +1,19 @@
 package AnimalCareCentre.server.controller;
 
+import AnimalCareCentre.server.dto.AdoptionRequestDTO;
 import AnimalCareCentre.server.model.Adoption;
+import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.model.ShelterAnimal;
 import AnimalCareCentre.server.model.User;
 import AnimalCareCentre.server.enums.Status;
 import AnimalCareCentre.server.service.AdoptionService;
 import AnimalCareCentre.server.service.ShelterAnimalService;
 import AnimalCareCentre.server.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -31,25 +37,18 @@ public class AdoptionController {
 
 
     // Pedido de adoção
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/request")
-    public ResponseEntity<?> requestAdoption(@RequestParam String email, @RequestParam Long animalId) {
-
+    public ResponseEntity<?> requestAdoption(@Valid @RequestBody AdoptionRequestDTO dto) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByEmail(email);
 
         if (user == null) {
-            return ResponseEntity.status(404).body("That Id doesn't correspond to any user!");
+            return ResponseEntity.status(404).body("This user isn't registered!");
         }
 
-
-        ShelterAnimal animal = shelterAnimalService.findByShelterAnimalById(animalId);
-
-        if(animal==null){
-            return ResponseEntity.status(404).body("That Id doesn't correspond to any animal!");
-        }
-
-        Adoption adoption = adoptionService.requestAdoption(user, animal);
-
-        return ResponseEntity.ok().body(adoption);
+        Adoption adoption = adoptionService.requestAdoption(user, dto.getAnimalId(), dto.getAdoptionType());
+        return ResponseEntity.status(201).body(adoption);
     }
 
     // Alterar estado do pedido

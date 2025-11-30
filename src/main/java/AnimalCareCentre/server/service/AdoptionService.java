@@ -17,16 +17,20 @@ import java.util.List;
 public class AdoptionService {
 
   private final AdoptionRepository adoptionRepository;
+    private final ShelterAnimalService shelterAnimalService;
 
-  public AdoptionService(AdoptionRepository adoptionRepository) {
+    public AdoptionService(AdoptionRepository adoptionRepository, ShelterAnimalService shelterAnimalService) {
     this.adoptionRepository = adoptionRepository;
-  }
+        this.shelterAnimalService = shelterAnimalService;
+    }
 
 
-    public Adoption requestAdoption(User user, ShelterAnimal animal) {
+    public Adoption requestAdoption(User user, Long animalId, AdoptionType adoptionType) {
+        ShelterAnimal animal = shelterAnimalService.findByShelterAnimalById(animalId);
         Adoption adoption = new Adoption();
         adoption.setUser(user);
         adoption.setAnimal(animal);
+        adoption.setAdoptionType(adoptionType);
         adoption.setStatus(Status.PENDING);
         adoption.setRequestDate(LocalDate.now());
         return adoptionRepository.save(adoption);
