@@ -1,5 +1,7 @@
 package AnimalCareCentre.server.service;
 
+import AnimalCareCentre.server.dto.AdoptionRequestDTO;
+import AnimalCareCentre.server.dto.AdoptionResponseDTO;
 import AnimalCareCentre.server.enums.AdoptionType;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +10,7 @@ import AnimalCareCentre.server.model.Adoption;
 import AnimalCareCentre.server.model.ShelterAnimal;
 import AnimalCareCentre.server.model.User;
 import AnimalCareCentre.server.enums.Status;
-import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -54,8 +56,21 @@ public class AdoptionService {
         return adoptionRepository.findByUser(user);
     }
 
-    public List<Adoption> getPendingRequestsByShelter(Long shelterId) {
-        return adoptionRepository.findByAnimalShelterIdAndStatus(shelterId, Status.PENDING);
+    //So the shelters can see their pending requests
+    public List<AdoptionResponseDTO> getPendingRequestsByShelter(Long shelterId) {
+        List<Adoption> adoptions = adoptionRepository.findByAnimalShelterIdAndStatus(shelterId, Status.PENDING);
+
+        return adoptions.stream().map(a-> {
+            AdoptionResponseDTO dto = new AdoptionResponseDTO();
+            dto.setShelterId(a.getAnimal().getShelter().getId());
+            dto.setAnimalId(a.getAnimal().getId());
+            dto.setAnimalName(a.getAnimal().getName());
+            dto.setUserId(a.getUser().getId());
+            dto.setAdoptionType(a.getType());
+            dto.setStatus(a.getStatus());
+            dto.setRequestDate(a.getRequestDate());
+            return dto;
+        }).toList();
     }
 
     public Adoption findAdoptionById(Long id) {

@@ -1,6 +1,7 @@
 package AnimalCareCentre.server.controller;
 
 import AnimalCareCentre.server.dto.AdoptionRequestDTO;
+import AnimalCareCentre.server.dto.AdoptionResponseDTO;
 import AnimalCareCentre.server.model.Adoption;
 import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.model.ShelterAnimal;
@@ -68,8 +69,8 @@ public class AdoptionController {
 
     // Pedidos pendentes de um shelter
     @GetMapping("/pending")
-    public List<Adoption> pendingRequests(@RequestParam Long shelterId) {
-        return adoptionService.getPendingRequestsByShelter(shelterId);
+    public List<AdoptionResponseDTO> pendingRequests(@RequestParam Long shelterId) {
+        return adoptionService.getPendingRequestsByShelter(shelterId); //spring return automatically the 200 ok
     }
 
 

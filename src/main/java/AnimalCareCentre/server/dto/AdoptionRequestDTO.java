@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class AdoptionRequestDTO {
 
-    @NotNull(message = "Animal é obrigatório")
+    @NotNull(message = "The must declare the id of the animal")
     private Long animalId;
 
     @Enumerated(EnumType.STRING)
