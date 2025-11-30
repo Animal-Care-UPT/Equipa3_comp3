@@ -5,10 +5,13 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import AnimalCareCentre.client.views.*;
 import AnimalCareCentre.server.enums.AnimalType;
@@ -34,6 +37,9 @@ public class App extends Application {
   private static Scanner sc = new Scanner(System.in);
   private Thread consoleThread;
   private static String loggedRole;
+  private static final ObjectMapper mapper = new ObjectMapper()
+      .registerModule(new JavaTimeModule())
+      .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
   public void start(Stage stage) {
     App.stage = stage;
@@ -626,9 +632,41 @@ public class App extends Application {
       dataMap.put(key, value);
     }
     try {
-      ObjectMapper objectMapper = new ObjectMapper();
-      return objectMapper.writeValueAsString(dataMap);
+      return mapper.writeValueAsString(dataMap);
     } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  /**
+   * Parse JSON string into a single object
+   */
+  public <T> T parseResponse(String json, Class<T> cl) {
+    if (json == null || json.isEmpty()) {
+      return null;
+    }
+    try {
+      return mapper.readValue(json, cl);
+    } catch (Exception e) {
+      System.out.println("Failed to parse response: " + e.getMessage());
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  /**
+   * Parse JSON string into a list of objects
+   */
+  public <T> List<T> parseList(String json, Class<T> cl) {
+    if (json == null || json.isEmpty()) {
+      return null;
+    }
+    try {
+      return mapper.readValue(json,
+          mapper.getTypeFactory().constructCollectionType(List.class, cl));
+    } catch (Exception e) {
+      System.out.println("Failed to parse list: " + e.getMessage());
       e.printStackTrace();
       return null;
     }
