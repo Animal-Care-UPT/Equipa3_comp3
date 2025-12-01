@@ -15,10 +15,13 @@ public interface ShelterAnimalRepository extends JpaRepository<ShelterAnimal, Lo
   @Query("SELECT s FROM ShelterAnimal s WHERE s.status = :status AND (" +
       "s.name LIKE :search OR s.race LIKE :search OR " +
       "CAST(s.type AS string) LIKE :search OR " +
+      "CAST(s.gender AS string) LIKE :search OR " +
       "CAST(s.size AS string) LIKE :search OR " +
       "CAST(s.color AS string) LIKE :search)")
   public List<ShelterAnimal> findByKeyword(@Param("search") String search, @Param("status") Status status);
   public List<ShelterAnimal> findByGenderAndStatus(AnimalGender gender, Status status);
+  public List<ShelterAnimal> findBySizeAndStatus(AnimalSize size, Status status);
+  public List<ShelterAnimal> findByColorAndStatus(AnimalColor color, Status status);
   public List<ShelterAnimal> findByTypeAndStatus(AnimalType type, Status status);
   public List<ShelterAnimal> findByShelter(Shelter shelter);
   public List<ShelterAnimal> findByStatusAndShelter(Status status, Shelter shelter);

@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -94,24 +95,13 @@ public class AccountController {
       HttpSession session = httpRequest.getSession(true);
       session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 
-      Account account = accountService.findAccount(request.getEmail());
-      account.setPassword(null);
+      String role = securityContext.getAuthentication().getAuthorities().iterator().next().getAuthority();
 
-      if (account instanceof Shelter) {
-        Shelter shelter = (Shelter) account;
-        return ResponseEntity.ok(Map.of("type", "SHELTER", "account", (Shelter) shelter));
-
-      } else if (account instanceof User) {
-        User user = (User) account;
-        return ResponseEntity.ok(Map.of("type", "USER", "account", (User) user));
-
-      } else {
-        return ResponseEntity.ok(Map.of("type", "ADMIN", "account", account));
-      }
+      return ResponseEntity.ok(role);
 
     } catch (AuthenticationException e) {
 
-      return ResponseEntity.status(401).body("Invalid email or password!");
+      return ResponseEntity.status(400).body("Invalid email or password!");
     }
   }
 

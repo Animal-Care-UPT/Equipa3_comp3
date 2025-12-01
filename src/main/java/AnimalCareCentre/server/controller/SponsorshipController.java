@@ -70,3 +70,4 @@ public class SponsorshipController {
     return ResponseEntity.status(404).body("There are no SponsorShips registered");
   }
 }
+
