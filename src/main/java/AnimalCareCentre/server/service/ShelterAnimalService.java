@@ -7,7 +7,6 @@ import AnimalCareCentre.server.model.ShelterAnimal;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import AnimalCareCentre.server.repository.ShelterAnimalRepository;
@@ -24,6 +23,7 @@ public class ShelterAnimalService {
   public ShelterAnimal registerShelterAnimal(ShelterAnimal shelterAnimal) {
     shelterAnimal.setStatus(Status.AVAILABLE);
     return shelterAnimalRepository.save(shelterAnimal);
+
   }
 
   public List<ShelterAnimal> searchByKeyword(String search) {
@@ -89,7 +89,16 @@ public class ShelterAnimalService {
     return animals;
   }
 
-  public ShelterAnimal findById(Long id) {
-    return shelterAnimalRepository.findById(id).orElse(null);
+
+  public ShelterAnimal findShelterAnimalById(Long id) {
+      return shelterAnimalRepository.findById(id).orElse(null);
+    }
+
+  //So that we can change the status of a shelteranimal after the adoption
+  public void save(ShelterAnimal animal) {
+      shelterAnimalRepository.save(animal);
+
   }
+
+
 }
