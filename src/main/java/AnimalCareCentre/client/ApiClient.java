@@ -18,8 +18,7 @@ public class ApiClient {
   public static ApiResponse post(String endpoint, String json) {
     try {
 
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.APPLICATION_JSON);
+      HttpHeaders headers = createHeadersWithCookie();
 
       HttpEntity<String> request = new HttpEntity<>(json, headers);
 

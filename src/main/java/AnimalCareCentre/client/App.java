@@ -585,14 +585,14 @@ public class App extends Application {
     System.out.println("Animals: ");
     ApiResponse response = ApiClient.get("/shelteranimals/search/shelter/available?id=" + shelter.id());
     if (response.isSuccess()) {
-      
-    List<ShelterAnimal> animals = parseList(response.getBody(), ShelterAnimal.class);
-    ShelterAnimal choice = (ShelterAnimal) chooseOption(animals.toArray(), "Animal");
-    if (choice == null) {
-      javafx.application.Platform.runLater(this::userHomepage);
-      return;
-    }
-    showAnimal(choice);
+
+      List<ShelterAnimal> animals = parseList(response.getBody(), ShelterAnimal.class);
+      ShelterAnimal choice = (ShelterAnimal) chooseOption(animals.toArray(), "Animal");
+      if (choice == null) {
+        javafx.application.Platform.runLater(this::userHomepage);
+        return;
+      }
+      showAnimal(choice);
     } else {
       System.out.println(response.getBody());
       showShelter(shelter);
@@ -641,14 +641,14 @@ public class App extends Application {
     ApiResponse response = ApiClient.get("/shelters/");
 
     if (response.isSuccess()) {
-    List<Shelter> shelters = parseList(response.getBody(), Shelter.class);
+      List<Shelter> shelters = parseList(response.getBody(), Shelter.class);
 
-    Shelter choice = (Shelter) chooseOption(shelters.toArray(), "Shelter");
-    if (choice == null) {
-      javafx.application.Platform.runLater(this::userHomepage);
-      return;
-    }
-    showShelter(choice);
+      Shelter choice = (Shelter) chooseOption(shelters.toArray(), "Shelter");
+      if (choice == null) {
+        javafx.application.Platform.runLater(this::userHomepage);
+        return;
+      }
+      showShelter(choice);
     } else {
       System.out.println(response.getBody());
       userHomepage();
