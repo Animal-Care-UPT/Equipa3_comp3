@@ -526,77 +526,80 @@ public class App extends Application {
 
         switch (option) {
           case 1 -> {
-              System.out.println("\n=== REGISTER ANIMAL ===");
+            System.out.println("\n=== REGISTER ANIMAL ===");
 
-              System.out.print("Name: ");
-              String name = readLine();
+            System.out.print("Name: ");
+            String name = readLine();
 
-              AnimalType type = (AnimalType) chooseOption(AnimalType.values(), "Type");
-              if (type == null) return;
-
-              List<String> breeds = type.getBreeds();
-              String race = null;
-              if (breeds != null) {
-                  while (true) {
-                      System.out.println("Select Breed:");
-                      for (int i = 0; i < breeds.size(); i++) {
-                          System.out.println((i + 1) + ". " + breeds.get(i));
-                      }
-                      System.out.print("Option: ");
-                      String input = readLine();
-                      try {
-                          int breedOption = Integer.parseInt(input);
-                          if (breedOption >= 1 && breedOption <= breeds.size()) {
-                              race = breeds.get(breedOption - 1);
-                              break;
-                          }
-                      } catch (NumberFormatException ignored) {}
-                      System.out.println("Invalid option, please try again.");
-                  }
-              }
-
-              AnimalSize size = (AnimalSize) chooseOption(AnimalSize.values(), "Size");
-              if (size == null) return;
-
-              AnimalGender gender = (AnimalGender) chooseOption(AnimalGender.values(), "Gender");
-              if (gender == null) return;
-
-              System.out.print("Age: ");
-              int age = readInt();
-
-              AnimalColor color = (AnimalColor) chooseOption(AnimalColor.values(), "Color");
-              if (color == null) return;
-
-              System.out.print("Description: ");
-              String description = readLine();
-
-              AdoptionType adoptionType = (AdoptionType) chooseOption(AdoptionType.values(), "Adoption Type");
-              if (adoptionType == null) return;
-
-
-              String json = jsonString(
-                      "name", name,
-                      "type", type.name(),
-                      "race", race,
-                      "age", age,
-                      "color", color.name(),
-                      "size", size.name(),
-                      "gender", gender.name(),
-                      "adoptionType", adoptionType.name(),
-                      "description", description
-              );
-
-
-              ApiResponse response = ApiClient.post("/shelteranimals/register", json);
-
-              if (response.isSuccess()) {
-                  System.out.println("Animal successfully registered!");
-              } else {
-                  System.out.println("Error: " + response.getBody());
-              }
-
-              shelterHomepage();
+            AnimalType type = (AnimalType) chooseOption(AnimalType.values(), "Type");
+            if (type == null)
               return;
+
+            List<String> breeds = type.getBreeds();
+            String race = null;
+            if (breeds != null) {
+              while (true) {
+                System.out.println("Select Breed:");
+                for (int i = 0; i < breeds.size(); i++) {
+                  System.out.println((i + 1) + ". " + breeds.get(i));
+                }
+                System.out.print("Option: ");
+                String input = readLine();
+                try {
+                  int breedOption = Integer.parseInt(input);
+                  if (breedOption >= 1 && breedOption <= breeds.size()) {
+                    race = breeds.get(breedOption - 1);
+                    break;
+                  }
+                } catch (NumberFormatException ignored) {
+                }
+                System.out.println("Invalid option, please try again.");
+              }
+            }
+
+            AnimalSize size = (AnimalSize) chooseOption(AnimalSize.values(), "Size");
+            if (size == null)
+              return;
+
+            AnimalGender gender = (AnimalGender) chooseOption(AnimalGender.values(), "Gender");
+            if (gender == null)
+              return;
+
+            System.out.print("Age: ");
+            int age = readInt();
+
+            AnimalColor color = (AnimalColor) chooseOption(AnimalColor.values(), "Color");
+            if (color == null)
+              return;
+
+            System.out.print("Description: ");
+            String description = readLine();
+
+            AdoptionType adoptionType = (AdoptionType) chooseOption(AdoptionType.values(), "Adoption Type");
+            if (adoptionType == null)
+              return;
+
+            String json = jsonString(
+                "name", name,
+                "type", type.name(),
+                "race", race,
+                "age", age,
+                "color", color.name(),
+                "size", size.name(),
+                "gender", gender.name(),
+                "adoptionType", adoptionType.name(),
+                "description", description);
+
+            ApiResponse response = ApiClient.post("/shelteranimals/register", json);
+
+            if (response.isSuccess()) {
+              System.out.println("Animal successfully registered!");
+            } else {
+              System.out.println("Error: " + response.getBody());
+            }
+
+            shelterHomepage();
+            return;
           }
 
           case 2 -> {
@@ -647,7 +650,7 @@ public class App extends Application {
   }
 
   /**
-   * This method shows a shelter's animals
+   * This method shows a shelter's available animals
    */
   public void showShelterAnimals(Shelter shelter) {
     System.out.println(shelter);
@@ -797,6 +800,74 @@ public class App extends Application {
   }
 
   /**
+   * This method allows the admin to do multiple operations on the shelter
+   */
+  public void displayShelterForAdmin(Shelter shelter) {
+    System.out.println(shelter);
+    System.out.println("\n");
+    String[] options = { "Change Shelter Status", "View All Shelter Animals" };
+    String opt = (String) chooseOption(options, "Search Option");
+    if (opt == null) {
+      Platform.runLater(this::userHomepage);
+      return;
+    }
+
+    switch (opt) {
+      case "Change Shelter Status" -> {
+        String[] requestAction = { "Set as Available", "Ban Shelter" };
+        String action = (String) chooseOption(requestAction, "Shelter Request");
+        if (action == null) {
+          javafx.application.Platform.runLater(this::adminHomepage);
+          return;
+        }
+
+        if (action.equals("Set as Available")) {
+          String jsonStatus = jsonString("status", Status.AVAILABLE);
+          ApiResponse acptResponse = ApiClient.put("/shelters/status?id=" + shelter.id(), jsonStatus);
+          if (acptResponse.isSuccess()) {
+            System.out.println("Shelter accepted with success!");
+          } else {
+            System.out.println(acptResponse.getBody());
+          }
+
+        } else {
+          String jsonStatus = jsonString("status", Status.BANNED);
+          ApiResponse banResponse = ApiClient.put("/shelters/status?id=" + shelter.id(), jsonStatus);
+          if (banResponse.isSuccess()) {
+            System.out.println("Shelter rejected with success!");
+          } else {
+            System.out.println(banResponse.getBody());
+          }
+        }
+        adminHomepage();
+        return;
+      }
+
+      case "View All Shelter Animals" -> {
+        System.out.println(shelter);
+        System.out.println("Animals: ");
+        ApiResponse response = ApiClient.get("/shelteranimals/search/shelter?id=" + shelter.id());
+        if (response.isSuccess()) {
+
+          List<ShelterAnimal> animals = parseList(response.getBody(), ShelterAnimal.class);
+
+        } else {
+          System.out.println(response.getBody());
+          displayShelterForAdmin(shelter);
+        }
+
+        return;
+      }
+
+      default -> {
+        System.out.println("Invalid option!");
+        showShelter(shelter);
+        return;
+      }
+    }
+  }
+
+  /**
    * This method shows admin's homepage
    */
   private void adminHomepage() {
@@ -873,7 +944,22 @@ public class App extends Application {
           }
 
           case 2 -> {
-            adminHomepage();
+            ApiResponse response = ApiClient.get("/shelters/all");
+
+            if (response.isSuccess()) {
+              List<Shelter> shelters = parseList(response.getBody(), Shelter.class);
+
+              Shelter choice = (Shelter) chooseOption(shelters.toArray(), "Shelter");
+              if (choice == null) {
+                javafx.application.Platform.runLater(this::userHomepage);
+                return;
+              }
+              displayShelterForAdmin(choice);
+            } else {
+              System.out.println(response.getBody());
+              userHomepage();
+            }
+
             return;
           }
 

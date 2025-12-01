@@ -69,7 +69,7 @@ public class ShelterAnimalController {
     return ResponseEntity.status(404).body("No matching animals!");
   }
 
-  @PreAuthorize("hasRole('SHELTER')")
+  @PreAuthorize("hasRole('SHELTER') or hasRole('ADMIN')")
   @GetMapping("/search/shelter")
   public ResponseEntity<?> getShelterAnimals() {
     String email = SecurityContextHolder.getContext().getAuthentication().getName();
