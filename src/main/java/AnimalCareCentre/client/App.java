@@ -288,7 +288,8 @@ public class App extends Application {
     int opc = readInt();
     switch (opc) {
       case 1 -> {
-        // System.out.println("Insert the amount of money you wish to give as a sponsorship");
+        // System.out.println("Insert the amount of money you wish to give as a
+        // sponsorship");
         // float amount = readFloat();
         // User user = (User) loggedAcc;
         // manager.createSponsorship(user, animal, amount);
@@ -298,14 +299,16 @@ public class App extends Application {
 
       case 2 -> {
         // manager.adoptAnimal((User) loggedAcc, animal, AdoptionType.FOR_ADOPTION);
-        // System.out.println("Congratulations! Your request to adopt " + animal.getName() + " has been submitted!");
+        // System.out.println("Congratulations! Your request to adopt " +
+        // animal.getName() + " has been submitted!");
         userHomepage();
         return;
       }
 
       case 3 -> {
         // manager.adoptAnimal((User) loggedAcc, animal, AdoptionType.FOR_FOSTER);
-        // System.out.println("Congratulations! Your request to foster " + animal.getName() + " has been submitted!");
+        // System.out.println("Congratulations! Your request to foster " +
+        // animal.getName() + " has been submitted!");
         userHomepage();
         return;
       }
@@ -419,72 +422,67 @@ public class App extends Application {
   private void shelterHomepage() {
     javafx.application.Platform.runLater(() -> showTerminalScreen());
 
-    try {
-      if (consoleThread != null && consoleThread.isAlive()) {
-        consoleThread.interrupt();
-      }
-      consoleThread = new Thread(() -> {
-        System.out.println("=== SHELTER MENU ===");
-        System.out.println("1. Register Animal");
-        System.out.println("2. View My Animals");
-        System.out.println("3. View Pending Adoption Requests");
-        System.out.println("4. View Pending Foster Requests");
-        System.out.println("5. View Adoptions");
-        System.out.println("6. View Fosters");
-        System.out.println("0. Logout");
-        System.out.print("Option: ");
-        int option = readInt();
+    if (consoleThread != null && consoleThread.isAlive()) {
+      consoleThread.interrupt();
+    }
+    consoleThread = new Thread(() -> {
+      System.out.println("=== SHELTER MENU ===");
+      System.out.println("1. Register Animal");
+      System.out.println("2. View My Animals");
+      System.out.println("3. View Pending Adoption Requests");
+      System.out.println("4. View Pending Foster Requests");
+      System.out.println("5. View Adoptions");
+      System.out.println("6. View Fosters");
+      System.out.println("0. Logout");
+      System.out.print("Option: ");
+      int option = readInt();
 
-        switch (option) {
-          case 1 -> {
-            shelterHomepage();
-            return;
-          }
-
-          case 2 -> {
-            shelterHomepage();
-            return;
-          }
-
-          case 3 -> {
-            shelterHomepage();
-            return;
-          }
-
-          case 4 -> {
-            shelterHomepage();
-            return;
-          }
-
-          case 5 -> {
-            shelterHomepage();
-            return;
-          }
-
-          case 6 -> {
-            shelterHomepage();
-            return;
-          }
-
-          case 0 -> {
-            System.out.println("Exiting terminal menu...");
-            javafx.application.Platform.runLater(this::showMainMenu);
-          }
-
-          default -> {
-            System.out.println("Invalid option!");
-            shelterHomepage();
-            return;
-          }
+      switch (option) {
+        case 1 -> {
+          shelterHomepage();
+          return;
         }
 
-      });
-      consoleThread.start();
+        case 2 -> {
+          shelterHomepage();
+          return;
+        }
 
-    } catch (InputMismatchException e) {
-      System.out.println("Please pick a valid option!");
-      shelterHomepage();
-    }
+        case 3 -> {
+          shelterHomepage();
+          return;
+        }
+
+        case 4 -> {
+          shelterHomepage();
+          return;
+        }
+
+        case 5 -> {
+          shelterHomepage();
+          return;
+        }
+
+        case 6 -> {
+          shelterHomepage();
+          return;
+        }
+
+        case 0 -> {
+          System.out.println("Exiting terminal menu...");
+          javafx.application.Platform.runLater(this::showMainMenu);
+        }
+
+        default -> {
+          System.out.println("Invalid option!");
+          shelterHomepage();
+          return;
+        }
+      }
+
+    });
+    consoleThread.start();
+
   }
 
   /**
@@ -493,67 +491,60 @@ public class App extends Application {
   private void userHomepage() {
     javafx.application.Platform.runLater(() -> showTerminalScreen());
 
-    try {
-
-      if (consoleThread != null && consoleThread.isAlive()) {
-        consoleThread.interrupt();
-      }
-      consoleThread = new Thread(() -> {
-        int option;
-
-        System.out.println("=== USER MENU ===");
-        System.out.println("1. Search Animal");
-        System.out.println("2. Search Shelter");
-        System.out.println("3. See My Adoptions Requests");
-        System.out.println("4. See My Foster Requests");
-        System.out.println("5. Lost and Found");
-        System.out.println("0. Logout");
-        System.out.print("Option: ");
-        option = readInt();
-
-        switch (option) {
-          case 1 -> {
-            searchAnimalMenu();
-            userHomepage();
-            return;
-          }
-
-          case 2 -> {
-            // searchShelter();
-            userHomepage();
-            return;
-          }
-
-          case 3 -> {
-            userHomepage();
-            return;
-          }
-
-          case 4 -> {
-            userHomepage();
-            return;
-          }
-
-          case 5 -> {
-            // lostAndFoundMenu();
-            userHomepage();
-            return;
-          }
-
-          case 0 -> {
-            System.out.println("Exiting terminal menu...");
-            Platform.runLater(() -> showMainMenu());
-            return;
-          }
-          default -> System.out.println("Invalid option!");
-        }
-      });
-      consoleThread.start();
-
-    } catch (InputMismatchException e) {
-      System.out.println("Please pick a valid option!");
-      userHomepage();
+    if (consoleThread != null && consoleThread.isAlive()) {
+      consoleThread.interrupt();
     }
+    consoleThread = new Thread(() -> {
+      int option;
+
+      System.out.println("=== USER MENU ===");
+      System.out.println("1. Search Animal");
+      System.out.println("2. Search Shelter");
+      System.out.println("3. See My Adoptions Requests");
+      System.out.println("4. See My Foster Requests");
+      System.out.println("5. Lost and Found");
+      System.out.println("0. Logout");
+      System.out.print("Option: ");
+      option = readInt();
+
+      switch (option) {
+        case 1 -> {
+          searchAnimalMenu();
+          return;
+        }
+
+        case 2 -> {
+          // searchShelter();
+          userHomepage();
+          return;
+        }
+
+        case 3 -> {
+          userHomepage();
+          return;
+        }
+
+        case 4 -> {
+          userHomepage();
+          return;
+        }
+
+        case 5 -> {
+          // lostAndFoundMenu();
+          userHomepage();
+          return;
+        }
+
+        case 0 -> {
+          System.out.println("Exiting terminal menu...");
+          Platform.runLater(() -> showMainMenu());
+          return;
+        }
+        default -> System.out.println("Invalid option!");
+      }
+    });
+    consoleThread.start();
+
   }
 
   /**
@@ -562,77 +553,71 @@ public class App extends Application {
   private void adminHomepage() {
     javafx.application.Platform.runLater(() -> showTerminalScreen());
 
-    try {
-
-      if (consoleThread != null && consoleThread.isAlive()) {
-        consoleThread.interrupt();
-      }
-      consoleThread = new Thread(() -> {
-        int option;
-
-        System.out.println("=== ADMIN MENU ===");
-        System.out.println("1. View Shelter Requests");
-        System.out.println("2. View Available Shelters");
-        System.out.println("3. View All Sponsorships");
-        System.out.println("4. View All Animals");
-        System.out.println("5. View All Adoptions");
-        System.out.println("6. View All Fosters");
-        System.out.println("7 Lost and Found");
-        System.out.println("0. Logout");
-        System.out.print("Option: ");
-        option = readInt();
-
-        switch (option) {
-          case 1 -> {
-            adminHomepage();
-            return;
-          }
-
-          case 2 -> {
-            adminHomepage();
-            return;
-          }
-
-          case 3 -> {
-            adminHomepage();
-            return;
-          }
-
-          case 4 -> {
-            adminHomepage();
-            return;
-          }
-
-          case 5 -> {
-            adminHomepage();
-            return;
-          }
-
-          case 6 -> {
-            adminHomepage();
-            return;
-          }
-
-          case 7 -> {
-            // lostAndFoundMenu();
-            adminHomepage();
-            return;
-          }
-
-          case 0 -> {
-            System.out.println("Exiting terminal menu...");
-            Platform.runLater(() -> showMainMenu());
-            return;
-          }
-          default -> System.out.println("Invalid option!");
-        }
-      });
-      consoleThread.start();
-
-    } catch (InputMismatchException e) {
-      System.out.println("Please pick a valid option!");
-      userHomepage();
+    if (consoleThread != null && consoleThread.isAlive()) {
+      consoleThread.interrupt();
     }
+    consoleThread = new Thread(() -> {
+      int option;
+
+      System.out.println("=== ADMIN MENU ===");
+      System.out.println("1. View Shelter Requests");
+      System.out.println("2. View Available Shelters");
+      System.out.println("3. View All Sponsorships");
+      System.out.println("4. View All Animals");
+      System.out.println("5. View All Adoptions");
+      System.out.println("6. View All Fosters");
+      System.out.println("7 Lost and Found");
+      System.out.println("0. Logout");
+      System.out.print("Option: ");
+      option = readInt();
+
+      switch (option) {
+        case 1 -> {
+          adminHomepage();
+          return;
+        }
+
+        case 2 -> {
+          adminHomepage();
+          return;
+        }
+
+        case 3 -> {
+          adminHomepage();
+          return;
+        }
+
+        case 4 -> {
+          adminHomepage();
+          return;
+        }
+
+        case 5 -> {
+          adminHomepage();
+          return;
+        }
+
+        case 6 -> {
+          adminHomepage();
+          return;
+        }
+
+        case 7 -> {
+          // lostAndFoundMenu();
+          adminHomepage();
+          return;
+        }
+
+        case 0 -> {
+          System.out.println("Exiting terminal menu...");
+          Platform.runLater(() -> showMainMenu());
+          return;
+        }
+        default -> System.out.println("Invalid option!");
+      }
+    });
+    consoleThread.start();
+
   }
 
   /**
@@ -719,7 +704,7 @@ public class App extends Application {
   }
 
   /**
-   * Method to choose an option
+   * Method to choose an option from the enum classes
    */
   private Object chooseOption(Object[] values, String title) {
     while (true) {
@@ -750,9 +735,16 @@ public class App extends Application {
 
   private int readInt() {
     synchronized (sc) {
-      int value = sc.nextInt();
-      sc.nextLine();
-      return value;
+      while (true) {
+        try {
+          int value = sc.nextInt();
+          sc.nextLine();
+          return value;
+        } catch (InputMismatchException e) {
+          sc.nextLine();
+          System.out.println("Please pick a valid number!");
+        }
+      }
     }
   }
 
@@ -764,9 +756,16 @@ public class App extends Application {
 
   private float readFloat() {
     synchronized (sc) {
-      float value = sc.nextFloat();
-      sc.nextLine();
-      return value;
+      while (true) {
+        try {
+          float value = sc.nextFloat();
+          sc.nextLine();
+          return value;
+        } catch (InputMismatchException e) {
+          System.out.println("Please pick a valid number!");
+          sc.nextLine();
+        }
+      }
     }
   }
 
