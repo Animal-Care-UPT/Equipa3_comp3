@@ -193,7 +193,29 @@ public class ShelterAnimalController {
     ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(id);
     if (animal != null) {
       shelterAnimalService.changeAge(animal, age);
-      return ResponseEntity.ok("Changed vacination with success!");
+      return ResponseEntity.ok("Changed age with success!");
+    }
+    return ResponseEntity.status(404).body("Animal not found!");
+  }
+
+  @PreAuthorize("hasRole('SHELTER')")
+  @PutMapping("/status")
+  public ResponseEntity<?> changeStatus(@NotNull @RequestParam Long id) {
+    ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(id);
+    if (animal != null) {
+      shelterAnimalService.changeStatus(animal);
+      return ResponseEntity.ok("Changed status with success!");
+    }
+    return ResponseEntity.status(404).body("Animal not found!");
+  }
+
+  @PreAuthorize("hasRole('SHELTER')")
+  @PutMapping("/adoptiontype")
+  public ResponseEntity<?> changeAdoptionType(@NotNull @RequestParam Long id) {
+    ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(id);
+    if (animal != null) {
+      shelterAnimalService.changeAdoptionType(animal);
+      return ResponseEntity.ok("Changed adoption type with success!");
     }
     return ResponseEntity.status(404).body("Animal not found!");
   }

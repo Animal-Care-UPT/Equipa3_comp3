@@ -110,4 +110,22 @@ public class ShelterAnimalService {
     return shelterAnimalRepository.save(animal);
   }
 
+  public ShelterAnimal changeStatus(ShelterAnimal animal) {
+    if (animal.getStatus() == Status.AVAILABLE) {
+      animal.setStatus(Status.UNAVAILABLE);
+    } else {
+      animal.setStatus(Status.AVAILABLE);
+    }
+    return shelterAnimalRepository.save(animal);
+  }
+
+  public ShelterAnimal changeAdoptionType(ShelterAnimal animal) {
+    if (animal.getAdoptionType() == AdoptionType.FOR_ADOPTION) {
+      animal.setAdoptionType(AdoptionType.FOR_FOSTER);
+    } else {
+      animal.setAdoptionType(AdoptionType.FOR_ADOPTION);
+    }
+    return shelterAnimalRepository.save(animal);
+  }
+
 }

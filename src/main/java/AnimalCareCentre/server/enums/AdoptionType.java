@@ -6,7 +6,6 @@ package AnimalCareCentre.server.enums;
  */
 public enum AdoptionType {
 
-  NOT_AVAILABLE("Unavailable"),
   FOR_ADOPTION("Adoption"),
   FOR_FOSTER("Foster");
 

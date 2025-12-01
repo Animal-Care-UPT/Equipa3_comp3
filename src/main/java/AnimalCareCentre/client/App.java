@@ -499,9 +499,12 @@ public class App extends Application {
 
   public void manageAnimal(ShelterAnimal animal) {
     System.out.println(animal);
+    System.out.println(animal.status());
     System.out.println("Menu: ");
     System.out.println("1 - Change Vacination Status");
     System.out.println("2 - Change Age");
+    System.out.println("3 - Change Adoption Type");
+    System.out.println("4 - Change Status");
     System.out.println("0 - Back");
     int opc = readInt();
     switch (opc) {
@@ -526,6 +529,18 @@ public class App extends Application {
         }
 
         ApiResponse response = ApiClient.put("/age?id=" + animal.id() + "&age=" + age, "");
+        System.out.println(response.getBody());
+        manageAnimal(animal);
+      }
+
+      case 3 -> {
+        ApiResponse response = ApiClient.put("/adoptiontype?id=" + animal.id(), "");
+        System.out.println(response.getBody());
+        manageAnimal(animal);
+      }
+
+      case 4 -> {
+        ApiResponse response = ApiClient.put("/status?id=" + animal.id(), "");
         System.out.println(response.getBody());
         manageAnimal(animal);
       }
