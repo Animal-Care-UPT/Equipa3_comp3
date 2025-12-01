@@ -101,9 +101,11 @@ public class App extends Application {
         return;
       }
 
-      if (response.getBody().equals("ROLE_USER")) {
+      loggedRole = response.getBody();
+
+      if (loggedRole.equals("ROLE_USER")) {
         userHomepage();
-      } else if (response.getBody().equals("ROLE_SHELTER")) {
+      } else if (loggedRole.equals("ROLE_SHELTER")) {
         shelterHomepage();
       } else {
         adminHomepage();
@@ -273,6 +275,49 @@ public class App extends Application {
   }
 
   /**
+   * This method shows the profile of an animal from a shelter
+   *
+   */
+  public void showAnimal(ShelterAnimal animal) {
+    System.out.println(animal);
+    System.out.println("Menu: ");
+    System.out.println("1 - Sponsor Animal");
+    System.out.println("2 - Adopt Animal");
+    System.out.println("3 - Foster Animal");
+    System.out.println("0 - Back");
+    int opc = readInt();
+    switch (opc) {
+      case 1 -> {
+        // System.out.println("Insert the amount of money you wish to give as a sponsorship");
+        // float amount = readFloat();
+        // User user = (User) loggedAcc;
+        // manager.createSponsorship(user, animal, amount);
+        userHomepage();
+        return;
+      }
+
+      case 2 -> {
+        // manager.adoptAnimal((User) loggedAcc, animal, AdoptionType.FOR_ADOPTION);
+        // System.out.println("Congratulations! Your request to adopt " + animal.getName() + " has been submitted!");
+        userHomepage();
+        return;
+      }
+
+      case 3 -> {
+        // manager.adoptAnimal((User) loggedAcc, animal, AdoptionType.FOR_FOSTER);
+        // System.out.println("Congratulations! Your request to foster " + animal.getName() + " has been submitted!");
+        userHomepage();
+        return;
+      }
+
+      case 0 -> {
+        userHomepage();
+        return;
+      }
+    }
+  }
+
+  /**
    * This method shows the search animals menu
    */
   public void searchAnimalMenu() {
@@ -292,21 +337,21 @@ public class App extends Application {
         String encodedSearch = URLEncoder.encode(search, StandardCharsets.UTF_8);
         ApiResponse response = ApiClient.get("/shelteranimals/search?keyword=" + encodedSearch);
 
-        System.out.println(response.getBody());
+        List<ShelterAnimal> animals = parseList(response.getBody(), ShelterAnimal.class);
 
-        // if (animals == null || animals.isEmpty()) {
-        // System.out.println("\nNo matches! Returning...");
-        // } else {
-        // ShelterAnimal choice = (ShelterAnimal) chooseOption(animals.toArray(),
-        // "Animal");
-        // if (choice == null) {
-        // javafx.application.Platform.runLater(this::userHomepage);
-        // return;
-        // }
-        // showAnimal(choice);
-        // }
-        searchAnimalMenu();
-        return;
+        if (animals == null || animals.isEmpty()) {
+          System.out.println("\nNo matches! Returning...");
+          searchAnimalMenu();
+          return;
+        } else {
+          ShelterAnimal choice = (ShelterAnimal) chooseOption(animals.toArray(),
+              "Animal");
+          if (choice == null) {
+            javafx.application.Platform.runLater(this::userHomepage);
+            return;
+          }
+          showAnimal(choice);
+        }
       }
 
       case "Search by Type" -> {
