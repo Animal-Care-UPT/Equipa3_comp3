@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import AnimalCareCentre.server.dto.SponsorshipDTO;
+import AnimalCareCentre.server.dto.SponsorshipResponseDTO;
 import AnimalCareCentre.server.model.ShelterAnimal;
 import AnimalCareCentre.server.model.Sponsorship;
 import AnimalCareCentre.server.model.User;
@@ -54,7 +55,7 @@ public class SponsorshipController {
   @PreAuthorize("hasRole('USER')")
   @GetMapping("/search/usersponsor")
   public ResponseEntity<?> getUserSponsorShips(User user){
-    List<Sponsorship> results = sponsorshipService.searchSponsorshipsUser(user);
+    List<SponsorshipResponseDTO> results = sponsorshipService.searchSponsorshipsUser(user);
     if (!results.isEmpty()){
       return ResponseEntity.ok().body(results);
     }

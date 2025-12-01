@@ -4,6 +4,7 @@ import java.util.*;
 import org.springframework.stereotype.Service;
 
 import AnimalCareCentre.server.repository.SponsorshipRepository;
+import AnimalCareCentre.server.dto.SponsorshipResponseDTO;
 import AnimalCareCentre.server.model.*;
 
 @Service
@@ -27,7 +28,14 @@ public class SponsorshipService {
     return sponsorshipRepository.findAll(); 
   }
   
-  public List<Sponsorship> searchSponsorshipsUser(User user){
-    return sponsorshipRepository.findByUser(user);      
+  public List<SponsorshipResponseDTO> searchSponsorshipsUser(User user){
+    List <Sponsorship> sponsors = sponsorshipRepository.findByUser(user);
+    return sponsors.stream().map(a -> {
+      SponsorshipResponseDTO dto = new SponsorshipResponseDTO();
+      dto.setUser(a.getUser().getName());
+      dto.setAnimal(a.getAnimal().getName());
+      dto.setAmount(a.getAmount());
+      return dto;
+    }).toList();
   } 
 }
