@@ -280,10 +280,10 @@ public class App extends Application {
    */
   public void showAnimal(ShelterAnimal animal) {
     System.out.println(animal);
+    String listed = animal.adoptionType() == AdoptionType.FOR_ADOPTION ? "Adopt" : "Foster";
     System.out.println("Menu: ");
     System.out.println("1 - Sponsor Animal");
-    System.out.println("2 - Adopt Animal");
-    System.out.println("3 - Foster Animal");
+    System.out.println("2 - " + listed + " Animal");
     System.out.println("0 - Back");
     int opc = readInt();
     switch (opc) {
@@ -305,14 +305,6 @@ public class App extends Application {
         return;
       }
 
-      case 3 -> {
-        // manager.adoptAnimal((User) loggedAcc, animal, AdoptionType.FOR_FOSTER);
-        // System.out.println("Congratulations! Your request to foster " +
-        // animal.getName() + " has been submitted!");
-        userHomepage();
-        return;
-      }
-
       case 0 -> {
         userHomepage();
         return;
@@ -327,7 +319,7 @@ public class App extends Application {
 
     System.out.println("\n=== SEARCH ANIMAL ===");
     String[] options = { "Search by Keyword", "Search by Type", "Search by Color", "Search by Gender",
-        "Search by Size" };
+        "Search by Size", "Search Animals for Adoption", "Search Animals for Foster" };
     String opt = (String) chooseOption(options, "Search Option");
     if (opt == null) {
       Platform.runLater(this::userHomepage);
