@@ -492,12 +492,79 @@ public class App extends Application {
         } else {
           System.out.println(response.getBody());
           searchAnimalMenu();
-
         }
       }
-
     }
+  }
 
+  public void manageAnimal(ShelterAnimal animal) {
+    System.out.println(animal);
+    System.out.println("Menu: ");
+    System.out.println("1 - Change Vacination Status");
+    System.out.println("2 - Change Age");
+    System.out.println("0 - Back");
+    int opc = readInt();
+    switch (opc) {
+
+      case 1 -> {
+        ApiResponse response = ApiClient.put("/vacination?id=" + animal.id(), "");
+        System.out.println(response.getBody());
+        manageAnimal(animal);
+      }
+
+      case 2 -> {
+        Integer age;
+        System.out.println("What is the age?");
+
+        while (true) {
+          age = readInt();
+          if (age < 0 || age > 30) {
+            System.out.println("Pick a valid age!");
+          } else {
+            break;
+          }
+        }
+
+        ApiResponse response = ApiClient.put("/age?id=" + animal.id() + "&age=" + age, "");
+        System.out.println(response.getBody());
+        manageAnimal(animal);
+      }
+
+      case 0 -> {
+        shelterHomepage();
+        return;
+      }
+
+      default -> {
+        System.out.println("Please pick a valid option!");
+        manageAnimal(animal);
+        return;
+      }
+    }
+  }
+
+  /**
+   * This method allows the shelter to view his animals
+   */
+  public void shelterViewAnimals() {
+
+    ApiResponse response = ApiClient.get("/shelteranimals/search/own");
+
+    if (response.isSuccess()) {
+
+      List<ShelterAnimal> animals = parseList(response.getBody(), ShelterAnimal.class);
+
+      ShelterAnimal choice = (ShelterAnimal) chooseOption(animals.toArray(),
+          "Animal");
+      if (choice == null) {
+        javafx.application.Platform.runLater(this::shelterHomepage);
+        return;
+      }
+      manageAnimal(choice);
+    } else {
+      System.out.println(response.getBody());
+      shelterViewAnimals();
+    }
   }
 
   /**
@@ -603,7 +670,7 @@ public class App extends Application {
           }
 
           case 2 -> {
-            shelterHomepage();
+            shelterViewAnimals();
             return;
           }
 
@@ -808,7 +875,7 @@ public class App extends Application {
     String[] options = { "Change Shelter Status", "View All Shelter Animals" };
     String opt = (String) chooseOption(options, "Search Option");
     if (opt == null) {
-      Platform.runLater(this::userHomepage);
+      Platform.runLater(this::adminHomepage);
       return;
     }
 
@@ -850,13 +917,14 @@ public class App extends Application {
         if (response.isSuccess()) {
 
           List<ShelterAnimal> animals = parseList(response.getBody(), ShelterAnimal.class);
+          System.out.println(animals);
+          adminHomepage();
+          return;
 
         } else {
           System.out.println(response.getBody());
           displayShelterForAdmin(shelter);
         }
-
-        return;
       }
 
       default -> {

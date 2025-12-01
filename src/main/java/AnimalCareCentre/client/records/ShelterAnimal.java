@@ -11,7 +11,8 @@ public record ShelterAnimal(long id, String name, AnimalType type, String race, 
   @Override
   public String toString() {
     return "\nName: " + name + "\nType: " + type + "\nRace: " + race + "\nSize: " + size + "\nGender: " + gender
-        + "\nColor: " + color + "\nDescription: " + description + "\nListed For: " + adoptionType + "\nShelter: " + shelter.name() + "\n";
+        + "\nColor: " + color + "\nDescription: " + description + "\nListed For: " + adoptionType
+        + "\nVacination Status: " + isVacinated + "\nShelter: " + shelter.name() + "\n";
   }
 
 }
