@@ -112,7 +112,7 @@ public class ShelterAnimalController {
 
   @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
   @GetMapping("/search/size")
-  public ResponseEntity<?> getAnimalsByGender(@NotNull @RequestParam AnimalSize size) {
+  public ResponseEntity<?> getAnimalsBySize(@NotNull @RequestParam AnimalSize size) {
     List<ShelterAnimal> animals = shelterAnimalService.searchBySize(size);
     if (!animals.isEmpty()) {
       return ResponseEntity.ok().body(animals);
@@ -122,7 +122,7 @@ public class ShelterAnimalController {
 
   @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
   @GetMapping("/search/color")
-  public ResponseEntity<?> getAnimalsByGender(@NotNull @RequestParam AnimalColor color) {
+  public ResponseEntity<?> getAnimalsByColor(@NotNull @RequestParam AnimalColor color) {
     List<ShelterAnimal> animals = shelterAnimalService.searchByColor(color);
     if (!animals.isEmpty()) {
       return ResponseEntity.ok().body(animals);

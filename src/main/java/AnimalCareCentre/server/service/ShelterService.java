@@ -1,5 +1,6 @@
 package AnimalCareCentre.server.service;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,7 +41,9 @@ public class ShelterService {
   }
 
   public List<Shelter> getPendingShelters() {
-    return shelterRepository.findByStatus(Status.PENDING);
+    List<Shelter> shelters = shelterRepository.findByStatus(Status.PENDING);
+    shelters.sort(Comparator.comparing(Shelter::getLocation).thenComparing(Shelter::getName));
+    return shelters;
   }
 
   public Shelter changePassword(Shelter shelter, String password) {
@@ -49,6 +52,8 @@ public class ShelterService {
   }
 
   public List<Shelter> getShelters() {
-    return shelterRepository.findByStatus(Status.AVAILABLE);
+    List<Shelter> shelters = shelterRepository.findByStatus(Status.AVAILABLE);
+    shelters.sort(Comparator.comparing(Shelter::getLocation).thenComparing(Shelter::getName));
+    return shelters;
   }
 }

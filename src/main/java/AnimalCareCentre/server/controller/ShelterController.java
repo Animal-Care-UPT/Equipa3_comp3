@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import AnimalCareCentre.server.dto.ChangeStatusDTO;
 import AnimalCareCentre.server.enums.Status;
 import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.service.AccountService;
@@ -53,10 +54,10 @@ public class ShelterController {
 
   @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/status")
-  public ResponseEntity<?> changeStatus(@RequestParam long id, @RequestParam Status status) {
+  public ResponseEntity<?> changeStatus(@RequestParam long id, @Valid @RequestBody ChangeStatusDTO status) {
     Shelter shelter = shelterService.findById(id);
     if (shelter != null) {
-      shelterService.changeStatus(shelter, status);
+      shelterService.changeStatus(shelter, status.getStatus());
       return ResponseEntity.ok().body("Changed shelter status successfully");
     }
     return ResponseEntity.status(404).body("Shelter not found!");

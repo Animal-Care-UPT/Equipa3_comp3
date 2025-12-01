@@ -37,7 +37,6 @@ public class App extends Application {
   private static Stage stage;
   private static Scanner sc = new Scanner(System.in);
   private Thread consoleThread;
-  private static String loggedRole;
   private static final ObjectMapper mapper = new ObjectMapper()
       .registerModule(new JavaTimeModule())
       .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -101,11 +100,9 @@ public class App extends Application {
         return;
       }
 
-      loggedRole = response.getBody();
-
-      if (loggedRole.equals("ROLE_USER")) {
+      if (response.getBody().equals("ROLE_USER")) {
         userHomepage();
-      } else if (loggedRole.equals("ROLE_SHELTER")) {
+      } else if (response.getBody().equals("ROLE_SHELTER")) {
         shelterHomepage();
       } else {
         adminHomepage();
@@ -280,10 +277,10 @@ public class App extends Application {
    */
   public void showAnimal(ShelterAnimal animal) {
     System.out.println(animal);
+    String listed = animal.adoptionType() == AdoptionType.FOR_ADOPTION ? "Adopt" : "Foster";
     System.out.println("Menu: ");
     System.out.println("1 - Sponsor Animal");
-    System.out.println("2 - Adopt Animal");
-    System.out.println("3 - Foster Animal");
+    System.out.println("2 - " + listed + " Animal");
     System.out.println("0 - Back");
     int opc = readInt();
     switch (opc) {
@@ -305,14 +302,6 @@ public class App extends Application {
         return;
       }
 
-      case 3 -> {
-        // manager.adoptAnimal((User) loggedAcc, animal, AdoptionType.FOR_FOSTER);
-        // System.out.println("Congratulations! Your request to foster " +
-        // animal.getName() + " has been submitted!");
-        userHomepage();
-        return;
-      }
-
       case 0 -> {
         userHomepage();
         return;
@@ -327,7 +316,7 @@ public class App extends Application {
 
     System.out.println("\n=== SEARCH ANIMAL ===");
     String[] options = { "Search by Keyword", "Search by Type", "Search by Color", "Search by Gender",
-        "Search by Size" };
+        "Search by Size", "Search Animals for Adoption", "Search Animals for Foster" };
     String opt = (String) chooseOption(options, "Search Option");
     if (opt == null) {
       Platform.runLater(this::userHomepage);
@@ -463,6 +452,50 @@ public class App extends Application {
         }
       }
 
+      case "Search Animals for Adoption" -> {
+
+        ApiResponse response = ApiClient.get("/shelteranimals/search/adoption");
+
+        if (response.isSuccess()) {
+
+          List<ShelterAnimal> animals = parseList(response.getBody(), ShelterAnimal.class);
+
+          ShelterAnimal choice = (ShelterAnimal) chooseOption(animals.toArray(),
+              "Animal");
+          if (choice == null) {
+            javafx.application.Platform.runLater(this::userHomepage);
+            return;
+          }
+          showAnimal(choice);
+        } else {
+          System.out.println(response.getBody());
+          searchAnimalMenu();
+
+        }
+      }
+
+      case "Search Animals for Foster" -> {
+
+        ApiResponse response = ApiClient.get("/shelteranimals/search/foster");
+
+        if (response.isSuccess()) {
+
+          List<ShelterAnimal> animals = parseList(response.getBody(), ShelterAnimal.class);
+
+          ShelterAnimal choice = (ShelterAnimal) chooseOption(animals.toArray(),
+              "Animal");
+          if (choice == null) {
+            javafx.application.Platform.runLater(this::userHomepage);
+            return;
+          }
+          showAnimal(choice);
+        } else {
+          System.out.println(response.getBody());
+          searchAnimalMenu();
+
+        }
+      }
+
     }
 
   }
@@ -476,64 +509,219 @@ public class App extends Application {
     if (consoleThread != null && consoleThread.isAlive()) {
       consoleThread.interrupt();
     }
+
     consoleThread = new Thread(() -> {
-      System.out.println("=== SHELTER MENU ===");
-      System.out.println("1. Register Animal");
-      System.out.println("2. View My Animals");
-      System.out.println("3. View Pending Adoption Requests");
-      System.out.println("4. View Pending Foster Requests");
-      System.out.println("5. View Adoptions");
-      System.out.println("6. View Fosters");
-      System.out.println("0. Logout");
-      System.out.print("Option: ");
-      int option = readInt();
+      try {
 
-      switch (option) {
-        case 1 -> {
-          shelterHomepage();
+        System.out.println("=== SHELTER MENU ===");
+        System.out.println("1. Register Animal");
+        System.out.println("2. View My Animals");
+        System.out.println("3. View Pending Adoption Requests");
+        System.out.println("4. View Pending Foster Requests");
+        System.out.println("5. View Adoptions");
+        System.out.println("6. View Fosters");
+        System.out.println("0. Logout");
+        System.out.print("Option: ");
+        int option = readInt();
+
+        switch (option) {
+          case 1 -> {
+              System.out.println("\n=== REGISTER ANIMAL ===");
+
+              System.out.print("Name: ");
+              String name = readLine();
+
+              AnimalType type = (AnimalType) chooseOption(AnimalType.values(), "Type");
+              if (type == null) return;
+
+              List<String> breeds = type.getBreeds();
+              String race = null;
+              if (breeds != null) {
+                  while (true) {
+                      System.out.println("Select Breed:");
+                      for (int i = 0; i < breeds.size(); i++) {
+                          System.out.println((i + 1) + ". " + breeds.get(i));
+                      }
+                      System.out.print("Option: ");
+                      String input = readLine();
+                      try {
+                          int breedOption = Integer.parseInt(input);
+                          if (breedOption >= 1 && breedOption <= breeds.size()) {
+                              race = breeds.get(breedOption - 1);
+                              break;
+                          }
+                      } catch (NumberFormatException ignored) {}
+                      System.out.println("Invalid option, please try again.");
+                  }
+              }
+
+              AnimalSize size = (AnimalSize) chooseOption(AnimalSize.values(), "Size");
+              if (size == null) return;
+
+              AnimalGender gender = (AnimalGender) chooseOption(AnimalGender.values(), "Gender");
+              if (gender == null) return;
+
+              System.out.print("Age: ");
+              int age = readInt();
+
+              AnimalColor color = (AnimalColor) chooseOption(AnimalColor.values(), "Color");
+              if (color == null) return;
+
+              System.out.print("Description: ");
+              String description = readLine();
+
+              AdoptionType adoptionType = (AdoptionType) chooseOption(AdoptionType.values(), "Adoption Type");
+              if (adoptionType == null) return;
+
+
+              String json = jsonString(
+                      "name", name,
+                      "type", type.name(),
+                      "race", race,
+                      "age", age,
+                      "color", color.name(),
+                      "size", size.name(),
+                      "gender", gender.name(),
+                      "adoptionType", adoptionType.name(),
+                      "description", description
+              );
+
+
+              ApiResponse response = ApiClient.post("/shelteranimals/register", json);
+
+              if (response.isSuccess()) {
+                  System.out.println("Animal successfully registered!");
+              } else {
+                  System.out.println("Error: " + response.getBody());
+              }
+
+              shelterHomepage();
+              return;
+          }
+
+          case 2 -> {
+            shelterHomepage();
+            return;
+          }
+
+          case 3 -> {
+            shelterHomepage();
+            return;
+          }
+
+          case 4 -> {
+            shelterHomepage();
+            return;
+          }
+
+          case 5 -> {
+            shelterHomepage();
+            return;
+          }
+
+          case 6 -> {
+            shelterHomepage();
+            return;
+          }
+
+          case 0 -> {
+            System.out.println("Exiting terminal menu...");
+            javafx.application.Platform.runLater(this::showMainMenu);
+          }
+
+          default -> {
+            System.out.println("Invalid option!");
+            shelterHomepage();
+            return;
+          }
+        }
+      } catch (RuntimeException e) {
+        if (e.getMessage().equals("Thread Interrupted")) {
           return;
         }
+        throw e;
+      }
+    });
+    consoleThread.setDaemon(true);
+    consoleThread.start();
+  }
 
-        case 2 -> {
-          shelterHomepage();
-          return;
-        }
+  /**
+   * This method shows a shelter's animals
+   */
+  public void showShelterAnimals(Shelter shelter) {
+    System.out.println(shelter);
+    System.out.println("Animals: ");
+    ApiResponse response = ApiClient.get("/shelteranimals/search/shelter/available?id=" + shelter.id());
+    if (response.isSuccess()) {
+      
+    List<ShelterAnimal> animals = parseList(response.getBody(), ShelterAnimal.class);
+    ShelterAnimal choice = (ShelterAnimal) chooseOption(animals.toArray(), "Animal");
+    if (choice == null) {
+      javafx.application.Platform.runLater(this::userHomepage);
+      return;
+    }
+    showAnimal(choice);
+    } else {
+      System.out.println(response.getBody());
+      showShelter(shelter);
+    }
+  }
 
-        case 3 -> {
-          shelterHomepage();
-          return;
-        }
+  /**
+   * This method shows a shelter's profile
+   *
+   */
+  public void showShelter(Shelter shelter) {
+    System.out.println(shelter);
+    System.out.println("\n");
+    String[] options = { "Donate to Shelter", "View Shelter Animals" };
+    String opt = (String) chooseOption(options, "Search Option");
+    if (opt == null) {
+      Platform.runLater(this::userHomepage);
+      return;
+    }
 
-        case 4 -> {
-          shelterHomepage();
-          return;
-        }
-
-        case 5 -> {
-          shelterHomepage();
-          return;
-        }
-
-        case 6 -> {
-          shelterHomepage();
-          return;
-        }
-
-        case 0 -> {
-          System.out.println("Exiting terminal menu...");
-          javafx.application.Platform.runLater(this::showMainMenu);
-        }
-
-        default -> {
-          System.out.println("Invalid option!");
-          shelterHomepage();
-          return;
-        }
+    switch (opt) {
+      case "Donate to Shelter" -> {
+        // donation stuff
+        showShelter(shelter);
+        return;
       }
 
-    });
-    consoleThread.start();
+      case "View Shelter Animals" -> {
+        showShelterAnimals(shelter);
+        return;
+      }
 
+      default -> {
+        System.out.println("Invalid option!");
+        showShelter(shelter);
+        return;
+      }
+    }
+  }
+
+  /**
+   * This method displays all the available shelters
+   */
+  public void searchShelter() {
+
+    ApiResponse response = ApiClient.get("/shelters/");
+
+    if (response.isSuccess()) {
+    List<Shelter> shelters = parseList(response.getBody(), Shelter.class);
+
+    Shelter choice = (Shelter) chooseOption(shelters.toArray(), "Shelter");
+    if (choice == null) {
+      javafx.application.Platform.runLater(this::userHomepage);
+      return;
+    }
+    showShelter(choice);
+    } else {
+      System.out.println(response.getBody());
+      userHomepage();
+    }
   }
 
   /**
@@ -545,55 +733,65 @@ public class App extends Application {
     if (consoleThread != null && consoleThread.isAlive()) {
       consoleThread.interrupt();
     }
+
     consoleThread = new Thread(() -> {
-      int option;
+      try {
 
-      System.out.println("=== USER MENU ===");
-      System.out.println("1. Search Animal");
-      System.out.println("2. Search Shelter");
-      System.out.println("3. See My Adoptions Requests");
-      System.out.println("4. See My Foster Requests");
-      System.out.println("5. Lost and Found");
-      System.out.println("0. Logout");
-      System.out.print("Option: ");
-      option = readInt();
+        int option;
 
-      switch (option) {
-        case 1 -> {
-          searchAnimalMenu();
+        System.out.println("=== USER MENU ===");
+        System.out.println("1. Search Animal");
+        System.out.println("2. Search Shelter");
+        System.out.println("3. See My Adoptions Requests");
+        System.out.println("4. See My Foster Requests");
+        System.out.println("5. Lost and Found");
+        System.out.println("0. Logout");
+        System.out.print("Option: ");
+        option = readInt();
+
+        switch (option) {
+          case 1 -> {
+            searchAnimalMenu();
+            return;
+          }
+
+          case 2 -> {
+            searchShelter();
+            return;
+          }
+
+          case 3 -> {
+            userHomepage();
+            return;
+          }
+
+          case 4 -> {
+            userHomepage();
+            return;
+          }
+
+          case 5 -> {
+            // lostAndFoundMenu();
+            userHomepage();
+            return;
+          }
+
+          case 0 -> {
+            System.out.println("Exiting terminal menu...");
+            Platform.runLater(() -> showMainMenu());
+            return;
+          }
+          default -> System.out.println("Invalid option!");
+        }
+      } catch (RuntimeException e) {
+        if (e.getMessage().equals("Thread Interrupted")) {
           return;
         }
-
-        case 2 -> {
-          // searchShelter();
-          userHomepage();
-          return;
-        }
-
-        case 3 -> {
-          userHomepage();
-          return;
-        }
-
-        case 4 -> {
-          userHomepage();
-          return;
-        }
-
-        case 5 -> {
-          // lostAndFoundMenu();
-          userHomepage();
-          return;
-        }
-
-        case 0 -> {
-          System.out.println("Exiting terminal menu...");
-          Platform.runLater(() -> showMainMenu());
-          return;
-        }
-        default -> System.out.println("Invalid option!");
+        throw e;
       }
+
     });
+    consoleThread.setDaemon(true);
     consoleThread.start();
 
   }
@@ -607,66 +805,119 @@ public class App extends Application {
     if (consoleThread != null && consoleThread.isAlive()) {
       consoleThread.interrupt();
     }
+
     consoleThread = new Thread(() -> {
-      int option;
+      try {
 
-      System.out.println("=== ADMIN MENU ===");
-      System.out.println("1. View Shelter Requests");
-      System.out.println("2. View Available Shelters");
-      System.out.println("3. View All Sponsorships");
-      System.out.println("4. View All Animals");
-      System.out.println("5. View All Adoptions");
-      System.out.println("6. View All Fosters");
-      System.out.println("7 Lost and Found");
-      System.out.println("0. Logout");
-      System.out.print("Option: ");
-      option = readInt();
+        int option;
 
-      switch (option) {
-        case 1 -> {
-          adminHomepage();
+        System.out.println("=== ADMIN MENU ===");
+        System.out.println("1. View Shelter Requests");
+        System.out.println("2. View Shelters");
+        System.out.println("3. View All Sponsorships");
+        System.out.println("4. View All Animals");
+        System.out.println("5. View All Adoptions");
+        System.out.println("6. View All Fosters");
+        System.out.println("7 Lost and Found");
+        System.out.println("0. Logout");
+        System.out.print("Option: ");
+        option = readInt();
+
+        switch (option) {
+          case 1 -> {
+            ApiResponse response = ApiClient.get("/shelters/pending");
+            Shelter choice;
+
+            if (response.isSuccess()) {
+              List<Shelter> shelters = parseList(response.getBody(), Shelter.class);
+              choice = (Shelter) chooseOption(shelters.toArray(), "Shelter Request");
+              if (choice == null) {
+                javafx.application.Platform.runLater(this::adminHomepage);
+                return;
+              }
+
+            } else {
+              System.out.println(response.getBody());
+              adminHomepage();
+              return;
+            }
+
+            String[] requestAction = { "Accept", "Reject" };
+            String action = (String) chooseOption(requestAction, "Shelter Request");
+            if (action == null) {
+              javafx.application.Platform.runLater(this::adminHomepage);
+              return;
+            }
+
+            if (action.equals("Accept")) {
+              String jsonStatus = jsonString("status", Status.AVAILABLE);
+              ApiResponse acptResponse = ApiClient.put("/shelters/status?id=" + choice.id(), jsonStatus);
+              if (acptResponse.isSuccess()) {
+                System.out.println("Shelter accepted with success!");
+              } else {
+                System.out.println(acptResponse.getBody());
+              }
+
+            } else {
+              String jsonStatus = jsonString("status", Status.REJECTED);
+              ApiResponse rejResponse = ApiClient.put("/shelters/status?id=" + choice.id(), jsonStatus);
+              if (rejResponse.isSuccess()) {
+                System.out.println("Shelter rejected with success!");
+              } else {
+                System.out.println(rejResponse.getBody());
+              }
+            }
+            adminHomepage();
+            return;
+
+          }
+
+          case 2 -> {
+            adminHomepage();
+            return;
+          }
+
+          case 3 -> {
+            adminHomepage();
+            return;
+          }
+
+          case 4 -> {
+            adminHomepage();
+            return;
+          }
+
+          case 5 -> {
+            adminHomepage();
+            return;
+          }
+
+          case 6 -> {
+            adminHomepage();
+            return;
+          }
+
+          case 7 -> {
+            // lostAndFoundMenu();
+            adminHomepage();
+            return;
+          }
+
+          case 0 -> {
+            System.out.println("Exiting terminal menu...");
+            Platform.runLater(() -> showMainMenu());
+            return;
+          }
+          default -> System.out.println("Invalid option!");
+        }
+      } catch (RuntimeException e) {
+        if (e.getMessage().equals("Thread Interrupted")) {
           return;
         }
-
-        case 2 -> {
-          adminHomepage();
-          return;
-        }
-
-        case 3 -> {
-          adminHomepage();
-          return;
-        }
-
-        case 4 -> {
-          adminHomepage();
-          return;
-        }
-
-        case 5 -> {
-          adminHomepage();
-          return;
-        }
-
-        case 6 -> {
-          adminHomepage();
-          return;
-        }
-
-        case 7 -> {
-          // lostAndFoundMenu();
-          adminHomepage();
-          return;
-        }
-
-        case 0 -> {
-          System.out.println("Exiting terminal menu...");
-          Platform.runLater(() -> showMainMenu());
-          return;
-        }
-        default -> System.out.println("Invalid option!");
+        throw e;
       }
     });
+    consoleThread.setDaemon(true);
     consoleThread.start();
 
   }
@@ -759,7 +1010,7 @@ public class App extends Application {
    */
   private Object chooseOption(Object[] values, String title) {
     while (true) {
-      System.out.println("\n\n\n");
+      System.out.println("\n");
       System.out.println("Select " + title + ":");
       System.out.println("\n");
 
@@ -787,6 +1038,9 @@ public class App extends Application {
   private int readInt() {
     synchronized (sc) {
       while (true) {
+        if (Thread.currentThread().isInterrupted()) {
+          throw new RuntimeException("Thread Interrupted");
+        }
         try {
           int value = sc.nextInt();
           sc.nextLine();
@@ -801,6 +1055,9 @@ public class App extends Application {
 
   private String readLine() {
     synchronized (sc) {
+      if (Thread.currentThread().isInterrupted()) {
+        throw new RuntimeException("Thread Interrupted");
+      }
       return sc.nextLine();
     }
   }
@@ -808,6 +1065,9 @@ public class App extends Application {
   private float readFloat() {
     synchronized (sc) {
       while (true) {
+        if (Thread.currentThread().isInterrupted()) {
+          throw new RuntimeException("Thread Interrupted");
+        }
         try {
           float value = sc.nextFloat();
           sc.nextLine();

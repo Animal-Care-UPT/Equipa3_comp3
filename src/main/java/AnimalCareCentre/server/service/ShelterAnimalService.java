@@ -23,7 +23,6 @@ public class ShelterAnimalService {
   public ShelterAnimal registerShelterAnimal(ShelterAnimal shelterAnimal) {
     shelterAnimal.setStatus(Status.AVAILABLE);
     return shelterAnimalRepository.save(shelterAnimal);
-
   }
 
   public List<ShelterAnimal> searchByKeyword(String search) {
@@ -97,8 +96,5 @@ public class ShelterAnimalService {
   //So that we can change the status of a shelteranimal after the adoption
   public void save(ShelterAnimal animal) {
       shelterAnimalRepository.save(animal);
-
   }
-
-
 }
