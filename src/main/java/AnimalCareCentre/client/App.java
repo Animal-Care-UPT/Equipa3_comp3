@@ -1,4 +1,4 @@
-package  AnimalCareCentre.client;
+package AnimalCareCentre.client;
 
 import java.awt.Toolkit;
 import java.net.URLEncoder;
@@ -114,9 +114,53 @@ public class App extends Application {
     });
 
     changePassword.setOnAction(e -> {
-      // changePassword();
+      changePassword();
+    });
+  }
+
+  /**
+   * This method shows the change password screen
+   */
+  public void changePassword() {
+    ACCScene scene = new ACCScene(stage, new ACCVBox());
+    Label emailLabel = new Label("Email:");
+    TextField email = new TextField();
+    Button enter = new Button("Enter");
+    Label passwordLabel = new Label("New password:");
+    PasswordField password = new PasswordField();
+    Button confirm = new Button("Confirm");
+    Button back = new Button("Back");
+    TextField answer = new TextField();
+
+    scene.addItems(emailLabel, email, enter, back);
+    enter.setOnAction(e -> {
+      ApiResponse response = ApiClient.get("/accounts/secquestion?email=" + email.getText());
+      if (response.isSuccess()) {
+        scene.clearContent();
+        Label question = new Label(response.getBody());
+        scene.addItems(question, answer, passwordLabel, password, confirm, back);
+      } else {
+        showAlert(AlertType.ERROR, "Error", response.getBody());
+      }
     });
 
+    confirm.setOnAction(e -> {
+      String json = jsonString("email", email.getText(), "answer", answer.getText(), "newPassword", password.getText());
+      ApiResponse response = ApiClient.put("/accounts/changepw", json);
+      if (response.isSuccess()) {
+        showAlert(AlertType.INFORMATION, "Success", response.getBody());
+        login();
+        return;
+      } else {
+        showAlert(AlertType.ERROR, "Error", response.getBody());
+        return;
+      }
+
+    });
+
+    back.setOnAction(e -> {
+      login();
+    });
   }
 
   /**
@@ -287,7 +331,7 @@ public class App extends Application {
       case 1 -> {
         System.out.println("Insert the amount of money you wish to give as a sponsorship");
         Float amount = readFloat();
-        String json = jsonString("id",animal.id(),"amount",amount);
+        String json = jsonString("id", animal.id(), "amount", amount);
         ApiResponse response = ApiClient.post("/sponsorships/create", json);
         System.out.println(response.getBody());
         userHomepage();
@@ -711,12 +755,12 @@ public class App extends Application {
           }
 
           case 8 -> {
-            
+
             SecurityQuestion question = (SecurityQuestion) chooseOption(SecurityQuestion.values(), "SecurityQuestion");
             System.out.println("Answer: ");
             String answer = readLine();
-            String json = jsonString("securityQuestion",question,"answer",answer);
-            ApiResponse response = ApiClient.put("/accounts/changesq",json);
+            String json = jsonString("securityQuestion", question, "answer", answer);
+            ApiResponse response = ApiClient.put("/accounts/changesq", json);
             System.out.println(response.getBody());
             shelterHomepage();
             return;
@@ -878,26 +922,27 @@ public class App extends Application {
 
           case 6 -> {
             ApiResponse response = ApiClient.get("/sponsorships/usersponsor");
-            if (response.isSuccess()){
+            if (response.isSuccess()) {
               List<Sponsorship> sponsorships = parseList(response.getBody(), Sponsorship.class);
-            }
-            else{
+              System.out.println(sponsorships);
+            } else {
               System.out.println(response.getBody());
             }
             userHomepage();
             return;
           }
-          
-          case 7 ->{
+
+          case 7 -> {
             SecurityQuestion question = (SecurityQuestion) chooseOption(SecurityQuestion.values(), "SecurityQuestion");
             System.out.println("Answer: ");
             String answer = readLine();
-            String json = jsonString("securityQuestion",question,"answer",answer);
-            ApiResponse response = ApiClient.put("/accounts/changesq",json);
+            String json = jsonString("securityQuestion", question, "answer", answer);
+            ApiResponse response = ApiClient.put("/accounts/changesq", json);
             System.out.println(response.getBody());
             userHomepage();
             return;
           }
+
           case 0 -> {
             System.out.println("Exiting terminal menu...");
             Platform.runLater(() -> showMainMenu());
@@ -1138,8 +1183,8 @@ public class App extends Application {
             SecurityQuestion question = (SecurityQuestion) chooseOption(SecurityQuestion.values(), "SecurityQuestion");
             System.out.println("Answer: ");
             String answer = readLine();
-            String json = jsonString("securityQuestion",question,"answer",answer);
-            ApiResponse response = ApiClient.put("/accounts/changesq",json);
+            String json = jsonString("securityQuestion", question, "answer", answer);
+            ApiResponse response = ApiClient.put("/accounts/changesq", json);
             System.out.println(response.getBody());
             shelterHomepage();
             return;

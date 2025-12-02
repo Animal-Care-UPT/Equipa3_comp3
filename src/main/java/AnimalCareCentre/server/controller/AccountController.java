@@ -1,15 +1,13 @@
 package AnimalCareCentre.server.controller;
 
-import java.util.Map;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,10 +20,10 @@ import AnimalCareCentre.server.dto.ChangePasswordDTO;
 import AnimalCareCentre.server.dto.LoginRequestDTO;
 import AnimalCareCentre.server.dto.SecurityQuestionDTO;
 import AnimalCareCentre.server.model.*;
-import AnimalCareCentre.server.repository.AccountRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import AnimalCareCentre.server.service.AccountService;
 
 @RestController
@@ -70,7 +68,7 @@ public class AccountController {
     }
 
     if (!accountService.verifySecurityAnswer(pwRequest.getEmail(), pwRequest.getAnswer())) {
-      return ResponseEntity.status(403).body("Invalid answer!");
+      return ResponseEntity.status(400).body("Invalid answer!");
     }
 
     String pwError = accountService.verifyPasswordRules(pwRequest.getNewPassword());
@@ -107,13 +105,13 @@ public class AccountController {
     }
   }
 
-  @PostMapping("/secquestion")
-  public ResponseEntity<?> getSecurityQuestion(@RequestParam String email) {
+  @GetMapping("/secquestion")
+  public ResponseEntity<?> getSecurityQuestion(@NotBlank @RequestParam String email) {
     Account acc = accountService.findAccount(email);
     if (acc == null) {
       return ResponseEntity.status(404).body("Email not registered!");
     }
-    return ResponseEntity.ok(acc.getSecurityQuestion());
+    return ResponseEntity.ok(acc.getSecurityQuestion().toString());
   }
 
   @PostMapping("/logout")
