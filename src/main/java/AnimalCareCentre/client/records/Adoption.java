@@ -9,6 +9,7 @@ public record Adoption(
         String animalName,
         Long userId,
         AdoptionType adoptionType,
+        Long adoptionId,
         Status status,
         LocalDate requestDate
 ) {}

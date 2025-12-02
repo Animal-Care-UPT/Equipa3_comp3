@@ -610,7 +610,7 @@ public class App extends Application {
         System.out.println("=== SHELTER MENU ===");
         System.out.println("1. Register Animal");
         System.out.println("2. View My Animals");
-        System.out.println("3. View Pending Requests");
+        System.out.println("3. View Pending Requests And Change their status");
         System.out.println("4. View Historic");
         System.out.println("0. Logout");
         System.out.print("Option: ");
@@ -702,10 +702,15 @@ public class App extends Application {
           case 3 -> {
               System.out.println("\n=== PENDING REQUESTS ===");
 
-              ApiResponse adoptionResponse = ApiClient.get("/adoptions/pending");
-              if (adoptionResponse.isSuccess()) {
-                  List<Adoption> requests = parseList(adoptionResponse.getBody(), Adoption.class);
+              ApiResponse changeStatusResponse = ApiClient.get("/adoptions/pending");
+              if (changeStatusResponse.isSuccess()) {
+                  List<Adoption> requests = parseList(changeStatusResponse.getBody(), Adoption.class);
 
+                  if (requests.isEmpty()) {
+                      System.out.println("No pending requests at the moment.");
+                      shelterHomepage();
+                      return;
+                  }
 
                   System.out.println("Total: " + requests.size() + " Requests ");
 
@@ -713,9 +718,44 @@ public class App extends Application {
                       System.out.println(req.animalName() + " - " + req.adoptionType() + " - " + req.userId());
                   }
 
-              }
-              else{
-                  System.out.println("Error: " + adoptionResponse.getBody());
+
+                  Adoption choice = (Adoption) chooseOption(requests.toArray(), "Pending Request");
+                  if (choice == null) {
+                      javafx.application.Platform.runLater(this::shelterHomepage);
+                      return;
+                  }
+
+                  System.out.println("\n=== Request Details ===");
+                  System.out.println("Animal: " + choice.animalName());
+                  System.out.println("Requested by: " + choice.userId());
+                  System.out.println("Type: " + choice.adoptionType());
+                  System.out.println("Request Date: " + choice.requestDate());
+                  System.out.println("========================\n");
+
+                  String[] requestActions = { "Accept", "Reject" };
+                  String action = (String) chooseOption(requestActions, "Action");
+                  if (action == null) {
+                      javafx.application.Platform.runLater(this::shelterHomepage);
+                      return;
+                  }
+
+                  Status newStatus = action.equals("Accept") ? Status.ACCEPTED : Status.REJECTED;
+
+                  String json = jsonString(
+                          "adoptionId", choice.adoptionId(),
+                          "newStatus", newStatus.name()
+                  );
+
+                  ApiResponse statusResponse = ApiClient.put("/adoptions/change/status", json);
+
+                  if (statusResponse.isSuccess()) {
+                      System.out.println("Request " + newStatus.name().toLowerCase() + " successfully!");
+                  } else {
+                      System.out.println("Error: " + statusResponse.getBody());
+                  }
+
+              } else {
+                  System.out.println("Error loading requests: " + changeStatusResponse.getBody());
               }
 
               shelterHomepage();
@@ -848,8 +888,8 @@ public class App extends Application {
         System.out.println("=== USER MENU ===");
         System.out.println("1. Search Animal");
         System.out.println("2. Search Shelter");
-        System.out.println("3. See My Adoptions Requests");
-        System.out.println("4. See My Foster Requests");
+        System.out.println("3. See My Pending Requests");
+        System.out.println("4. See My Requests");
         System.out.println("5. Lost and Found");
         System.out.println("0. Logout");
         System.out.print("Option: ");
@@ -867,11 +907,45 @@ public class App extends Application {
           }
 
           case 3 -> {
+              System.out.println("\n=== PENDING REQUESTS ===");
+
+              ApiResponse requestResponse = ApiClient.get("/adoptions/user/pending");
+              if (requestResponse.isSuccess()) {
+                  List<Adoption> requests = parseList(requestResponse.getBody(), Adoption.class);
+
+
+                  System.out.println("Total: " + requests.size() + " Requests ");
+
+                  for (Adoption req : requests) {
+                      System.out.println(req.animalName() + " - " + req.adoptionType() + " - " + req.userId());
+                  }
+
+              }
+              else{
+                  System.out.println("Error: " + requestResponse.getBody());
+              }
             userHomepage();
             return;
           }
 
           case 4 -> {
+              System.out.println("\n=== ACCEPTED REQUESTS ===");
+
+              ApiResponse acceptedResponse = ApiClient.get("/adoptions/user/accepted");
+              if (acceptedResponse.isSuccess()) {
+                  List<Adoption> requests = parseList(acceptedResponse.getBody(), Adoption.class);
+
+
+                  System.out.println("Total: " + requests.size() + " Requests ");
+
+                  for (Adoption req : requests) {
+                      System.out.println(req.animalName() + " - " + req.adoptionType() + " - " + req.userId());
+                  }
+
+              }
+              else{
+                  System.out.println("Error: " + acceptedResponse.getBody());
+              }
             userHomepage();
             return;
           }
