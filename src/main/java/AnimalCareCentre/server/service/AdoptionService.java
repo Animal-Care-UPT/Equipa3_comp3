@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 import AnimalCareCentre.server.repository.AdoptionRepository;
 import AnimalCareCentre.server.model.Adoption;
 import AnimalCareCentre.server.model.ShelterAnimal;
-import AnimalCareCentre.server.model.User;
 import AnimalCareCentre.server.enums.Status;
+
+import AnimalCareCentre.server.model.User;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -56,7 +57,6 @@ public class AdoptionService {
     }
 
     adoption.setStatus(newStatus);
-
     if (newStatus == Status.ACCEPTED) {
       adoption.setAdoptionDate(LocalDate.now());
     }

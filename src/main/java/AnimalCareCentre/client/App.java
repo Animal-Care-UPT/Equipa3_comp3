@@ -1,4 +1,4 @@
-package AnimalCareCentre.client;
+package  AnimalCareCentre.client;
 
 import java.awt.Toolkit;
 import java.net.URLEncoder;
@@ -285,11 +285,11 @@ public class App extends Application {
     int opc = readInt();
     switch (opc) {
       case 1 -> {
-        // System.out.println("Insert the amount of money you wish to give as a
-        // sponsorship");
-        // float amount = readFloat();
-        // User user = (User) loggedAcc;
-        // manager.createSponsorship(user, animal, amount);
+        System.out.println("Insert the amount of money you wish to give as a sponsorship");
+        Float amount = readFloat();
+        String json = jsonString("id",animal.id(),"amount",amount);
+        ApiResponse response = ApiClient.post("/sponsorships/create", json);
+        System.out.println(response.getBody());
         userHomepage();
         return;
       }
@@ -602,6 +602,7 @@ public class App extends Application {
         System.out.println("4. View Pending Foster Requests");
         System.out.println("5. View Adoptions");
         System.out.println("6. View Fosters");
+        System.out.println("8. Change Security Answer");
         System.out.println("0. Logout");
         System.out.print("Option: ");
         int option = readInt();
@@ -705,6 +706,18 @@ public class App extends Application {
           }
 
           case 6 -> {
+            shelterHomepage();
+            return;
+          }
+
+          case 8 -> {
+            
+            SecurityQuestion question = (SecurityQuestion) chooseOption(SecurityQuestion.values(), "SecurityQuestion");
+            System.out.println("Answer: ");
+            String answer = readLine();
+            String json = jsonString("securityQuestion",question,"answer",answer);
+            ApiResponse response = ApiClient.put("/accounts/changesq",json);
+            System.out.println(response.getBody());
             shelterHomepage();
             return;
           }
@@ -830,6 +843,8 @@ public class App extends Application {
         System.out.println("3. See My Adoptions Requests");
         System.out.println("4. See My Foster Requests");
         System.out.println("5. Lost and Found");
+        System.out.println("6. See My Sponsorships");
+        System.out.println("7. Change Security Answer");
         System.out.println("0. Logout");
         System.out.print("Option: ");
         option = readInt();
@@ -861,6 +876,28 @@ public class App extends Application {
             return;
           }
 
+          case 6 -> {
+            ApiResponse response = ApiClient.get("/sponsorships/usersponsor");
+            if (response.isSuccess()){
+              List<Sponsorship> sponsorships = parseList(response.getBody(), Sponsorship.class);
+            }
+            else{
+              System.out.println(response.getBody());
+            }
+            userHomepage();
+            return;
+          }
+          
+          case 7 ->{
+            SecurityQuestion question = (SecurityQuestion) chooseOption(SecurityQuestion.values(), "SecurityQuestion");
+            System.out.println("Answer: ");
+            String answer = readLine();
+            String json = jsonString("securityQuestion",question,"answer",answer);
+            ApiResponse response = ApiClient.put("/accounts/changesq",json);
+            System.out.println(response.getBody());
+            userHomepage();
+            return;
+          }
           case 0 -> {
             System.out.println("Exiting terminal menu...");
             Platform.runLater(() -> showMainMenu());
@@ -973,6 +1010,7 @@ public class App extends Application {
         System.out.println("5. View All Adoptions");
         System.out.println("6. View All Fosters");
         System.out.println("7 Lost and Found");
+        System.out.println("8. Change Security Answer");
         System.out.println("0. Logout");
         System.out.print("Option: ");
         option = readInt();
@@ -1093,6 +1131,17 @@ public class App extends Application {
           case 7 -> {
             // lostAndFoundMenu();
             adminHomepage();
+            return;
+          }
+
+          case 8 -> {
+            SecurityQuestion question = (SecurityQuestion) chooseOption(SecurityQuestion.values(), "SecurityQuestion");
+            System.out.println("Answer: ");
+            String answer = readLine();
+            String json = jsonString("securityQuestion",question,"answer",answer);
+            ApiResponse response = ApiClient.put("/accounts/changesq",json);
+            System.out.println(response.getBody());
+            shelterHomepage();
             return;
           }
 

@@ -50,6 +50,20 @@ public class AccountService {
     return accountRepository.save(acc);
   }
 
+  public Account changeSQandAns(String email, SecurityQuestion question, String answer){
+      Account acc = accountRepository.findByEmail(email);
+      if (acc == null) {
+        return null;
+      }
+      if (question != null && !question.toString().isBlank()) {
+        acc.setSecurityQuestion(question);
+      }
+      if (answer != null && !answer.isBlank()) {
+        acc.setAnswer(answer);
+      }
+      return accountRepository.save(acc);
+  }
+
   public boolean verifySecurityAnswer(String email, String answer) {
     Account acc = findAccount(email);
     if (acc != null) {

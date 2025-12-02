@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * This class describes the model of a Donation with its attributes and how it
@@ -18,11 +19,12 @@ import jakarta.persistence.Table;
 @Entity
 @Table (name = "Donations")
 public class Donation {
-  
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
-  private float amount;
+  @NotNull(message = "The amount is mandatory")
+  private Float amount;
   private LocalDate donationDate;
   @ManyToOne
   @JoinColumn(name = "Sponsorship_id")
