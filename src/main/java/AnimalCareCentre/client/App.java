@@ -997,8 +997,7 @@ public class App extends Application {
           }
 
           case 5 -> {
-            // lostAndFoundMenu();
-            userHomepage();
+            lostAndFoundHomePage();
             return;
           }
 
@@ -1447,7 +1446,9 @@ public class App extends Application {
             LostAnimal choice = (LostAnimal) chooseOption(animals.toArray(), "animal");
 
             ApiResponse request = ApiClient.delete("/lostandfound/delete/" + choice.id());
-            System.out.println(request.getBody() + request.getStatusCode());
+            if(request.isSuccess()){
+                System.out.println("Removed posting successfully!");
+            }
             lostAndFoundHomePage();
             return;
           }

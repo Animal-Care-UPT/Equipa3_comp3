@@ -76,6 +76,7 @@ public class ApiClient {
     try {
 
       HttpHeaders headers = createHeadersWithCookie();
+      headers.setContentType(MediaType.APPLICATION_JSON);
       HttpEntity<String> request = new HttpEntity<>(headers);
       ResponseEntity<String> response = rest.exchange(BASE_URL + endpoint, HttpMethod.DELETE, request, String.class);
       return new ApiResponse(true, response.getBody(), response.getStatusCode().value());
