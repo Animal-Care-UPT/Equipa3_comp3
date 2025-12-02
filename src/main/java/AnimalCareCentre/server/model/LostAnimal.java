@@ -18,8 +18,8 @@ public class LostAnimal extends Animal {
 
   @Override
   public String toString() {
-    return "LostAnimal{location=" + location + ", Name=" + getName() + ", Type="
-        + getType() + ", Race=" + getRace() + ", Size=" + getSize() + ", Color=" + getColor() + "}";
+    return "Location" + location + ", Name=" + getName() + ", Type="
+        + getType() + ", Race=" + getRace() + ", Size=" + getSize() + ", Color=" + getColor() + ", Contact: "+contact+ "}";
   }
 
   public LostAnimal() {
