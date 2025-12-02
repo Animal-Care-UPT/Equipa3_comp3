@@ -330,7 +330,7 @@ public class App extends Application {
       case 1 -> {
         System.out.println("Insert the amount of money you wish to give as a sponsorship");
         Float amount = readFloat();
-        String json = jsonString("id", animal.id(), "amount", amount);
+        String json = jsonString("animalId", animal.id(), "amount", amount);
         ApiResponse response = ApiClient.post("/sponsorships/create", json);
         System.out.println(response.getBody());
         userHomepage();
@@ -341,7 +341,7 @@ public class App extends Application {
         System.out.println("You can " + listed + " this animal.");
         AdoptionType type = (listed.equals("Adopt")) ? AdoptionType.FOR_ADOPTION : AdoptionType.FOR_FOSTER;
 
-        String json = jsonString("animalId", animal.id(), "adoptionType", type.name());
+        String json = jsonString("animalId", animal.id(), "type", type.name());
 
         ApiResponse response = ApiClient.post("/adoptions/request", json);
 
@@ -782,7 +782,7 @@ public class App extends Application {
               System.out.println("Total: " + requests.size() + " Requests ");
 
               for (Adoption req : requests) {
-                System.out.println(req.animal().name() + " - " + req.adoptionType() + " - " + req.user().name());
+                System.out.println(req.animal().name() + " - " + req.type() + " - " + req.user().name());
               }
 
               Adoption choice = (Adoption) chooseOption(requests.toArray(), "Pending Request");
@@ -794,7 +794,7 @@ public class App extends Application {
               System.out.println("\n=== Request Details ===");
               System.out.println("Animal: " + choice.animal().name());
               System.out.println("Requested by: " + choice.user().name());
-              System.out.println("Type: " + choice.adoptionType());
+              System.out.println("Type: " + choice.type());
               System.out.println("Request Date: " + choice.requestDate());
               System.out.println("========================\n");
 
@@ -808,7 +808,7 @@ public class App extends Application {
               Status newStatus = action.equals("Accept") ? Status.ACCEPTED : Status.REJECTED;
 
               String json = jsonString(
-                  "adoptionId", choice.adoptionId(),
+                  "adoptionId", choice.id(),
                   "newStatus", newStatus.name());
 
               ApiResponse statusResponse = ApiClient.put("/adoptions/change/status", json);
@@ -972,7 +972,7 @@ public class App extends Application {
               System.out.println("Total: " + requests.size() + " Requests ");
 
               for (Adoption req : requests) {
-                System.out.println(req.animal().name() + " - " + req.adoptionType() + " - " + req.user().name());
+                System.out.println(req.animal().name() + " - " + req.type() + " - " + req.user().name());
               }
 
             } else {
@@ -992,7 +992,7 @@ public class App extends Application {
               System.out.println("Total: " + requests.size() + " Requests ");
 
               for (Adoption req : requests) {
-                System.out.println(req.animal().name() + " - " + req.adoptionType() + " - " + req.user().name());
+                System.out.println(req.animal().name() + " - " + req.type() + " - " + req.user().name());
               }
 
             } else {
@@ -1234,13 +1234,15 @@ public class App extends Application {
           }
 
           case 4 -> {
-            ApiResponse response = ApiClient.get("/shelteranimals/all");
+            ApiResponse response = ApiClient.get("/shelteranimals/search/all");
             if (response.isSuccess()) {
               List<ShelterAnimal> animals = parseList(response.getBody(), ShelterAnimal.class);
               System.out.println(animals);
-              adminHomepage();
-              return;
+            } else {
+              System.out.println(response.getBody());
             }
+            adminHomepage();
+            return;
           }
 
           case 5 -> {
@@ -1252,9 +1254,11 @@ public class App extends Application {
                 System.out.println("Shelter: " + a.animal().shelter().name());
                 System.out.println("Animal: " + a.animal().name());
               }
-              adminHomepage();
-              return;
+            } else {
+              System.out.println(response.getBody());
             }
+            adminHomepage();
+            return;
           }
 
           case 6 -> {
@@ -1267,9 +1271,11 @@ public class App extends Application {
                 System.out.println("Animal: " + f.animal().name());
               }
 
-              adminHomepage();
-              return;
+            } else {
+              System.out.println(response.getBody());
             }
+            adminHomepage();
+            return;
           }
 
           case 7 -> {

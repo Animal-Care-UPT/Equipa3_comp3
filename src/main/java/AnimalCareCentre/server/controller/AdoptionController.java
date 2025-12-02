@@ -10,6 +10,7 @@ import AnimalCareCentre.server.service.ShelterAnimalService;
 import AnimalCareCentre.server.service.ShelterService;
 import AnimalCareCentre.server.service.UserService;
 import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +37,7 @@ public class AdoptionController {
   // Adoption request
   @PreAuthorize("hasRole('USER')")
   @PostMapping("/request")
-  public ResponseEntity<?> requestAdoption(@Valid @RequestBody AdoptionDTO dto) {
+  public ResponseEntity<?> requestAdoption(@RequestBody AdoptionRequestDTO dto) {
     String email = SecurityContextHolder.getContext().getAuthentication().getName();
     User user = userService.findByEmail(email);
 
@@ -44,7 +45,7 @@ public class AdoptionController {
       return ResponseEntity.status(404).body("This user isn't registered!");
     }
 
-    Adoption adoption = adoptionService.requestAdoption(user, dto.getAnimal().getId(), dto.getType());
+    Adoption adoption = adoptionService.requestAdoption(user, dto.getAnimalId(), dto.getType());
     return ResponseEntity.status(201).body(adoption);
   }
 

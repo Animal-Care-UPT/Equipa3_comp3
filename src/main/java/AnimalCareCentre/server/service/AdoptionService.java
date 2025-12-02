@@ -71,6 +71,7 @@ public class AdoptionService {
       AdoptionDTO dto = new AdoptionDTO();
       dto.setId(a.getId());
       dto.setAnimal(a.getAnimal());
+      dto.setUser(a.getUser());
       dto.setType(a.getType());
       dto.setStatus(a.getStatus());
       dto.setRequestDate(a.getRequestDate());
@@ -88,6 +89,7 @@ public class AdoptionService {
       AdoptionDTO dto = new AdoptionDTO();
       dto.setId(a.getId());
       dto.setAnimal(a.getAnimal());
+      dto.setUser(a.getUser());
       dto.setType(a.getType());
       dto.setStatus(a.getStatus());
       dto.setRequestDate(a.getRequestDate());
@@ -104,6 +106,7 @@ public class AdoptionService {
     return adoptions.stream().map(a -> {
       AdoptionDTO dto = new AdoptionDTO();
       dto.setId(a.getId());
+      dto.setUser(a.getUser());
       dto.setAnimal(a.getAnimal());
       dto.setType(a.getType());
       dto.setStatus(a.getStatus());
@@ -121,6 +124,7 @@ public class AdoptionService {
     return adoptions.stream().map(a -> {
       AdoptionDTO dto = new AdoptionDTO();
       dto.setAnimal(a.getAnimal());
+      dto.setUser(a.getUser());
       dto.setType(a.getType());
       dto.setAdoptionDate(a.getAdoptionDate());
       return dto;

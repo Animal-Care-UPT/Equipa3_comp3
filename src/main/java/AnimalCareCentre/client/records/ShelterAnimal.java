@@ -10,12 +10,18 @@ public record ShelterAnimal(long id, String name, AnimalType type, String race, 
 
   @Override
   public String toString() {
-    return "\nName: " + name + "\nType: " + type + "\nRace: " + race + "\nSize: " + size + "\nGender: " + gender
-        + "\nColor: " + color + "\nDescription: " + description + "\nListed For: " + adoptionType
-        + "\nVacination Status: " + vacinated + "\nAge: " + age + "\nShelter: " + shelter.name() + "\n";
+    return "\nID: " + id +
+        "\nName: " + name +
+        "\nType: " + type +
+        "\nRace: " + race +
+        "\nSize: " + size +
+        "\nGender: " + gender +
+        "\nColor: " + color +
+        "\nDescription: " + description +
+        "\nListed For: " + adoptionType +
+        "\nVacination Status: " + vacinated +
+        "\nAge: " + age +
+        "\nStatus: " + status +
+        "\nShelter: " + (shelter != null ? shelter.name() : "N/A") + "\n";
   }
-
-    public Long getId() {
-      return id;
-    }
 }

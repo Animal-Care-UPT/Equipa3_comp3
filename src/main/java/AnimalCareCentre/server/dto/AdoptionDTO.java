@@ -8,19 +8,12 @@ import jakarta.validation.constraints.NotNull;
 
 public class AdoptionDTO {
 
-  @NotNull
   private Long id;
-  @NotNull
   private User user;
-  @NotNull
   private ShelterAnimal animal;
-  @NotNull
   private LocalDate adoptionDate;
-  @NotNull
   private AdoptionType type;
-  @NotNull
   private LocalDate requestDate;
-  @NotNull
   private Status status;
 
   public Status getStatus() {

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import AnimalCareCentre.server.dto.SponsorshipDTO;
+import AnimalCareCentre.server.dto.*;
 import AnimalCareCentre.server.model.ShelterAnimal;
 import AnimalCareCentre.server.model.Sponsorship;
 import AnimalCareCentre.server.model.User;
@@ -37,15 +37,20 @@ public class SponsorshipController {
 
   @PreAuthorize("hasRole('USER')")
   @PostMapping("/create")
-  public ResponseEntity<?> createSponsorShip(@Valid @RequestBody SponsorshipDTO sponsorship) {
+  public ResponseEntity<?> createSponsorShip(@RequestBody SponsorshipRequestDTO sponsorship) {
     String email = SecurityContextHolder.getContext().getAuthentication().getName();
     User user = userService.findByEmail(email);
     ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(sponsorship.getAnimalId());
-    Float amount = sponsorship.getAmount();
+
+    if (animal == null) {
+      return ResponseEntity.status(404).body("Animal not found");
+    }
+
     if (animal.getSponsors().size() >= 3) {
       return ResponseEntity.status(409).body("The animal already has 3 sponsors");
     }
-    sponsorshipService.createSponsorShip(user, animal, amount);
+
+    sponsorshipService.createSponsorShip(user, animal, sponsorship.getAmount());
     return ResponseEntity.status(201).body("You sponsored the animal with success!");
   }
 
@@ -64,7 +69,7 @@ public class SponsorshipController {
   @PreAuthorize("hasRole('ADMIN')")
   @GetMapping("/all")
   public ResponseEntity<?> searchAllSponsorships() {
-    List<Sponsorship> results = sponsorshipService.searchAll();
+    List<SponsorshipDTO> results = sponsorshipService.searchAll();
     if (!results.isEmpty()) {
       return ResponseEntity.ok().body(results);
     }
