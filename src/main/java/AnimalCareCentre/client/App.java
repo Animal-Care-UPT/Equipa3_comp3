@@ -1314,7 +1314,256 @@ public class App extends Application {
       showMainMenu();
       return;
     });
+  }
 
+  /**
+   * This method shows the lost and found menu
+   */
+  private void lostAndFoundHomePage() {
+    javafx.application.Platform.runLater(() -> showTerminalScreen());
+
+    if (consoleThread != null && consoleThread.isAlive()) {
+      consoleThread.interrupt();
+    }
+
+    consoleThread = new Thread(() -> {
+      try {
+
+        System.out.println("=== LOST AND FOUND MENU===");
+        System.out.println("1. Register Lost Animal");
+        System.out.println("2. View Lost Animals");
+        System.out.println("4. Remove Posting");
+        System.out.println("5. View my lost animals");
+        System.out.println("0. Logout");
+        System.out.print("Option: ");
+        int option = readInt();
+
+        switch (option) {
+          case 1 -> {
+            System.out.println("\n=== REGISTER LOST ANIMAL ===");
+            System.out.print("Name :");
+            String name = readLine();
+
+            AnimalType type = (AnimalType) chooseOption(AnimalType.values(), "Type");
+            if (type == null)
+              return;
+
+            List<String> breeds = type.getBreeds();
+            String race = null;
+            if (breeds != null) {
+              while (true) {
+                System.out.println("Select Breed:");
+                for (int i = 0; i < breeds.size(); i++) {
+                  System.out.println((i + 1) + ". " + breeds.get(i));
+                }
+                System.out.print("Option: ");
+                String input = readLine();
+                try {
+                  int breedOption = Integer.parseInt(input);
+                  if (breedOption >= 1 && breedOption <= breeds.size()) {
+                    race = breeds.get(breedOption - 1);
+                    break;
+                  }
+                } catch (NumberFormatException ignored) {
+                }
+                System.out.println("Invalid option, please try again.");
+              }
+            }
+
+            AnimalSize size = (AnimalSize) chooseOption(AnimalSize.values(), "Size");
+            if (size == null)
+              return;
+
+            AnimalGender gender = (AnimalGender) chooseOption(AnimalGender.values(), "Gender");
+            if (gender == null)
+              return;
+
+            System.out.print("Age: ");
+            int age = readInt();
+
+            AnimalColor color = (AnimalColor) chooseOption(AnimalColor.values(), "Color");
+            if (color == null)
+              return;
+
+            System.out.println("Location");
+            String location = readLine();
+
+            System.out.print("Description: ");
+            String description = readLine();
+
+            System.out.println("Contact: ");
+            int contact = readInt();
+
+            String json = jsonString(
+                "name", name,
+                "type", type.name(),
+                "race", race,
+                "age", age,
+                "color", color.name(),
+                "size", size.name(),
+                "gender", gender.name(),
+                "contact", contact,
+                "description", description,
+                "location", location,
+                "isLost", true);
+
+            ApiResponse response = ApiClient.post("/lostandfound/create", json);
+
+            if (response.isSuccess()) {
+              System.out.println("Lost animal successfully registered");
+            } else {
+              System.out.println("Error: " + response.getBody());
+            }
+
+            lostAndFoundHomePage();
+            return;
+          }
+
+          case 2 -> {
+            ApiResponse response = ApiClient.get("/lostandfound/showlostanimals");
+            List<LostAnimal> animals = parseList(response.getBody(), LostAnimal.class);
+            for (LostAnimal animal : animals) {
+              System.out.println(animal.toString() + "\n");
+
+            }
+            lostAndFoundHomePage();
+            return;
+          }
+
+          case 3 -> {
+            ApiResponse response = ApiClient.get("/lostandfound/showrescuedanimals");
+            List<LostAnimal> animals = parseList(response.getBody(), LostAnimal.class);
+            for (LostAnimal animal : animals) {
+              System.out.println(animal.toString() + "\n");
+
+            }
+            shelterHomepage();
+            return;
+          }
+
+          case 4 -> {
+            ApiResponse response = ApiClient.get("/lostandfound/showanimalsbyaccount");
+            List<LostAnimal> animals = parseList(response.getBody(), LostAnimal.class);
+            LostAnimal choice = (LostAnimal) chooseOption(animals.toArray(), "animal");
+
+            ApiResponse request = ApiClient.delete("/lostandfound/delete/" + choice.id());
+            System.out.println(request.getBody() + request.getStatusCode());
+            lostAndFoundHomePage();
+            return;
+          }
+
+          case 5 -> {
+            ApiResponse response = ApiClient.get("/lostandfound/showanimalsbyaccount");
+            System.out.println(response.getBody());
+            List<LostAnimal> animals = parseList(response.getBody(), LostAnimal.class);
+            for (LostAnimal animal : animals) {
+              System.out.println(animal.toString() + "\n");
+
+            }
+            lostAndFoundHomePage();
+            return;
+
+          }
+
+          case 6 -> {
+            System.out.println("\n=== REGISTER LOST ANIMAL ===");
+            System.out.print("Name (if available) :");
+            String name = readLine();
+
+            AnimalType type = (AnimalType) chooseOption(AnimalType.values(), "Type");
+            if (type == null)
+              return;
+
+            List<String> breeds = type.getBreeds();
+            String race = null;
+            if (breeds != null) {
+              while (true) {
+                System.out.println("Select Breed:");
+                for (int i = 0; i < breeds.size(); i++) {
+                  System.out.println((i + 1) + ". " + breeds.get(i));
+                }
+                System.out.print("Option: ");
+                String input = readLine();
+                try {
+                  int breedOption = Integer.parseInt(input);
+                  if (breedOption >= 1 && breedOption <= breeds.size()) {
+                    race = breeds.get(breedOption - 1);
+                    break;
+                  }
+                } catch (NumberFormatException ignored) {
+                }
+                System.out.println("Invalid option, please try again.");
+              }
+            }
+
+            AnimalSize size = (AnimalSize) chooseOption(AnimalSize.values(), "Size");
+            if (size == null)
+              return;
+
+            AnimalGender gender = (AnimalGender) chooseOption(AnimalGender.values(), "Gender");
+            if (gender == null)
+              return;
+
+            System.out.print("Age: ");
+            int age = readInt();
+
+            AnimalColor color = (AnimalColor) chooseOption(AnimalColor.values(), "Color");
+            if (color == null)
+              return;
+
+            System.out.println("Location");
+            String location = readLine();
+
+            System.out.print("Description: ");
+            String description = readLine();
+
+            System.out.println("Contact: ");
+            int contact = readInt();
+
+            String json = jsonString(
+                "name", name,
+                "type", type.name(),
+                "race", race,
+                "age", age,
+                "color", color.name(),
+                "size", size.name(),
+                "gender", gender.name(),
+                "contact", contact,
+                "description", description,
+                "location", location,
+                "isLost", false);
+
+            ApiResponse response = ApiClient.post("/lostandfound/create", json);
+
+            if (response.isSuccess()) {
+              System.out.println("Lost animal successfully registered");
+            } else {
+              System.out.println("Error: " + response.getBody());
+            }
+
+            lostAndFoundHomePage();
+          }
+
+          case 0 -> {
+            System.out.println("Exiting terminal menu...");
+            javafx.application.Platform.runLater(this::showMainMenu);
+          }
+
+          default -> {
+            System.out.println("Invalid option!");
+            lostAndFoundHomePage();
+            return;
+          }
+        }
+      } catch (RuntimeException e) {
+        if (e.getMessage().equals("Thread Interrupted")) {
+          return;
+        }
+        throw e;
+      }
+    });
+    consoleThread.setDaemon(true);
+    consoleThread.start();
   }
 
   /**
