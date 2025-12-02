@@ -128,7 +128,7 @@ public class App extends Application {
     Button enter = new Button("Enter");
     Label passwordLabel = new Label("New password:");
     PasswordField password = new PasswordField();
-    Button confirm = new Button("Comfirm");
+    Button confirm = new Button("Confirm");
     Button back = new Button("Back");
     TextField answer = new TextField();
 

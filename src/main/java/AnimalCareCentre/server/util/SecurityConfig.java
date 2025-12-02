@@ -23,6 +23,8 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(
                 "/accounts/login",
+                "/accounts/secquestion",
+                "/accounts/changepw",
                 "/accounts/create",
                 "/shelters/create",
                 "/users/create")
