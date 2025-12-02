@@ -126,12 +126,13 @@ public class AccountController {
     return ResponseEntity.ok("Logged out successfully");
   }
 
-  @PostMapping("/changesq")
+  @PutMapping("/changesq")
   public ResponseEntity<?> changeSecurityQuestion(@Valid @RequestBody SecurityQuestionDTO requestSecurity){
-    if(accountService.findAccount(requestSecurity.getEmail())== null){
-      return ResponseEntity.status(404).body("");
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    if(accountService.findAccount(email)==null){
+      return ResponseEntity.status(404).body("User not found");
     }
-    accountService.changeSQandAns(requestSecurity.getEmail(), requestSecurity.getSecurityQuestion(), requestSecurity.getAnswer());
+    accountService.changeSQandAns(email, requestSecurity.getSecurityQuestion(), requestSecurity.getAnswer());
     return ResponseEntity.ok("Security info changed successfully");
   }
 }
