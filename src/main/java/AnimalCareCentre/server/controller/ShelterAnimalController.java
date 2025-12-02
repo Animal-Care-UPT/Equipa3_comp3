@@ -50,7 +50,7 @@ public class ShelterAnimalController {
     return ResponseEntity.status(201).body(savedAnimal);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
+  
   @GetMapping("/search/all")
   public ResponseEntity<?> getAnimals() {
     List<ShelterAnimal> results = shelterAnimalService.searchAll();

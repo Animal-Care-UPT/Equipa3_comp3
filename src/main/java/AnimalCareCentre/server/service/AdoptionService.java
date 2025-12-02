@@ -10,8 +10,9 @@ import org.springframework.stereotype.Service;
 import AnimalCareCentre.server.repository.AdoptionRepository;
 import AnimalCareCentre.server.model.Adoption;
 import AnimalCareCentre.server.model.ShelterAnimal;
-import AnimalCareCentre.server.model.User;
 import AnimalCareCentre.server.enums.Status;
+
+import AnimalCareCentre.server.model.User;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -57,7 +58,6 @@ public class AdoptionService {
     }
 
     adoption.setStatus(newStatus);
-
     if (newStatus == Status.ACCEPTED) {
       adoption.setAdoptionDate(LocalDate.now());
     }
@@ -119,7 +119,7 @@ public class AdoptionService {
 
   public List<AdoptionDTO> getAdoptions() {
 
-    List<Adoption> adoptions = adoptionRepository.findByAdoptionType(AdoptionType.FOR_ADOPTION);
+    List<Adoption> adoptions = adoptionRepository.findByType(AdoptionType.FOR_ADOPTION);
 
     return adoptions.stream().map(a -> {
       AdoptionDTO dto = new AdoptionDTO();
@@ -132,7 +132,7 @@ public class AdoptionService {
 
   public List<AdoptionDTO> getFosters() {
 
-    List<Adoption> adoptions = adoptionRepository.findByAdoptionType(AdoptionType.FOR_FOSTER);
+    List<Adoption> adoptions = adoptionRepository.findByType(AdoptionType.FOR_FOSTER);
 
     return adoptions.stream().map(a -> {
       AdoptionDTO dto = new AdoptionDTO();
