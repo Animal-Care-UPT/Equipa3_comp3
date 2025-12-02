@@ -26,96 +26,90 @@ public class LostAnimalController {
 
   public LostAnimalController(LostAnimalService lostAnimalService, AccountService accountService) {
     this.lostAnimalService = lostAnimalService;
-      this.accountService = accountService;
+    this.accountService = accountService;
   }
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/showrescuedanimals")
-    public ResponseEntity<?> showRescuedAnimals() {
-        List<LostAnimal> results = lostAnimalService.findRescuedAnimals();
-        results.sort(Comparator.comparing(LostAnimal::getLocation));
-        if (!results.isEmpty()) {
-            return ResponseEntity.ok().body(results);
-        }
-        return ResponseEntity.status(404).body("There are no registered animals as rescued");
+
+  @GetMapping("/showrescuedanimals")
+  public ResponseEntity<?> showRescuedAnimals() {
+    List<LostAnimal> results = lostAnimalService.findRescuedAnimals();
+    results.sort(Comparator.comparing(LostAnimal::getLocation));
+    if (!results.isEmpty()) {
+      return ResponseEntity.ok().body(results);
     }
-  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    return ResponseEntity.status(404).body("There are no registered animals as rescued");
+  }
+
   @GetMapping("/showlostanimals")
   public ResponseEntity<?> showLostAnimals() {
-      List<LostAnimal> results = lostAnimalService.findLostAnimals();
-      results.sort(Comparator.comparing(LostAnimal::getLocation));
-      if (!results.isEmpty()) {
-          return ResponseEntity.ok().body(results);
-      }
-      return ResponseEntity.status(404).body("There are no registered animals in Lost and Found");
+    List<LostAnimal> results = lostAnimalService.findLostAnimals();
+    results.sort(Comparator.comparing(LostAnimal::getLocation));
+    if (!results.isEmpty()) {
+      return ResponseEntity.ok().body(results);
+    }
+    return ResponseEntity.status(404).body("There are no registered animals in Lost and Found");
   }
-  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+
   @GetMapping("/showanimalsbyaccount")
-  public ResponseEntity<?> showLostAnimalsByAccount(){
-      Account account = accountService.findAccount( SecurityContextHolder.getContext().getAuthentication().getName());
+  public ResponseEntity<?> showLostAnimalsByAccount() {
+    Account account = accountService.findAccount(SecurityContextHolder.getContext().getAuthentication().getName());
 
-
-      List<LostAnimal> results = lostAnimalService.findLostAnimalsByAccount(account.getId());
-      results.sort(Comparator.comparing(LostAnimal::getLocation));
-      if (!results.isEmpty()) {
-          return ResponseEntity.ok().body(results);
-      }
-      return ResponseEntity.status(404).body("There are no registered lost animals to this account");
+    List<LostAnimal> results = lostAnimalService.findLostAnimalsByAccount(account.getId());
+    results.sort(Comparator.comparing(LostAnimal::getLocation));
+    if (!results.isEmpty()) {
+      return ResponseEntity.ok().body(results);
+    }
+    return ResponseEntity.status(404).body("There are no registered lost animals to this account");
   }
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/showByLocation")
-    public ResponseEntity<?> showLostAnimalsByLocation(@NotNull  @RequestParam String location){
 
-        List<LostAnimal> results = lostAnimalService.findByLocation(location);
-        if (!results.isEmpty()) {
-            return ResponseEntity.ok().body(results);
-        }
-        return ResponseEntity.status(404).body("There are no registered lost animals in this location");
+  @GetMapping("/showByLocation")
+  public ResponseEntity<?> showLostAnimalsByLocation(@NotNull @RequestParam String location) {
+
+    List<LostAnimal> results = lostAnimalService.findByLocation(location);
+    if (!results.isEmpty()) {
+      return ResponseEntity.ok().body(results);
     }
+    return ResponseEntity.status(404).body("There are no registered lost animals in this location");
+  }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/showByType")
-    public ResponseEntity<?> showLostAnimalsByType(@NotNull  @RequestParam AnimalType animalType){
+  @GetMapping("/showByType")
+  public ResponseEntity<?> showLostAnimalsByType(@NotNull @RequestParam AnimalType animalType) {
 
-        List<LostAnimal> results = lostAnimalService.searchByType(animalType);
-        if (!results.isEmpty()) {
-            return ResponseEntity.ok().body(results);
-        }
-        return ResponseEntity.status(404).body("There are no registered lost animals in this location");
+    List<LostAnimal> results = lostAnimalService.searchByType(animalType);
+    if (!results.isEmpty()) {
+      return ResponseEntity.ok().body(results);
     }
+    return ResponseEntity.status(404).body("There are no registered lost animals in this location");
+  }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/showByColor")
-    public ResponseEntity<?> showLostAnimalsByColor(@NotNull  @RequestParam AnimalColor animalColor){
+  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+  @GetMapping("/showByColor")
+  public ResponseEntity<?> showLostAnimalsByColor(@NotNull @RequestParam AnimalColor animalColor) {
 
-        List<LostAnimal> results = lostAnimalService.searchByColor(animalColor);
-        if (!results.isEmpty()) {
-            return ResponseEntity.ok().body(results);
-        }
-        return ResponseEntity.status(404).body("There are no registered lost animals in this location");
+    List<LostAnimal> results = lostAnimalService.searchByColor(animalColor);
+    if (!results.isEmpty()) {
+      return ResponseEntity.ok().body(results);
     }
+    return ResponseEntity.status(404).body("There are no registered lost animals in this location");
+  }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @PostMapping("/create")
-    public ResponseEntity<?> registerLostAnimal(@Valid @RequestBody LostAnimal lostAnimal){
-      Account acc = accountService.findAccount(SecurityContextHolder.getContext().getAuthentication().getName());
-      lostAnimal.setAccount(acc);
-
-      lostAnimalService.registerLostAnimal(lostAnimal);
-      return ResponseEntity.status(200).body(lostAnimal);
-
-
+  @PostMapping("/create")
+  public ResponseEntity<?> registerLostAnimal(@Valid @RequestBody LostAnimal lostAnimal) {
+    Account acc = accountService.findAccount(SecurityContextHolder.getContext().getAuthentication().getName());
+    if (acc == null) {
+      return ResponseEntity.status(404).body("Account not found!");
     }
+    lostAnimal.setAccount(acc);
+    lostAnimalService.registerLostAnimal(lostAnimal);
+    return ResponseEntity.status(200).body(lostAnimal);
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteAnimal(@PathVariable long id){
+  }
 
+  @DeleteMapping("/delete/{id}")
+  public ResponseEntity<?> deleteAnimal(@PathVariable long id) {
 
-        lostAnimalService.deleteById(id);
-        return ResponseEntity.status(200).body(id);
+    lostAnimalService.deleteById(id);
+    return ResponseEntity.status(200).body(id);
 
-
-    }
-
+  }
 
 }

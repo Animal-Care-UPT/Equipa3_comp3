@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import AnimalCareCentre.server.dto.ChangeStatusDTO;
-import AnimalCareCentre.server.enums.Status;
 import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.service.AccountService;
 import AnimalCareCentre.server.service.ShelterService;
@@ -73,10 +72,20 @@ public class ShelterController {
     return ResponseEntity.ok(shelters);
   }
 
-  @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+  @PreAuthorize("hasRole('USER')")
   @GetMapping
-  public ResponseEntity<?> viewShelters() {
+  public ResponseEntity<?> viewAvailableShelters() {
     List<Shelter> shelters = shelterService.getShelters();
+    if (shelters.isEmpty()) {
+      return ResponseEntity.status(404).body("There are no registered shelters!");
+    }
+    return ResponseEntity.ok(shelters);
+  }
+
+  @PreAuthorize("hasRole('ADMIN')")
+  @GetMapping("/all")
+  public ResponseEntity<?> viewAllShelters() {
+    List<Shelter> shelters = shelterService.getAllShelters();
     if (shelters.isEmpty()) {
       return ResponseEntity.status(404).body("There are no registered shelters!");
     }

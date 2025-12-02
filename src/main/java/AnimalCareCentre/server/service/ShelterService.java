@@ -56,4 +56,10 @@ public class ShelterService {
     shelters.sort(Comparator.comparing(Shelter::getLocation).thenComparing(Shelter::getName));
     return shelters;
   }
+
+  public List<Shelter> getAllShelters() {
+    List<Shelter> shelters = shelterRepository.findAll();
+    shelters.sort(Comparator.comparing(Shelter::getLocation).thenComparing(Shelter::getName));
+    return shelters;
+  }
 }

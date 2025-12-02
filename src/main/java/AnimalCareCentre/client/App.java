@@ -36,6 +36,7 @@ public class App extends Application {
   private static final ObjectMapper mapper = new ObjectMapper()
       .registerModule(new JavaTimeModule())
       .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+  private static String loggedRole;
 
   public void start(Stage stage) {
     App.stage = stage;
@@ -96,9 +97,11 @@ public class App extends Application {
         return;
       }
 
-      if (response.getBody().equals("ROLE_USER")) {
+      loggedRole = response.getBody();
+
+      if (loggedRole.equals("ROLE_USER")) {
         userHomepage();
-      } else if (response.getBody().equals("ROLE_SHELTER")) {
+      } else if (loggedRole.equals("ROLE_SHELTER")) {
         shelterHomepage();
       } else {
         adminHomepage();
@@ -561,8 +564,14 @@ public class App extends Application {
     switch (opc) {
 
       case 1 -> {
-        ApiResponse response = ApiClient.put("/vacination?id=" + animal.id(), "");
+        ApiResponse response = ApiClient.put("/shelteranimals/vacination?id=" + animal.id(), "");
         System.out.println(response.getBody());
+
+        ApiResponse updated = ApiClient.get("/shelteranimals/search/byid?id=" + animal.id());
+        if (updated.isSuccess()) {
+          animal = parseResponse(updated.getBody(), ShelterAnimal.class);
+        }
+
         manageAnimal(animal);
       }
 
@@ -579,20 +588,38 @@ public class App extends Application {
           }
         }
 
-        ApiResponse response = ApiClient.put("/age?id=" + animal.id() + "&age=" + age, "");
+        ApiResponse response = ApiClient.put("/shelteranimals/age?id=" + animal.id() + "&age=" + age, "");
         System.out.println(response.getBody());
+
+        ApiResponse updated = ApiClient.get("/shelteranimals/search/byid?id=" + animal.id());
+        if (updated.isSuccess()) {
+          animal = parseResponse(updated.getBody(), ShelterAnimal.class);
+        }
+
         manageAnimal(animal);
       }
 
       case 3 -> {
-        ApiResponse response = ApiClient.put("/adoptiontype?id=" + animal.id(), "");
+        ApiResponse response = ApiClient.put("/shelteranimals/adoptiontype?id=" + animal.id(), "");
         System.out.println(response.getBody());
+
+        ApiResponse updated = ApiClient.get("/shelteranimals/search/byid?id=" + animal.id());
+        if (updated.isSuccess()) {
+          animal = parseResponse(updated.getBody(), ShelterAnimal.class);
+        }
+
         manageAnimal(animal);
       }
 
       case 4 -> {
-        ApiResponse response = ApiClient.put("/status?id=" + animal.id(), "");
+        ApiResponse response = ApiClient.put("/shelteranimals/status?id=" + animal.id(), "");
         System.out.println(response.getBody());
+
+        ApiResponse updated = ApiClient.get("/shelteranimals/search/byid?id=" + animal.id());
+        if (updated.isSuccess()) {
+          animal = parseResponse(updated.getBody(), ShelterAnimal.class);
+        }
+
         manageAnimal(animal);
       }
 
@@ -614,7 +641,7 @@ public class App extends Application {
    */
   public void shelterViewAnimals() {
 
-    ApiResponse response = ApiClient.get("/shelteranimals/search/own");
+    ApiResponse response = ApiClient.get("/shelteranimals/search/self");
 
     if (response.isSuccess()) {
 
@@ -650,8 +677,8 @@ public class App extends Application {
         System.out.println("1. Register Animal");
         System.out.println("2. View My Animals");
         System.out.println("3. View Pending Requests And Change their status");
-        System.out.println("4. View Historic");
-        System.out.println("5. Change Security Answer");
+        System.out.println("4. Change Security Answer");
+        System.out.println("5. Lost and Found");
         System.out.println("0. Logout");
         System.out.print("Option: ");
         int option = readInt();
@@ -802,12 +829,6 @@ public class App extends Application {
 
           case 4 -> {
 
-            shelterHomepage();
-            return;
-          }
-
-          case 5 -> {
-
             SecurityQuestion question = (SecurityQuestion) chooseOption(SecurityQuestion.values(), "SecurityQuestion");
             if (question == null) {
               shelterHomepage();
@@ -819,6 +840,11 @@ public class App extends Application {
             ApiResponse response = ApiClient.put("/accounts/changesq", json);
             System.out.println(response.getBody());
             shelterHomepage();
+            return;
+          }
+
+          case 5 -> {
+            lostAndFoundHomePage();
             return;
           }
 
@@ -873,31 +899,7 @@ public class App extends Application {
   public void showShelter(Shelter shelter) {
     System.out.println(shelter);
     System.out.println("\n");
-    String[] options = { "Donate to Shelter", "View Shelter Animals" };
-    String opt = (String) chooseOption(options, "Search Option");
-    if (opt == null) {
-      Platform.runLater(this::userHomepage);
-      return;
-    }
-
-    switch (opt) {
-      case "Donate to Shelter" -> {
-        // donation stuff
-        showShelter(shelter);
-        return;
-      }
-
-      case "View Shelter Animals" -> {
-        showShelterAnimals(shelter);
-        return;
-      }
-
-      default -> {
-        System.out.println("Invalid option!");
-        showShelter(shelter);
-        return;
-      }
-    }
+    showShelterAnimals(shelter);
   }
 
   /**
@@ -1057,6 +1059,7 @@ public class App extends Application {
    */
   public void displayShelterForAdmin(Shelter shelter) {
     System.out.println(shelter);
+    System.out.println("Status: " + shelter.status().toString());
     System.out.println("\n");
     String[] options = { "Change Shelter Status", "View All Shelter Animals" };
     String opt = (String) chooseOption(options, "Search Option");
@@ -1206,7 +1209,7 @@ public class App extends Application {
 
               Shelter choice = (Shelter) chooseOption(shelters.toArray(), "Shelter");
               if (choice == null) {
-                javafx.application.Platform.runLater(this::userHomepage);
+                javafx.application.Platform.runLater(this::adminHomepage);
                 return;
               }
               displayShelterForAdmin(choice);
@@ -1271,7 +1274,6 @@ public class App extends Application {
 
           case 7 -> {
             lostAndFoundHomePage();
-            adminHomepage();
             return;
           }
 
@@ -1487,7 +1489,13 @@ public class App extends Application {
 
           case 0 -> {
             System.out.println("Exiting terminal menu...");
-            javafx.application.Platform.runLater(this::showMainMenu);
+            if (loggedRole.equals("ROLE_USER")) {
+              javafx.application.Platform.runLater(this::userHomepage);
+            } else if (loggedRole.equals("ROLE_SHELTER")) {
+              javafx.application.Platform.runLater(this::shelterHomepage);
+            } else {
+              javafx.application.Platform.runLater(this::adminHomepage);
+            }
           }
 
           default -> {

@@ -57,7 +57,6 @@ public class ApiClient {
     try {
 
       HttpHeaders headers = createHeadersWithCookie();
-      headers.setContentType(MediaType.APPLICATION_JSON);
       HttpEntity<String> request = new HttpEntity<>(json, headers);
       ResponseEntity<String> response = rest.exchange(BASE_URL + endpoint, HttpMethod.PUT, request, String.class);
 
@@ -93,7 +92,6 @@ public class ApiClient {
     try {
 
       HttpHeaders headers = createHeadersWithCookie();
-      headers.setContentType(MediaType.APPLICATION_JSON);
       HttpEntity<String> request = new HttpEntity<>(json, headers);
 
       ResponseEntity<String> response = rest.postForEntity(BASE_URL + endpoint, request, String.class);

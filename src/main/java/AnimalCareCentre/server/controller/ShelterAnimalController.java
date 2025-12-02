@@ -50,7 +50,6 @@ public class ShelterAnimalController {
     return ResponseEntity.status(201).body(savedAnimal);
   }
 
-  
   @GetMapping("/search/all")
   public ResponseEntity<?> getAnimals() {
     List<ShelterAnimal> results = shelterAnimalService.searchAll();
@@ -189,7 +188,7 @@ public class ShelterAnimalController {
 
   @PreAuthorize("hasRole('SHELTER')")
   @PutMapping("/age")
-  public ResponseEntity<?> changeVacination(@NotNull @RequestParam Long id, @NotNull @RequestParam Integer age) {
+  public ResponseEntity<?> changeAge(@NotNull @RequestParam Long id, @NotNull @RequestParam Integer age) {
     ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(id);
     if (animal != null) {
       shelterAnimalService.changeAge(animal, age);
@@ -216,6 +215,16 @@ public class ShelterAnimalController {
     if (animal != null) {
       shelterAnimalService.changeAdoptionType(animal);
       return ResponseEntity.ok("Changed adoption type with success!");
+    }
+    return ResponseEntity.status(404).body("Animal not found!");
+  }
+
+  @PreAuthorize("hasRole('SHELTER')")
+  @GetMapping("/search/byid")
+  public ResponseEntity<?> getAnimalById(@NotNull @RequestParam Long id) {
+    ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(id);
+    if (animal != null) {
+      return ResponseEntity.ok().body(animal);
     }
     return ResponseEntity.status(404).body("Animal not found!");
   }
