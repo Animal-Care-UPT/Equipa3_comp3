@@ -38,60 +38,73 @@ public class Adoption {
   @Enumerated(EnumType.STRING)
   private Status status;
 
-  public Adoption() {}
+  public Adoption() {
+  }
 
-  // Getters and setters area
+  @Override
+  public String toString() {
+    return "Adoption{" +
+        "id=" + id +
+        ", user=" + user +
+        ", animal=" + animal.getName() +
+        ", date of request =" + requestDate +
+        ", status=" + status +
+        '}';
+  }
+
+  public long getId() {
+    return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
+  }
+
   public User getUser() {
     return user;
   }
 
-  public void setAdoptionType(AdoptionType type) {this.type = type;}
+  public void setUser(User user) {
+    this.user = user;
+  }
 
-
-    public long getId() {return id;}
-
-    public ShelterAnimal getAnimal() {
+  public ShelterAnimal getAnimal() {
     return animal;
   }
 
-  public LocalDate getRequestDate() { return requestDate; }
+  public void setAnimal(ShelterAnimal animal) {
+    this.animal = animal;
+  }
 
-  public LocalDate getAdoptionDate() { return adoptionDate; }
+  public LocalDate getRequestDate() {
+    return requestDate;
+  }
 
-  public void setAdoptionDate(LocalDate adoptionDate) { this.adoptionDate = adoptionDate; }
+  public void setRequestDate(LocalDate requestDate) {
+    this.requestDate = requestDate;
+  }
 
-  public Status getStatus() { return status; }
+  public LocalDate getAdoptionDate() {
+    return adoptionDate;
+  }
 
-  public void setStatus(Status status) { this.status = status; }
+  public void setAdoptionDate(LocalDate adoptionDate) {
+    this.adoptionDate = adoptionDate;
+  }
 
   public AdoptionType getType() {
     return type;
   }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  public void setType(AdoptionType type) {
+    this.type = type;
+  }
 
-    public void setAnimal(ShelterAnimal animal) {
-        this.animal = animal;
-    }
+  public Status getStatus() {
+    return status;
+  }
 
-
-
-    public void setRequestDate(LocalDate requestDate) {
-        this.requestDate = requestDate;
-    }
-
-    @Override
-    public String toString() {
-        return "Adoption{" +
-                "id=" + id +
-                ", user=" + user +
-                ", animal=" + animal.getName() +
-                ", date of request =" + requestDate +
-                ", status=" + status +
-                '}';
-    }
-
-
+  public void setStatus(Status status) {
+    this.status = status;
+  }
 }

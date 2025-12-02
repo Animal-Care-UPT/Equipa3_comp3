@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,9 +70,24 @@ public class ShelterAnimalController {
     return ResponseEntity.status(404).body("No matching animals!");
   }
 
-  @PreAuthorize("hasRole('SHELTER')")
+  @PreAuthorize("hasRole('ADMIN')")
   @GetMapping("/search/shelter")
-  public ResponseEntity<?> getShelterAnimals() {
+  public ResponseEntity<?> getShelterAnimals(@NotNull @RequestParam Long id) {
+    Shelter shelter = shelterService.findById(id);
+    if (shelter == null) {
+      return ResponseEntity.status(404).body("Shelter not found!");
+    }
+
+    List<ShelterAnimal> animals = shelterAnimalService.searchByShelter(shelter);
+    if (!animals.isEmpty()) {
+      return ResponseEntity.ok().body(animals);
+    }
+    return ResponseEntity.status(404).body("No available Animals!");
+  }
+
+  @PreAuthorize("hasRole('SHELTER')")
+  @GetMapping("/search/self")
+  public ResponseEntity<?> getLoggedShelterAnimals() {
     String email = SecurityContextHolder.getContext().getAuthentication().getName();
     Shelter shelter = shelterService.findByEmail(email);
     if (shelter == null) {
@@ -158,6 +174,50 @@ public class ShelterAnimalController {
       return ResponseEntity.ok().body(animals);
     }
     return ResponseEntity.status(404).body("There are no animals available for adoption!");
+  }
+
+  @PreAuthorize("hasRole('SHELTER')")
+  @PutMapping("/vacination")
+  public ResponseEntity<?> changeVacination(@NotNull @RequestParam Long id) {
+    ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(id);
+    if (animal != null) {
+      shelterAnimalService.changeVacination(animal);
+      return ResponseEntity.ok("Changed vacination with success!");
+    }
+    return ResponseEntity.status(404).body("Animal not found!");
+  }
+
+  @PreAuthorize("hasRole('SHELTER')")
+  @PutMapping("/age")
+  public ResponseEntity<?> changeVacination(@NotNull @RequestParam Long id, @NotNull @RequestParam Integer age) {
+    ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(id);
+    if (animal != null) {
+      shelterAnimalService.changeAge(animal, age);
+      return ResponseEntity.ok("Changed age with success!");
+    }
+    return ResponseEntity.status(404).body("Animal not found!");
+  }
+
+  @PreAuthorize("hasRole('SHELTER')")
+  @PutMapping("/status")
+  public ResponseEntity<?> changeStatus(@NotNull @RequestParam Long id) {
+    ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(id);
+    if (animal != null) {
+      shelterAnimalService.changeStatus(animal);
+      return ResponseEntity.ok("Changed status with success!");
+    }
+    return ResponseEntity.status(404).body("Animal not found!");
+  }
+
+  @PreAuthorize("hasRole('SHELTER')")
+  @PutMapping("/adoptiontype")
+  public ResponseEntity<?> changeAdoptionType(@NotNull @RequestParam Long id) {
+    ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(id);
+    if (animal != null) {
+      shelterAnimalService.changeAdoptionType(animal);
+      return ResponseEntity.ok("Changed adoption type with success!");
+    }
+    return ResponseEntity.status(404).body("Animal not found!");
   }
 
 }

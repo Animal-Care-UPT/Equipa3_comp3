@@ -36,17 +36,4 @@ public class UserController {
     return ResponseEntity.status(201).body(u);
   }
 
-    @GetMapping("/email")
-    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
-
-        User user = userService.findByEmail(email);
-
-        if (user == null) {
-            return ResponseEntity.status(404).build();
-        }
-
-        return ResponseEntity.ok(user);
-    }
-
-
 }

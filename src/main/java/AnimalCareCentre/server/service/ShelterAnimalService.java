@@ -4,7 +4,6 @@ import AnimalCareCentre.server.enums.*;
 import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.model.ShelterAnimal;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -88,13 +87,45 @@ public class ShelterAnimalService {
     return animals;
   }
 
-
   public ShelterAnimal findShelterAnimalById(Long id) {
-      return shelterAnimalRepository.findById(id).orElse(null);
-    }
-
-  //So that we can change the status of a shelteranimal after the adoption
-  public void save(ShelterAnimal animal) {
-      shelterAnimalRepository.save(animal);
+    return shelterAnimalRepository.findById(id).orElse(null);
   }
+
+  // So that we can change the status of a shelteranimal after the adoption
+  public void save(ShelterAnimal animal) {
+    shelterAnimalRepository.save(animal);
+  }
+
+  public ShelterAnimal changeVacination(ShelterAnimal animal) {
+    if (animal.isVacinated()) {
+      animal.setVacinated(false);
+    } else {
+      animal.setVacinated(true);
+    }
+    return shelterAnimalRepository.save(animal);
+  }
+
+  public ShelterAnimal changeAge(ShelterAnimal animal, int num) {
+    animal.setAge(num);
+    return shelterAnimalRepository.save(animal);
+  }
+
+  public ShelterAnimal changeStatus(ShelterAnimal animal) {
+    if (animal.getStatus() == Status.AVAILABLE) {
+      animal.setStatus(Status.UNAVAILABLE);
+    } else {
+      animal.setStatus(Status.AVAILABLE);
+    }
+    return shelterAnimalRepository.save(animal);
+  }
+
+  public ShelterAnimal changeAdoptionType(ShelterAnimal animal) {
+    if (animal.getAdoptionType() == AdoptionType.FOR_ADOPTION) {
+      animal.setAdoptionType(AdoptionType.FOR_FOSTER);
+    } else {
+      animal.setAdoptionType(AdoptionType.FOR_ADOPTION);
+    }
+    return shelterAnimalRepository.save(animal);
+  }
+
 }

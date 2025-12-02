@@ -20,6 +20,9 @@ public class ShelterAnimal extends Animal {
 
   private boolean isVacinated;
 
+  @NotNull
+  private Integer age;
+
   @Enumerated(EnumType.STRING)
   private Status status;
 
@@ -40,41 +43,33 @@ public class ShelterAnimal extends Animal {
     sponsors.add(sponsor);
   }
 
-  // The different getter from the class
-  public String getName() {
-    return super.getName();
+  @Override
+  public String toString() {
+    return super.toString() + "\n" + "Listed for: " + adoptionType;
   }
 
-  public AnimalType getType() {
-    return super.getType();
+  public Shelter getShelter() {
+    return shelter;
   }
 
-  public String getRace() {
-    return super.getRace();
-  }
-
-  public AnimalColor getColor() {
-    return super.getColor();
+  public void setShelter(Shelter shelter) {
+    this.shelter = shelter;
   }
 
   public boolean isVacinated() {
     return isVacinated;
   }
 
-  public AnimalSize getSize() {
-    return super.getSize();
+  public void setVacinated(boolean isVacinated) {
+    this.isVacinated = isVacinated;
   }
 
-  public AdoptionType getAdoptionType() {
-    return adoptionType;
+  public Integer getAge() {
+    return age;
   }
 
-  public String getDescription() {
-    return super.getDescription();
-  }
-
-  public Shelter getShelter() {
-    return shelter;
+  public void setAge(Integer age) {
+    this.age = age;
   }
 
   public Status getStatus() {
@@ -85,30 +80,27 @@ public class ShelterAnimal extends Animal {
     this.status = status;
   }
 
-  public void setShelter(Shelter shelter) {
-    this.shelter = shelter;
-  }
-
-  public List<Sponsorship> getSponsors() {
-    return sponsors;
-  }
-
-  public List<Adoption> getAdoptions() {
-    return adoptions;
-  }
-
-  // The different setters from the class
-  public void setVacinated(boolean vacinated) {
-    isVacinated = vacinated;
+  public AdoptionType getAdoptionType() {
+    return adoptionType;
   }
 
   public void setAdoptionType(AdoptionType adoptionType) {
     this.adoptionType = adoptionType;
   }
 
-  // toString from the class
-  @Override
-  public String toString() {
-    return super.toString() + "\n" + "Listed for: " + adoptionType;
+  public List<Adoption> getAdoptions() {
+    return adoptions;
+  }
+
+  public void setAdoptions(List<Adoption> adoptions) {
+    this.adoptions = adoptions;
+  }
+
+  public List<Sponsorship> getSponsors() {
+    return sponsors;
+  }
+
+  public void setSponsors(List<Sponsorship> sponsors) {
+    this.sponsors = sponsors;
   }
 }

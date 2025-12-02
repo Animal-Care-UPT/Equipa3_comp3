@@ -5,5 +5,4 @@ import java.time.LocalDate;
 
 import AnimalCareCentre.client.enums.*;
 
-public record Adoption(long id, User user, ShelterAnimal animal, LocalDate requestDate, LocalDate adoptionDate, AdoptionType type, Status status) {
-}
+public record Adoption(long id, User user, ShelterAnimal animal, LocalDate requestDate, LocalDate adoptionDate, AdoptionType type, Status status) {}
