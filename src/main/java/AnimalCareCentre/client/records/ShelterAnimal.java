@@ -6,7 +6,7 @@ import AnimalCareCentre.client.enums.*;
 
 public record ShelterAnimal(long id, String name, AnimalType type, String race, AnimalSize size, AnimalGender gender,
     AnimalColor color, String description, Shelter shelter, boolean vacinated, int age, Status status,
-    AdoptionType adoptionType, List<Adoption> adoptions, List<Sponsorship> sponsors) {
+    AdoptionType adoptionType, List<Adoption> adoptions, List<Sponsorship> sponsors) implements Displayable {
 
   @Override
   public String toString() {
@@ -23,5 +23,26 @@ public record ShelterAnimal(long id, String name, AnimalType type, String race, 
         "\nAge: " + age +
         "\nStatus: " + status +
         "\nShelter: " + (shelter != null ? shelter.name() : "N/A") + "\n";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return "Name: " + name;
+  }
+
+  @Override
+  public String getDisplayInfo() {
+    return "Type: " + type + "\nRace: " + race;
+  }
+
+  @Override
+  public String getDescription() {
+    return "Description: " + description;
+  }
+
+  @Override
+  public String getImagePath() {
+    // todo
+    return null;
   }
 }

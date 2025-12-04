@@ -4,7 +4,7 @@ import AnimalCareCentre.client.enums.SecurityQuestion;
 import AnimalCareCentre.client.enums.Status;
 
 public record Shelter(long id, String name, String email, String location, SecurityQuestion securityQuestion,
-    Integer foundationYear, String contact, Status status) {
+    Integer foundationYear, String contact, Status status) implements Displayable {
 
   @Override
   public String toString() {
@@ -15,4 +15,25 @@ public record Shelter(long id, String name, String email, String location, Secur
         "\nContact: " + contact +
         "\nStatus: " + status + "\n";
   }
+
+  @Override
+  public String getDisplayName() {
+      return "Name: " + name;
+  }
+
+  @Override
+  public String getDisplayInfo() {
+      return "Location: " + location;
+  }
+
+  @Override
+  public String getDescription() {
+      return "Contact: " + contact;
+  }
+    @Override
+  public String getImagePath() {
+    // todo
+      return null;
+  }
+
 }
