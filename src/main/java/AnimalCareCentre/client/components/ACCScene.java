@@ -1,4 +1,4 @@
-package AnimalCareCentre.client.views;
+package AnimalCareCentre.client.components;
 
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -84,11 +84,8 @@ public class ACCScene extends Scene {
   /**
    * This method adds items to the navigation bar of the app.
    */
-  public void setHeader(String... items) {
-    for (String item : items) {
-      ACCNavButton navButton = new ACCNavButton(item);
-      header.addItems(navButton);
-    }
+  public void setHeader(Node... items) {
+      header.addItems(items);
   }
 
   /**

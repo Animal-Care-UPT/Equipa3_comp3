@@ -1,4 +1,4 @@
-package AnimalCareCentre.client.views;
+package AnimalCareCentre.client.components;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;

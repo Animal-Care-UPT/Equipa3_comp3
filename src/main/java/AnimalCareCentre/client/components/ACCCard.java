@@ -1,4 +1,4 @@
-package AnimalCareCentre.client.views;
+package AnimalCareCentre.client.components;
 
 import AnimalCareCentre.client.records.Displayable;
 import javafx.geometry.Insets;

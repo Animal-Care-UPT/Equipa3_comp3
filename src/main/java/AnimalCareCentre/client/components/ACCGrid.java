@@ -1,4 +1,4 @@
-package AnimalCareCentre.client.views;
+package AnimalCareCentre.client.components;
 
 import java.util.List;
 import java.util.function.Consumer;
