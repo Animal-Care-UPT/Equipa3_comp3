@@ -29,6 +29,10 @@ public class MainMenu {
   public MainMenu(Navigator nav, Stage stage) {
     this.nav = nav;
     this.stage = stage;
+    show();
+  }
+
+  private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
 
     ACCButton login = new ACCButton("Login");
@@ -121,7 +125,8 @@ public class MainMenu {
     });
 
     confirm.setOnAction(e -> {
-      String json = Utility.jsonString("email", email.getText(), "answer", answer.getText(), "newPassword", password.getText());
+      String json = Utility.jsonString("email", email.getText(), "answer", answer.getText(), "newPassword",
+          password.getText());
       ApiResponse response = ApiClient.put("/accounts/changepw", json);
       if (response.isSuccess()) {
         Utility.showAlert(AlertType.INFORMATION, "Success", response.getBody());

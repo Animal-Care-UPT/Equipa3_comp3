@@ -18,14 +18,8 @@ public class Navigator {
   private String loggedRole;
 
   public Navigator(Stage stage) {
-
     this.stage = stage;
-    stage.setTitle("AnimalCareCentre");
-    stage.setWidth(Toolkit.getDefaultToolkit().getScreenSize().getWidth());
-    stage.setHeight(Toolkit.getDefaultToolkit().getScreenSize().getHeight());
-    stage.show();
     showMainMenu();
-
   }
 
   public void showMainMenu() {
