@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface AdoptionRepository extends JpaRepository<Adoption, Long> {
 
-    List<Adoption> findByUser(User user);
-    List<Adoption> findByAnimal(ShelterAnimal animal);
+
     List<Adoption> findByAnimal_ShelterAndStatus(Shelter shelter, Status status);
     List<Adoption> findByType(AdoptionType type);
     List<Adoption> findByUserAndStatus(User user, Status status);
+    List<Adoption> findByUserAndStatusAndType(User user, Status status, AdoptionType type);
 }
