@@ -36,7 +36,7 @@ public class NavBar {
     animals.setOnAction(e -> nav.userHomepage());
     shelters.setOnAction(e -> nav.userHomepage());
     lostFound.setOnAction(e -> nav.userHomepage());
-    acc.setOnAction(e -> nav.userHomepage());
+    acc.setOnAction(e -> new AccountPopover(nav).show(acc));
 
     scene.setHeader(home, animals, shelters, lostFound, acc);
   }
@@ -52,12 +52,12 @@ public class NavBar {
     animals.setOnAction(e -> nav.adminHomepage());
     shelters.setOnAction(e -> nav.adminHomepage());
     lostFound.setOnAction(e -> nav.adminHomepage());
-    acc.setOnAction(e -> nav.adminHomepage());
+    acc.setOnAction(e -> new AccountPopover(nav).show(acc));
 
     scene.setHeader(home, animals, shelters, lostFound, acc);
   }
 
-    private void shelterNavButtons() {
+  private void shelterNavButtons() {
     ACCNavButton home = new ACCNavButton("Home");
     ACCNavButton animals = new ACCNavButton("My Animals");
     ACCNavButton lostFound = new ACCNavButton("Lost and Found");
@@ -66,10 +66,9 @@ public class NavBar {
     home.setOnAction(e -> nav.shelterHomepage());
     animals.setOnAction(e -> nav.shelterHomepage());
     lostFound.setOnAction(e -> nav.shelterHomepage());
-    acc.setOnAction(e -> nav.shelterHomepage());
+    acc.setOnAction(e -> new AccountPopover(nav).show(acc));
 
     scene.setHeader(home, animals, lostFound, acc);
   }
-
 
 }
