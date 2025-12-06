@@ -8,7 +8,6 @@ import AnimalCareCentre.client.components.*;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -35,9 +34,9 @@ public class MainMenu {
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
 
-    ACCButton login = new ACCButton("Login");
-    ACCButton create = new ACCButton("Create Account");
-    ACCButton exit = new ACCButton("Exit");
+    ACCTextButton login = new ACCTextButton("Login");
+    ACCTextButton create = new ACCTextButton("Create Account");
+    ACCTextButton exit = new ACCTextButton("Exit");
 
     login.setOnAction(e -> {
       login();
@@ -63,9 +62,9 @@ public class MainMenu {
     Label passLabel = new Label("Password:");
     PasswordField password = new PasswordField();
     password.setMaxWidth(250);
-    Button enter = new Button("Enter");
-    Button back = new Button("Back");
-    Button changePassword = new Button("Forgot Password");
+    ACCButton enter = new ACCButton("Enter");
+    ACCButton back = new ACCButton("Back");
+    ACCButton changePassword = new ACCButton("Forgot Password");
     scene.addItems(emailLabel, email, passLabel, password, enter, back, changePassword);
 
     enter.setOnAction(e -> {
@@ -105,11 +104,11 @@ public class MainMenu {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     Label emailLabel = new Label("Email:");
     ACCTextField email = new ACCTextField();
-    Button enter = new Button("Enter");
+    ACCButton enter = new ACCButton("Enter");
     Label passwordLabel = new Label("New password:");
     PasswordField password = new PasswordField();
-    Button confirm = new Button("Confirm");
-    Button back = new Button("Back");
+    ACCButton confirm = new ACCButton("Confirm");
+    ACCButton back = new ACCButton("Back");
     ACCTextField answer = new ACCTextField();
 
     scene.addItems(emailLabel, email, enter, back);
@@ -203,8 +202,8 @@ public class MainMenu {
       return null;
     }));
 
-    Button create = new Button("Create");
-    Button back = new Button("Back");
+    ACCButton create = new ACCButton("Create");
+    ACCButton back = new ACCButton("Back");
 
     create.setOnAction(e -> {
 
