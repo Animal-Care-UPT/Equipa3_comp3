@@ -8,10 +8,7 @@ import AnimalCareCentre.client.components.*;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -34,9 +31,9 @@ public class MainMenu {
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
 
-    ACCTextButton login = new ACCTextButton("Login");
-    ACCTextButton create = new ACCTextButton("Create Account");
-    ACCTextButton exit = new ACCTextButton("Exit");
+    ACCMenuButton login = new ACCMenuButton("Login");
+    ACCMenuButton create = new ACCMenuButton("Create Account");
+    ACCMenuButton exit = new ACCMenuButton("Exit");
 
     login.setOnAction(e -> {
       login();
@@ -60,12 +57,18 @@ public class MainMenu {
     Label emailLabel = new Label("Email:");
     ACCTextField email = new ACCTextField();
     Label passLabel = new Label("Password:");
-    PasswordField password = new PasswordField();
+    ACCPasswordField password = new ACCPasswordField();
     password.setMaxWidth(250);
     ACCButton enter = new ACCButton("Enter");
     ACCButton back = new ACCButton("Back");
-    ACCButton changePassword = new ACCButton("Forgot Password");
-    scene.addItems(emailLabel, email, passLabel, password, enter, back, changePassword);
+    ACCTextButton changePassword = new ACCTextButton("Forgot Password?");
+
+    VBox vbox = new VBox();
+    vbox.setAlignment(Pos.CENTER_LEFT);
+    vbox.getChildren().addAll(emailLabel, email, passLabel, password);
+    vbox.setMaxWidth(250);
+    vbox.setSpacing(10);
+    scene.addItems(vbox, enter, back, changePassword);
 
     enter.setOnAction(e -> {
       String json = Utility.jsonString("email", email.getText(), "password", password.getText());
@@ -106,7 +109,7 @@ public class MainMenu {
     ACCTextField email = new ACCTextField();
     ACCButton enter = new ACCButton("Enter");
     Label passwordLabel = new Label("New password:");
-    PasswordField password = new PasswordField();
+    ACCPasswordField password = new ACCPasswordField();
     ACCButton confirm = new ACCButton("Confirm");
     ACCButton back = new ACCButton("Back");
     ACCTextField answer = new ACCTextField();
@@ -149,19 +152,19 @@ public class MainMenu {
   public void createAccount() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     Label type = new Label("Account type:");
-    ComboBox<String> accType = new ComboBox<>();
+    ACCComboBox<String> accType = new ACCComboBox<>();
     accType.getItems().addAll("User", "Admin", "Shelter");
     Label nameLabel = new Label("Name:");
     ACCTextField name = new ACCTextField();
     Label emailLabel = new Label("Email:");
     ACCTextField email = new ACCTextField();
     Label passLabel = new Label("Password:");
-    PasswordField password = new PasswordField();
+    ACCPasswordField password = new ACCPasswordField();
     password.setMaxWidth(250);
     Label locationLabel = new Label("Location:");
     ACCTextField location = new ACCTextField();
     Label secLabel = new Label("Security Question:");
-    ComboBox<SecurityQuestion> sec = new ComboBox<>();
+    ACCComboBox<SecurityQuestion> sec = new ACCComboBox<>();
     sec.getItems().addAll(SecurityQuestion.values());
     Label answerLabel = new Label("Answer:");
     ACCTextField answer = new ACCTextField();
@@ -175,10 +178,10 @@ public class MainMenu {
     vbox.setSpacing(10);
     scene.addItems(vbox);
 
-    PasswordField adminCode = new PasswordField();
+    ACCPasswordField adminCode = new ACCPasswordField();
     adminCode.setMaxWidth(250);
     Label birthLabel = new Label("Birthdate:");
-    DatePicker birthDate = new DatePicker();
+    ACCDatePicker birthDate = new ACCDatePicker();
     birthDate.setMaxWidth(250);
     Label contactLabel = new Label("Contact:");
     ACCTextField contact = new ACCTextField();
