@@ -21,7 +21,7 @@ public class SponsorshipService {
 
     /**
      * Create a new sponsorship
-     * @param doner
+     * @param donor
      * @param animal
      * @param amount
      * @return
@@ -69,5 +69,14 @@ public class SponsorshipService {
      */
   public List<Sponsorship> getAllSponsorships() {
       return sponsorshipRepository.findAll();
+  }
+
+    /**
+     * Verifies the number of sponsors of an animal
+     * @param animal
+     * @return
+     */
+  public long countActiveSponsors(ShelterAnimal animal) {
+      return sponsorshipRepository.countByAnimalAndStatus(animal, Status.ACTIVE);
   }
 }

@@ -1,6 +1,7 @@
 package AnimalCareCentre.server.model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,6 +122,17 @@ public class Sponsorship extends Donation {
     @Override
     public String getDonationType() {
         return "SPONSORSHIP";
+    }
+
+    public int getPaymentsMade() {
+        if (startDate == null) return 0;
+
+        long months = ChronoUnit.MONTHS.between(startDate, LocalDate.now());
+        return (int) months + 1;
+    }
+
+    public float getCalculatedTotalDonated() {
+        return getPaymentsMade() * getAmount();
     }
 
     @Override

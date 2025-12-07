@@ -14,5 +14,5 @@ public interface SponsorshipRepository extends JpaRepository<Sponsorship, Long> 
   public List<Sponsorship> findByUser(User user);
   List<Sponsorship> findByDonorOrderByStartDateDesc(User user);
   List<Sponsorship> findByAnimalOrderByStartDateDesc(ShelterAnimal animal);
-  List<Sponsorship> findByStatus(Status status);
+  long countByAnimalAndStatus(ShelterAnimal animal, Status status);
 }
