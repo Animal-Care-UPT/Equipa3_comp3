@@ -1,12 +1,10 @@
 package AnimalCareCentre.client.views;
 
-import org.controlsfx.control.PopOver;
-
 import AnimalCareCentre.client.ApiClient;
 import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
 import AnimalCareCentre.client.Utility;
-import AnimalCareCentre.client.components.ACCVBox;
+import AnimalCareCentre.client.components.*;
 import AnimalCareCentre.client.records.Account;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -17,7 +15,7 @@ import javafx.scene.layout.VBox;
 public class AccountPopover {
 
   private Navigator nav;
-  private PopOver popover;
+  private ACCPopover popover;
 
   public AccountPopover(Navigator nav) {
     this.nav = nav;
@@ -25,23 +23,14 @@ public class AccountPopover {
 
   public void show(Button button) {
     ACCVBox content = buildContent();
-    popover = new PopOver(content);
-    popover.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
+    popover = new ACCPopover(content, "Account");
     popover.setTitle("Account");
-    popover.setDetachable(false);
-    popover.setMinSize(350, 500);
-    popover.setHideOnEscape(true);
-    popover.setAutoHide(true);
-    popover.setArrowSize(0);
-    popover.setHeaderAlwaysVisible(true);
-    popover.setCloseButtonEnabled(false);
     popover.show(button);
   }
 
   private ACCVBox buildContent() {
     ACCVBox content = new ACCVBox();
     content.setPadding(new Insets(15, 15, 15, 15));
-    content.setStyle("-fx-background-color: #FFFAF1;");
 
     ApiResponse response = ApiClient.get("/accounts/self");
     if (!response.isSuccess()) {
@@ -58,12 +47,24 @@ public class AccountPopover {
     VBox accInfo = new VBox(name, email, location);
     accInfo.setSpacing(5);
 
-    Button secQuestion = new Button("Change Security Question");
+    ACCTextButton secQuestion = new ACCTextButton("Change Security Question");
     secQuestion.setOnAction(e -> changeSecurityQuestion());
 
-    content.addItems(accInfo, secQuestion);
+    ACCButton logout = new ACCButton("Logout");
+    logout.setOnAction(e -> logout());
+
+    content.addItems(accInfo, secQuestion, logout);
     return content;
   }
 
-  public void changeSecurityQuestion() {}
+  private void logout() {
+    ApiResponse response = ApiClient.post("/accounts/logout", "");
+    System.out.println(response.getBody());
+    ApiClient.clearSession();
+    nav.showMainMenu();
+    return;
+  }
+
+  private void changeSecurityQuestion() {
+  }
 }

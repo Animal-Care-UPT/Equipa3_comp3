@@ -33,7 +33,7 @@ public class NavBar {
     ACCNavButton acc = new ACCNavButton("Account");
 
     home.setOnAction(e -> nav.userHomepage());
-    animals.setOnAction(e -> nav.userHomepage());
+    animals.setOnAction(e -> new SearchAnimalPopover(nav).show(animals));
     shelters.setOnAction(e -> nav.userHomepage());
     lostFound.setOnAction(e -> nav.userHomepage());
     acc.setOnAction(e -> new AccountPopover(nav).show(acc));

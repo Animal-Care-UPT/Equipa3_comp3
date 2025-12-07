@@ -1,11 +1,9 @@
 package AnimalCareCentre.client;
 
-import java.awt.Toolkit;
+import java.util.List;
 
-import AnimalCareCentre.client.views.AdminHomepage;
-import AnimalCareCentre.client.views.MainMenu;
-import AnimalCareCentre.client.views.ShelterHomepage;
-import AnimalCareCentre.client.views.UserHomepage;
+import AnimalCareCentre.client.records.ShelterAnimal;
+import AnimalCareCentre.client.views.*;
 import javafx.stage.Stage;
 
 /**
@@ -41,6 +39,8 @@ public class Navigator {
   public void setLoggedRole(String role) {
     loggedRole = role;
   }
+
+  public void searchAnimal(List<ShelterAnimal> animals) {}
 
   public String getLoggedRole() {
     return loggedRole;

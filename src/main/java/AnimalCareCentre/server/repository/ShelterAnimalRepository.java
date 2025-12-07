@@ -12,18 +12,24 @@ import AnimalCareCentre.server.model.ShelterAnimal;
 
 public interface ShelterAnimalRepository extends JpaRepository<ShelterAnimal, Long> {
 
-  @Query("SELECT s FROM ShelterAnimal s WHERE s.status = :status AND (" +
-      "s.name LIKE :search OR s.race LIKE :search OR " +
-      "CAST(s.type AS string) LIKE :search OR " +
-      "CAST(s.gender AS string) LIKE :search OR " +
-      "CAST(s.size AS string) LIKE :search OR " +
-      "CAST(s.color AS string) LIKE :search)")
-  public List<ShelterAnimal> findByKeyword(@Param("search") String search, @Param("status") Status status);
-  public List<ShelterAnimal> findByGenderAndStatus(AnimalGender gender, Status status);
-  public List<ShelterAnimal> findBySizeAndStatus(AnimalSize size, Status status);
-  public List<ShelterAnimal> findByColorAndStatus(AnimalColor color, Status status);
-  public List<ShelterAnimal> findByTypeAndStatus(AnimalType type, Status status);
-  public List<ShelterAnimal> findByShelter(Shelter shelter);
-  public List<ShelterAnimal> findByStatusAndShelter(Status status, Shelter shelter);
-  public List<ShelterAnimal> findByAdoptionTypeAndStatus(AdoptionType adoptionType, Status status);
+  @Query("SELECT a FROM ShelterAnimal a WHERE " +
+      "a.status = :status AND " +
+      "(:keyword IS NULL OR :keyword = '' OR (" +
+      "a.name LIKE :keyword OR a.race LIKE :keyword OR " +
+      "CAST(a.type AS string) LIKE :keyword OR " +
+      "CAST(a.gender AS string) LIKE :keyword OR " +
+      "CAST(a.size AS string) LIKE :keyword OR " +
+      "CAST(a.color AS string) LIKE :keyword)) AND " +
+      "(:type IS NULL OR a.type = :type) AND " +
+      "(:gender IS NULL OR a.gender = :gender) AND " +
+      "(:adoptionType IS NULL OR a.adoptionType = :adoptionType)")
+  List<ShelterAnimal> searchWithFilters(
+      @Param("keyword") String keyword,
+      @Param("status") Status status,
+      @Param("type") AnimalType type,
+      @Param("gender") AnimalGender gender,
+      @Param("adoptionType") AdoptionType adoptionType);
+
+  List<ShelterAnimal> findByShelter(Shelter shelter);
+  List<ShelterAnimal> findByStatusAndShelter(Status status, Shelter shelter);
 }
