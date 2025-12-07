@@ -34,14 +34,14 @@ public abstract class Donation {
   @JoinColumn(name = "user_id", nullable = false)
   private User donor;
 
-  public Donation() {
-      this.donationDate = LocalDate.now();
-  }
+    public Donation() {
+        this.donationDate = LocalDate.now();
+    }
 
-  public Donation(User donor, float amount) {
-      this();
-      this.donor = donor;
-      this.amount = amount;
+    public Donation(User donor, float amount) {
+        this(); // chama o construtor vazio → cria a data
+        this.donor = donor;
+        this.amount = amount;
     }
 
 

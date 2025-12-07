@@ -17,7 +17,7 @@ public class ShelterDonation extends Donation {
 
     public ShelterDonation() {}
 
-    public ShelterDonation (User donor, Shelter shelter, float amount) {
+    public ShelterDonation(User donor, Shelter shelter, float amount) {
         super(donor, amount);
         this.shelter = shelter;
     }

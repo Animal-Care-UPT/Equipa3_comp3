@@ -1,21 +1,34 @@
 package AnimalCareCentre.server.dto;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 import java.time.LocalDate;
 
-public class SponsorshipDTO {
+public class ShelterDonationDTO {
+
     private Long userId;
     private String userName;
     private String userEmail;
 
-    private Long animalId;
-    private String animalName;
+
+    private Long shelterId;
     private String shelterName;
 
-    private Float amount;
-    private LocalDate startDate;
+    @NotNull(message = "Amount is required")
+    @Positive(message = "Amount must be positive")
+    @Min(5)
+    @Max(100)
+    private float amount;
 
-    // Getters e Setters
+    private LocalDate donationDate;
 
+
+    public ShelterDonationDTO() {}
+
+    // Getters and Setters
     public Long getUserId() {
         return userId;
     }
@@ -40,20 +53,12 @@ public class SponsorshipDTO {
         this.userEmail = userEmail;
     }
 
-    public Long getAnimalId() {
-        return animalId;
+    public Long getShelterId() {
+        return shelterId;
     }
 
-    public void setAnimalId(Long animalId) {
-        this.animalId = animalId;
-    }
-
-    public String getAnimalName() {
-        return animalName;
-    }
-
-    public void setAnimalName(String animalName) {
-        this.animalName = animalName;
+    public void setShelterId(Long shelterId) {
+        this.shelterId = shelterId;
     }
 
     public String getShelterName() {
@@ -64,19 +69,19 @@ public class SponsorshipDTO {
         this.shelterName = shelterName;
     }
 
-    public Float getAmount() {
+    public float getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(float amount) {
         this.amount = amount;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDate getDonationDate() {
+        return donationDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
+    public void setDonationDate(LocalDate donationDate) {
+        this.donationDate = donationDate;
     }
 }
