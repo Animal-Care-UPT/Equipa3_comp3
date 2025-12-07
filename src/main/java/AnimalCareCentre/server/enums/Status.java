@@ -12,7 +12,8 @@ public enum Status {
   CANCELLED("Cancelled"),
   AVAILABLE("Available"),
   UNAVAILABLE("Unavailable"),
-  BANNED("BANNED");
+  BANNED("BANNED"),
+  ACTIVE("ACTIVE");
 
   private final String status;
 
