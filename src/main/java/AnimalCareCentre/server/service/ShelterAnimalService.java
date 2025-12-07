@@ -1,5 +1,6 @@
 package AnimalCareCentre.server.service;
 
+import AnimalCareCentre.server.dto.SearchAnimalDTO;
 import AnimalCareCentre.server.enums.*;
 import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.model.ShelterAnimal;
@@ -24,37 +25,6 @@ public class ShelterAnimalService {
     return shelterAnimalRepository.save(shelterAnimal);
   }
 
-  public List<ShelterAnimal> searchByKeyword(String search) {
-    String keyword = "%" + search + "%";
-    List<ShelterAnimal> animals = shelterAnimalRepository.findByKeyword(keyword, Status.AVAILABLE);
-    animals.sort(Comparator.comparing(ShelterAnimal::getType).thenComparing(ShelterAnimal::getRace));
-    return animals;
-  }
-
-  public List<ShelterAnimal> searchByGender(AnimalGender gender) {
-    List<ShelterAnimal> animals = shelterAnimalRepository.findByGenderAndStatus(gender, Status.AVAILABLE);
-    animals.sort(Comparator.comparing(ShelterAnimal::getType).thenComparing(ShelterAnimal::getRace));
-    return animals;
-  }
-
-  public List<ShelterAnimal> searchBySize(AnimalSize size) {
-    List<ShelterAnimal> animals = shelterAnimalRepository.findBySizeAndStatus(size, Status.AVAILABLE);
-    animals.sort(Comparator.comparing(ShelterAnimal::getType).thenComparing(ShelterAnimal::getRace));
-    return animals;
-  }
-
-  public List<ShelterAnimal> searchByColor(AnimalColor color) {
-    List<ShelterAnimal> animals = shelterAnimalRepository.findByColorAndStatus(color, Status.AVAILABLE);
-    animals.sort(Comparator.comparing(ShelterAnimal::getType).thenComparing(ShelterAnimal::getRace));
-    return animals;
-  }
-
-  public List<ShelterAnimal> searchByType(AnimalType type) {
-    List<ShelterAnimal> animals = shelterAnimalRepository.findByTypeAndStatus(type, Status.AVAILABLE);
-    animals.sort(Comparator.comparing(ShelterAnimal::getType).thenComparing(ShelterAnimal::getRace));
-    return animals;
-  }
-
   public List<ShelterAnimal> searchAvailableByShelter(Shelter shelter) {
     List<ShelterAnimal> animals = shelterAnimalRepository.findByStatusAndShelter(Status.AVAILABLE, shelter);
     animals.sort(Comparator.comparing(ShelterAnimal::getType).thenComparing(ShelterAnimal::getRace));
@@ -67,22 +37,14 @@ public class ShelterAnimalService {
     return animals;
   }
 
+  public List<ShelterAnimal> searchWithFilters(SearchAnimalDTO search) {
+    List<ShelterAnimal> animals = shelterAnimalRepository.searchWithFilters(search.getKeyword(), Status.AVAILABLE, search.getType(), search.getGender(), search.getAdoptionType());
+    animals.sort(Comparator.comparing(ShelterAnimal::getType).thenComparing(ShelterAnimal::getRace));
+    return animals;
+  }
+
   public List<ShelterAnimal> searchAll() {
     List<ShelterAnimal> animals = shelterAnimalRepository.findAll();
-    animals.sort(Comparator.comparing(ShelterAnimal::getType).thenComparing(ShelterAnimal::getRace));
-    return animals;
-  }
-
-  public List<ShelterAnimal> searchFosterAnimals() {
-    List<ShelterAnimal> animals = shelterAnimalRepository.findByAdoptionTypeAndStatus(AdoptionType.FOR_FOSTER,
-        Status.AVAILABLE);
-    animals.sort(Comparator.comparing(ShelterAnimal::getType).thenComparing(ShelterAnimal::getRace));
-    return animals;
-  }
-
-  public List<ShelterAnimal> searchAdoptionAnimals() {
-    List<ShelterAnimal> animals = shelterAnimalRepository.findByAdoptionTypeAndStatus(AdoptionType.FOR_ADOPTION,
-        Status.AVAILABLE);
     animals.sort(Comparator.comparing(ShelterAnimal::getType).thenComparing(ShelterAnimal::getRace));
     return animals;
   }

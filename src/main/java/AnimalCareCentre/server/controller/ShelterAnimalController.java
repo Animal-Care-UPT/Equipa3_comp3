@@ -1,11 +1,10 @@
 package AnimalCareCentre.server.controller;
 
-import AnimalCareCentre.server.enums.*;
+import AnimalCareCentre.server.dto.SearchAnimalDTO;
 import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.model.ShelterAnimal;
 import AnimalCareCentre.server.service.ShelterService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import AnimalCareCentre.server.service.ShelterAnimalService;
 
@@ -59,10 +58,10 @@ public class ShelterAnimalController {
     return ResponseEntity.status(404).body("There are no registered animals");
   }
 
-  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-  @GetMapping("/search")
-  public ResponseEntity<?> getAnimalsByKeyword(@NotBlank @RequestParam String keyword) {
-    List<ShelterAnimal> results = shelterAnimalService.searchByKeyword(keyword);
+@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+@PostMapping("/search")
+  public ResponseEntity<?> getAnimalsByKeyword(@RequestBody SearchAnimalDTO search) {
+    List<ShelterAnimal> results = shelterAnimalService.searchWithFilters(search);
     if (!results.isEmpty()) {
       return ResponseEntity.ok().body(results);
     }
@@ -113,66 +112,6 @@ public class ShelterAnimalController {
       return ResponseEntity.ok().body(animals);
     }
     return ResponseEntity.status(404).body("This shelter has no available animals!");
-  }
-
-  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-  @GetMapping("/search/gender")
-  public ResponseEntity<?> getAnimalsByGender(@NotNull @RequestParam AnimalGender gender) {
-    List<ShelterAnimal> animals = shelterAnimalService.searchByGender(gender);
-    if (!animals.isEmpty()) {
-      return ResponseEntity.ok().body(animals);
-    }
-    return ResponseEntity.status(404).body("There are no animals of this gender!");
-  }
-
-  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-  @GetMapping("/search/size")
-  public ResponseEntity<?> getAnimalsBySize(@NotNull @RequestParam AnimalSize size) {
-    List<ShelterAnimal> animals = shelterAnimalService.searchBySize(size);
-    if (!animals.isEmpty()) {
-      return ResponseEntity.ok().body(animals);
-    }
-    return ResponseEntity.status(404).body("There are no animals of this size!");
-  }
-
-  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-  @GetMapping("/search/color")
-  public ResponseEntity<?> getAnimalsByColor(@NotNull @RequestParam AnimalColor color) {
-    List<ShelterAnimal> animals = shelterAnimalService.searchByColor(color);
-    if (!animals.isEmpty()) {
-      return ResponseEntity.ok().body(animals);
-    }
-    return ResponseEntity.status(404).body("There are no animals of this color!");
-  }
-
-  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-  @GetMapping("/search/type")
-  public ResponseEntity<?> getAnimalsByType(@NotNull @RequestParam AnimalType type) {
-    List<ShelterAnimal> animals = shelterAnimalService.searchByType(type);
-    if (!animals.isEmpty()) {
-      return ResponseEntity.ok().body(animals);
-    }
-    return ResponseEntity.status(404).body("There are no animals of the chosen type!");
-  }
-
-  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-  @GetMapping("/search/foster")
-  public ResponseEntity<?> getFosterAnimals() {
-    List<ShelterAnimal> animals = shelterAnimalService.searchFosterAnimals();
-    if (!animals.isEmpty()) {
-      return ResponseEntity.ok().body(animals);
-    }
-    return ResponseEntity.status(404).body("There are no animals available for foster!");
-  }
-
-  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-  @GetMapping("/search/adoption")
-  public ResponseEntity<?> getAdoptionAnimals() {
-    List<ShelterAnimal> animals = shelterAnimalService.searchAdoptionAnimals();
-    if (!animals.isEmpty()) {
-      return ResponseEntity.ok().body(animals);
-    }
-    return ResponseEntity.status(404).body("There are no animals available for adoption!");
   }
 
   @PreAuthorize("hasRole('SHELTER')")

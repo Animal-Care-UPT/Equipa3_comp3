@@ -1,10 +1,10 @@
 package AnimalCareCentre.client.components;
 
-import javafx.scene.control.TextField;
+import javafx.scene.control.PasswordField;
 
-public class ACCTextField extends TextField {
+public class ACCPasswordField extends PasswordField {
 
-  public ACCTextField() {
+  public ACCPasswordField() {
     setMaxWidth(250);
     setStyle(
         "-fx-background-color: white; " +
@@ -15,6 +15,6 @@ public class ACCTextField extends TextField {
             "-fx-font-size: 14px;");
     setMinHeight(35);
     setMaxHeight(35);
-
   }
+
 }
