@@ -42,6 +42,10 @@ public class Navigator {
 
   public void searchAnimal(List<ShelterAnimal> animals) {}
 
+  public void registerAnimal() {
+    new RegisterAnimal(this, stage);
+  }
+
   public String getLoggedRole() {
     return loggedRole;
   }
