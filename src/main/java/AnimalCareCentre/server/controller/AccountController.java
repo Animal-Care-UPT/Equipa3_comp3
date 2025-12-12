@@ -125,12 +125,23 @@ public class AccountController {
   }
 
   @PutMapping("/changesq")
-  public ResponseEntity<?> changeSecurityQuestion(@Valid @RequestBody SecurityQuestionDTO requestSecurity){
+  public ResponseEntity<?> changeSecurityQuestion(@Valid @RequestBody SecurityQuestionDTO requestSecurity) {
     String email = SecurityContextHolder.getContext().getAuthentication().getName();
-    if(accountService.findAccount(email)==null){
+    if (accountService.findAccount(email) == null) {
       return ResponseEntity.status(404).body("User not found");
     }
     accountService.changeSQandAns(email, requestSecurity.getSecurityQuestion(), requestSecurity.getAnswer());
     return ResponseEntity.ok("Security info changed successfully");
+  }
+
+  @GetMapping("/self")
+  public ResponseEntity<?> getUserDetails() {
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    Account acc = accountService.findAccount(email);
+    if (acc == null) {
+      return ResponseEntity.status(404).body("User not found");
+    }
+    acc.setPassword(null);
+    return ResponseEntity.ok(acc);
   }
 }
