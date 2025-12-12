@@ -82,6 +82,10 @@ public class RegisterAnimal {
     scene.addItems(vbox, register, back);
   }
 
+  private String uploadImage() {
+    return null;
+  }
+
   private void registerAnimal() {
   }
 }

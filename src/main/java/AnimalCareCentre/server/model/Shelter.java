@@ -5,12 +5,12 @@ import java.util.List;
 
 import AnimalCareCentre.server.enums.*;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -33,6 +33,8 @@ public class Shelter extends Account {
   private Status status;
   @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ShelterAnimal> animals = new ArrayList<>();
+  @ElementCollection
+  private List<String> images = new ArrayList<>();
 
   protected Shelter() {
   }

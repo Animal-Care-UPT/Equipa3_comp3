@@ -2,6 +2,7 @@ package AnimalCareCentre.client;
 
 import java.util.List;
 
+import AnimalCareCentre.client.records.Shelter;
 import AnimalCareCentre.client.records.ShelterAnimal;
 import AnimalCareCentre.client.views.*;
 import javafx.stage.Stage;
@@ -41,6 +42,8 @@ public class Navigator {
   }
 
   public void searchAnimal(List<ShelterAnimal> animals) {}
+
+  public void searchShelter(List<Shelter> shelters) {}
 
   public void registerAnimal() {
     new RegisterAnimal(this, stage);

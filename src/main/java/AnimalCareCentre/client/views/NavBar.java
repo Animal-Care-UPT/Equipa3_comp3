@@ -34,7 +34,7 @@ public class NavBar {
 
     home.setOnAction(e -> nav.userHomepage());
     animals.setOnAction(e -> new SearchAnimalPopover(nav).show(animals));
-    shelters.setOnAction(e -> nav.userHomepage());
+    shelters.setOnAction(e -> new SearchShelterPopover(nav).show(shelters));
     lostFound.setOnAction(e -> nav.userHomepage());
     acc.setOnAction(e -> new AccountPopover(nav).show(acc));
 
@@ -50,7 +50,7 @@ public class NavBar {
 
     home.setOnAction(e -> nav.adminHomepage());
     animals.setOnAction(e -> nav.adminHomepage());
-    shelters.setOnAction(e -> nav.adminHomepage());
+    shelters.setOnAction(e -> new SearchShelterPopover(nav).show(shelters));
     lostFound.setOnAction(e -> nav.adminHomepage());
     acc.setOnAction(e -> new AccountPopover(nav).show(acc));
 

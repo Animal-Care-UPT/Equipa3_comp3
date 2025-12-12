@@ -33,6 +33,8 @@ public class ShelterAnimal extends Animal {
   @OneToMany(mappedBy = "animal", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference("animal-sponsorships")
   List<Sponsorship> sponsors = new ArrayList<>();
+  @ElementCollection
+  List<String> images = new ArrayList<>();
 
   public ShelterAnimal() {
   }
