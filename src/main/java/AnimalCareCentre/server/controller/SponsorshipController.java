@@ -55,11 +55,6 @@ public class SponsorshipController {
           return ResponseEntity.status(404).body("Animal not found!");
       }
 
-      long activeSponsors = sponsorshipService.countActiveSponsors(animal);
-      if (activeSponsors >= 3) {
-          return ResponseEntity.status(409).body("The animal already has 3 active sponsors");
-      }
-
       Sponsorship sponsorship = sponsorshipService.newSponsorship(user, animal, amount);
       return ResponseEntity.status(200).body(sponsorship);
 
