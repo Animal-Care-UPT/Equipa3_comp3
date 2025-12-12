@@ -2,14 +2,11 @@ package AnimalCareCentre.server.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.RequestBody;
+import AnimalCareCentre.server.repository.SponsorshipRepository;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import AnimalCareCentre.server.dto.*;
 import AnimalCareCentre.server.model.ShelterAnimal;
@@ -21,58 +18,121 @@ import AnimalCareCentre.server.service.UserService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/sponsorships/")
+@RequestMapping("/sponsorships")
 public class SponsorshipController {
 
   private final SponsorshipService sponsorshipService;
   private final UserService userService;
   private final ShelterAnimalService shelterAnimalService;
+    private final SponsorshipRepository sponsorshipRepository;
 
-  public SponsorshipController(SponsorshipService sponsorshipService, UserService userService,
-      ShelterAnimalService shelterAnimalService) {
+    public SponsorshipController(SponsorshipService sponsorshipService, UserService userService,
+                               ShelterAnimalService shelterAnimalService, SponsorshipRepository sponsorshipRepository) {
     this.sponsorshipService = sponsorshipService;
     this.userService = userService;
     this.shelterAnimalService = shelterAnimalService;
-  }
+        this.sponsorshipRepository = sponsorshipRepository;
+    }
 
+    /**
+     * To create a new sponsorship
+     * @param animalId
+     * @param amount
+     * @return
+     */
   @PreAuthorize("hasRole('USER')")
   @PostMapping("/create")
-  public ResponseEntity<?> createSponsorShip(@RequestBody SponsorshipRequestDTO sponsorship) {
-    String email = SecurityContextHolder.getContext().getAuthentication().getName();
-    User user = userService.findByEmail(email);
-    ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(sponsorship.getAnimalId());
+  public ResponseEntity<?> createNewSponsorship (@Valid @RequestParam Long animalId, @RequestParam float amount){
+      String email = SecurityContextHolder.getContext().getAuthentication().getName();
+      User user = userService.findByEmail(email);
 
-    if (animal == null) {
-      return ResponseEntity.status(404).body("Animal not found");
-    }
+      if (user == null) {
+          return ResponseEntity.status(404).body("User not found!");
+      }
 
-    if (animal.getSponsors().size() >= 3) {
-      return ResponseEntity.status(409).body("The animal already has 3 sponsors");
-    }
+      ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(animalId);
+      if (animal == null) {
+          return ResponseEntity.status(404).body("Animal not found!");
+      }
 
-    sponsorshipService.createSponsorShip(user, animal, sponsorship.getAmount());
-    return ResponseEntity.status(201).body("You sponsored the animal with success!");
+      long activeSponsors = sponsorshipService.countActiveSponsors(animal);
+      if (activeSponsors >= 3) {
+          return ResponseEntity.status(409).body("The animal already has 3 active sponsors");
+      }
+
+      Sponsorship sponsorship = sponsorshipService.newSponsorship(user, animal, amount);
+      return ResponseEntity.status(200).body(sponsorship);
+
   }
+
+    /**
+     * To cancel a sponsorship
+     * @param sponsorshipId
+     * @return
+     */
+    @PreAuthorize("hasRole('USER')")
+    @DeleteMapping("/cancel")
+    public ResponseEntity<?> cancelSponsorship (@RequestParam Long sponsorshipId){
+        Sponsorship sponsorship = sponsorshipRepository.findById(sponsorshipId).orElse(null);
+
+        if (sponsorship == null) {
+            return ResponseEntity.status(404).body("Sponsorship not found!");
+        }
+
+        sponsorshipService.cancelSponsorship(sponsorshipId);
+        return ResponseEntity.ok("Sponsorship cancelled successfully!");
+    }
 
   @PreAuthorize("hasRole('USER')")
-  @GetMapping("/usersponsor")
-  public ResponseEntity<?> getUserSponsorShips() {
-    String email = SecurityContextHolder.getContext().getAuthentication().getName();
-    User user = userService.findByEmail(email);
-    List<SponsorshipDTO> results = sponsorshipService.searchSponsorshipsUser(user);
-    if (!results.isEmpty()) {
-      return ResponseEntity.ok().body(results);
-    }
-    return ResponseEntity.status(404).body("There are no sponsoships registered");
+  @GetMapping("/user/historic")
+  public ResponseEntity<?> listUserSponsorships(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.status(404).body("User not found!");
+        }
+
+        List<Sponsorship> sponsorships = sponsorshipService.getUserSponsorships(user);
+        return ResponseEntity.status(200).body(sponsorships);
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
-  @GetMapping("/all")
-  public ResponseEntity<?> searchAllSponsorships() {
-    List<SponsorshipDTO> results = sponsorshipService.searchAll();
-    if (!results.isEmpty()) {
-      return ResponseEntity.ok().body(results);
-    }
-    return ResponseEntity.status(404).body("There are no SponsorShips registered");
+    /**
+     * So a shelter can see the sponsorships of a certain animal
+     * @param animalId
+     * @return
+     */
+  @PreAuthorize("hasAnyRole('SHELTER','ADMIN')")
+  @GetMapping("/animal")
+  public ResponseEntity<?> listShelterSponsorships(@RequestParam Long animalId){
+      ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(animalId);
+      if (animal == null) {
+          return ResponseEntity.status(404).body("Animal not found");
+      }
+
+      List<Sponsorship> sponsorships = sponsorshipService.getAnimalSponsorships(animal);
+
+      if (sponsorships.isEmpty()) {
+          return ResponseEntity.status(404).body("No sponsorships found for this animal");
+      }
+
+      return ResponseEntity.status(200).body(sponsorships);
+
   }
+
+    /**
+     * To allow and Admin to see all the sponsorships
+     * @return
+     */
+  @PreAuthorize("hasRole('ADMIN')")
+  @GetMapping("/admin")
+  public ResponseEntity<?> listAllSponsorships(){
+      List<Sponsorship> sponsorships = sponsorshipService.getAllSponsorships();
+
+      if (sponsorships.isEmpty()) {
+          return ResponseEntity.status(404).body("No sponsorships found");
+      }
+
+      return ResponseEntity.status(200).body(sponsorships);
+  }
+
 }

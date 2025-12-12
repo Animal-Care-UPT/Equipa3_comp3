@@ -2,6 +2,8 @@ package AnimalCareCentre.server.service;
 
 import java.time.LocalDate;
 import java.util.*;
+
+import AnimalCareCentre.server.enums.Status;
 import org.springframework.stereotype.Service;
 
 import AnimalCareCentre.server.repository.SponsorshipRepository;
@@ -17,48 +19,64 @@ public class SponsorshipService {
     this.sponsorshipRepository = sponsorshipRepository;
   }
 
-  public Sponsorship createSponsorShip(User user, ShelterAnimal animal, Float amount) {
-    Sponsorship sponsorship = new Sponsorship();
-    sponsorship.setUser(user);
-    sponsorship.setAnimal(animal);
-    sponsorship.setAmount(amount);
-    sponsorship.setStartDate(LocalDate.now());
-    return sponsorshipRepository.save(sponsorship);
+    /**
+     * Create a new sponsorship
+     * @param donor
+     * @param animal
+     * @param amount
+     * @return
+     */
+  public Sponsorship newSponsorship (User donor, ShelterAnimal animal, float amount) {
+      Sponsorship sponsorship = new Sponsorship(donor, animal, amount);
+      return sponsorshipRepository.save(sponsorship);
+
   }
 
-  public List<SponsorshipDTO> searchAll() {
-    List<Sponsorship> sponsors = sponsorshipRepository.findAll();
-    return sponsors.stream().map(s -> {
-      SponsorshipDTO dto = new SponsorshipDTO();
-
-      if (s.getUser() != null) {
-        dto.setUserId(s.getUser().getId());
-        dto.setUserName(s.getUser().getName());
+    /**
+     * To cancel an ongoing sponsorship
+     * @param sponsorshipId
+     */
+  public void cancelSponsorship (Long sponsorshipId) {
+      Sponsorship sponsorship = sponsorshipRepository.findById(sponsorshipId).orElse(null);
+      if (sponsorship != null) {
+          sponsorship.setStatus(Status.CANCELLED);
+          sponsorship.setEndDate(LocalDate.now());
+          sponsorshipRepository.save( sponsorship );
       }
-
-      if (s.getAnimal() != null) {
-        dto.setAnimalId(s.getAnimal().getId());
-        dto.setAnimalName(s.getAnimal().getName());
-      }
-
-      dto.setAmount(s.getAmount());
-      dto.setStartDate(s.getStartDate());
-
-      return dto;
-    }).toList();
   }
 
-  public List<SponsorshipDTO> searchSponsorshipsUser(User user) {
-    List<Sponsorship> sponsors = sponsorshipRepository.findByUser(user);
-    return sponsors.stream().map(a -> {
-      SponsorshipDTO dto = new SponsorshipDTO();
-      dto.setUserId(a.getUser().getId());
-      dto.setUserName(a.getUser().getName());
-      dto.setAnimalName(a.getAnimal().getName());
-      dto.setAnimalId(a.getAnimal().getId());
-      dto.setStartDate(a.getStartDate());
-      dto.setAmount(a.getAmount());
-      return dto;
-    }).toList();
+    /**
+     * To get the sponsorship of a certain user
+     * @param donor
+     * @return
+     */
+  public List<Sponsorship> getUserSponsorships(User donor) {
+      return sponsorshipRepository.findByDonorOrderByStartDateDesc(donor);
+  }
+
+    /**
+     * To get the sponsorships of a certain animal
+     * @param animal
+     * @return
+     */
+  public List<Sponsorship> getAnimalSponsorships(ShelterAnimal animal) {
+      return sponsorshipRepository.findByAnimalOrderByStartDateDesc(animal);
+  }
+
+    /**
+     * To get all the sponsorships
+     * @return
+     */
+  public List<Sponsorship> getAllSponsorships() {
+      return sponsorshipRepository.findAll();
+  }
+
+    /**
+     * Verifies the number of sponsors of an animal
+     * @param animal
+     * @return
+     */
+  public long countActiveSponsors(ShelterAnimal animal) {
+      return sponsorshipRepository.countByAnimalAndStatus(animal, Status.ACTIVE);
   }
 }

@@ -1,20 +1,13 @@
 package AnimalCareCentre.server.model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import AnimalCareCentre.server.enums.Status;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -27,7 +20,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Sponsorships")
-public class Sponsorship {
+public class Sponsorship extends Donation {
 
   @Id
   @Column(name = "Sponsorship_id")
@@ -44,18 +37,29 @@ public class Sponsorship {
   @JsonBackReference("animal-sponsorships")
   private ShelterAnimal animal;
 
+  @Enumerated(EnumType.STRING)
+  private Status status;
+
+  @Column(name = "start_date")
   private LocalDate startDate;
 
-  @Min(5)
-  @Max(1000)
-  @NotNull(message = "The amount is mandatory")
-  private Float amount;
+  @Column(name = "end_date")
+  private LocalDate endDate;
 
-  @OneToMany(mappedBy = "sponsorship", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Donation> donations = new ArrayList<>();
+  @Column(name = "total_donated")
+  private float totalDonated = 0;
+
 
   public Sponsorship() {
   }
+
+  public Sponsorship(User donor, ShelterAnimal animal, float amount) {
+      super(donor, amount);
+      this.animal = animal;
+      this.status = Status.ACTIVE;
+      this.startDate = LocalDate.now();
+      this.totalDonated = amount;
+    }
 
   public long getId() {
     return id;
@@ -89,20 +93,56 @@ public class Sponsorship {
     this.startDate = startDate;
   }
 
-  public Float getAmount() {
-    return amount;
-  }
 
-  public void setAmount(Float amount) {
-    this.amount = amount;
-  }
+    public Status getStatus() {
+        return status;
+    }
 
-  public List<Donation> getDonations() {
-    return donations;
-  }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
-  public void setDonations(List<Donation> donations) {
-    this.donations = donations;
-  }
+    public LocalDate getEndDate() {
+        return endDate;
+    }
 
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public float getTotalDonated() {
+        return totalDonated;
+    }
+
+    public void setTotalDonated(float totalDonated) {
+        this.totalDonated = totalDonated;
+    }
+
+
+    @Override
+    public String getDonationType() {
+        return "SPONSORSHIP";
+    }
+
+    public int getPaymentsMade() {
+        if (startDate == null) return 0;
+
+        long months = ChronoUnit.MONTHS.between(startDate, LocalDate.now());
+        return (int) months + 1;
+    }
+
+    public float getCalculatedTotalDonated() {
+        return getPaymentsMade() * getAmount();
+    }
+
+    @Override
+    public String toString() {
+        return "Sponsorship{" +
+                "id=" + getId() +
+                ", animal=" + animal.getName() +
+                ", amount=" + getAmount() +
+                ", status=" + status +
+                ", totalDonated=" + totalDonated +
+                '}';
+    }
 }
