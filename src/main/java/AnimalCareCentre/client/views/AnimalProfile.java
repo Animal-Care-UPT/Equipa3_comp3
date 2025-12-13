@@ -11,6 +11,7 @@ import AnimalCareCentre.client.components.ACCVBox;
 import AnimalCareCentre.client.records.Adoption;
 import AnimalCareCentre.client.records.ShelterAnimal;
 import AnimalCareCentre.client.records.Sponsorship;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
@@ -54,14 +55,15 @@ public class AnimalProfile {
 
     }
 
-    public void sponsorshipPopover(Button button){
+    private void sponsorshipPopover(Button button){
         ApiResponse response = ApiClient.get("/sponsorships/animal/" + animal.id());
 
         ACCVBox content = new ACCVBox();
         content.setSpacing(8);
 
         if(!response.isSuccess()){
-            content.addItems(new Label("Error loading sponsorships!"));
+            showErrorAlert("Sponsorships History Error", "Failed to load sponsorships", response.getBody());
+            return;
         }
         else{
             List<Sponsorship> sponsors = Utility.parseList(response.getBody(), Sponsorship.class);
@@ -86,14 +88,15 @@ public class AnimalProfile {
 
     }
 
-    public void adoptionHistory (Button button){
+    private void adoptionHistory (Button button){
         ApiResponse response = ApiClient.get("/adoptions/animal/" + animal.id());
 
         ACCVBox content = new ACCVBox();
         content.setSpacing(8);
 
         if(!response.isSuccess()){
-            content.addItems(new Label("Error loading adoptions history!"));
+            showErrorAlert("Adoption History Error", "Failed to load adoption history", response.getBody());
+            return;
         }
         else{
             List<Adoption> adoptions = Utility.parseList(response.getBody(), Adoption.class);
@@ -114,6 +117,14 @@ public class AnimalProfile {
         scroll.setPrefHeight(200);
         popover = new ACCPopover(scroll, "Adoptions/Fosters History");
         popover.show(button);
+    }
+
+    private void showErrorAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content != null ? content : "An unexpected error occurred.");
+        alert.showAndWait();
     }
 
 

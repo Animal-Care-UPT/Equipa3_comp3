@@ -9,6 +9,7 @@ import AnimalCareCentre.client.components.ACCScene;
 import AnimalCareCentre.client.components.ACCVBox;
 import AnimalCareCentre.client.records.Shelter;
 import AnimalCareCentre.server.model.ShelterDonation;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -53,14 +54,15 @@ public class ShelterProfile {
 
     }
 
-    public void donationsPopover(Button button){
-        ApiResponse response = ApiClient.get("/donations/admin/" + shelter.id());
+    private void donationsPopover(Button button){
+        ApiResponse response = ApiClient.get("/donations/admin/{shelterId}" + shelter.id());
 
         ACCVBox content = new ACCVBox();
         content.setSpacing(8);
 
         if(!response.isSuccess()){
-            content.addItems(new Label("Error loading donations!"));
+            showErrorAlert("Donations History Error", "Error loading donations", response.getBody());
+            return;
         }
         else{
             List<ShelterDonation> donations = Utility.parseList(response.getBody(), ShelterDonation.class);
@@ -84,6 +86,14 @@ public class ShelterProfile {
         popover = new ACCPopover(scrollPane, "Donations");
         popover.show(button);
 
+    }
+
+    private void showErrorAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content != null ? content : "An unexpected error occurred.");
+        alert.showAndWait();
     }
 
 
