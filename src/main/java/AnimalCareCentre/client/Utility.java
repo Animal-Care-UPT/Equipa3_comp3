@@ -118,5 +118,4 @@ public class Utility {
 
     return fileChooser.showOpenDialog(stage);
   }
-
 }
