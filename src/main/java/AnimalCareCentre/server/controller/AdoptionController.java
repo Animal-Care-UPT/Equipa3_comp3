@@ -1,9 +1,7 @@
 package AnimalCareCentre.server.controller;
 
 import AnimalCareCentre.server.dto.*;
-import AnimalCareCentre.server.model.Adoption;
-import AnimalCareCentre.server.model.Shelter;
-import AnimalCareCentre.server.model.User;
+import AnimalCareCentre.server.model.*;
 import AnimalCareCentre.server.enums.Status;
 import AnimalCareCentre.server.service.AdoptionService;
 import AnimalCareCentre.server.service.ShelterAnimalService;
@@ -25,6 +23,7 @@ public class AdoptionController {
   private final AdoptionService adoptionService;
   private final UserService userService;
   private final ShelterService shelterService;
+  private final ShelterAnimalService shelterAnimalService;
 
   public AdoptionController(AdoptionService adoptionService, ShelterAnimalService shelterAnimalService,
       UserService userService, ShelterService shelterService) {
@@ -32,6 +31,7 @@ public class AdoptionController {
     this.adoptionService = adoptionService;
     this.userService = userService;
     this.shelterService = shelterService;
+    this.shelterAnimalService = shelterAnimalService;
   }
 
     /**
@@ -242,6 +242,29 @@ public class AdoptionController {
     }
     return ResponseEntity.ok(adoptions);
   }
+
+  /**
+  * To see the adoption/foster historic of a certain animal
+  * @param animalId
+  * @return
+  */
+  @PreAuthorize("hasAnyRole('SHELTER','ADMIN', 'USER')")
+  @GetMapping("/animal/{animalId}")
+  public ResponseEntity<?> listAnimalHistoric(@PathVariable Long animalId){
+      ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(animalId);
+      if (animal == null) {
+          return ResponseEntity.status(404).body("Animal not found");
+      }
+
+      List<AdoptionDTO> historic = adoptionService.getAdoptionsByAnimal(animal);
+
+      if (historic.isEmpty()) {
+            return ResponseEntity.status(200).body("This animal was never adopted or fostered");
+        }
+
+        return ResponseEntity.status(200).body(historic);
+
+    }
 
 
 }

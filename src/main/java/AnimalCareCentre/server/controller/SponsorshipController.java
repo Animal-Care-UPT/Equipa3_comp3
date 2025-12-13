@@ -96,9 +96,9 @@ public class SponsorshipController {
      * @param animalId
      * @return
      */
-  @PreAuthorize("hasAnyRole('SHELTER','ADMIN')")
-  @GetMapping("/animal")
-  public ResponseEntity<?> listShelterSponsorships(@RequestParam Long animalId){
+  @PreAuthorize("hasAnyRole('SHELTER','ADMIN', 'USER')")
+  @GetMapping("/animal/{animalId}")
+  public ResponseEntity<?> listShelterSponsorships(@PathVariable Long animalId){
       ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(animalId);
       if (animal == null) {
           return ResponseEntity.status(404).body("Animal not found");
