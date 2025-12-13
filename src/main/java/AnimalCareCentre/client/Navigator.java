@@ -2,13 +2,15 @@ package AnimalCareCentre.client;
 
 import java.util.List;
 
+import AnimalCareCentre.client.records.Displayable;
 import AnimalCareCentre.client.records.Shelter;
 import AnimalCareCentre.client.records.ShelterAnimal;
 import AnimalCareCentre.client.views.*;
 import javafx.stage.Stage;
 
 /**
- * This class is responsible for moving between the different pages of the platform.
+ * This class is responsible for moving between the different pages of the
+ * platform.
  *
  */
 public class Navigator {
@@ -41,11 +43,19 @@ public class Navigator {
     loggedRole = role;
   }
 
-  public void searchAnimal(List<ShelterAnimal> animals) {}
+  public void searchAnimal(List<ShelterAnimal> animals) {
+    new SearchPage<>(this, stage, animals);
+  }
 
-  public void searchShelter(List<Shelter> shelters) {}
+  public void searchShelter(List<Shelter> shelters) {
+    new SearchPage<>(this, stage, shelters);
+  }
+
+  public void showAnimal(Displayable animal) {
+  }
 
   public void registerAnimal() {
+
     new RegisterAnimal(this, stage);
   }
 

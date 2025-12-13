@@ -15,10 +15,14 @@ public class ACCCard<T extends Displayable> extends VBox {
     this.setSpacing(10);
     this.setMaxWidth(300);
 
-    ImageView imageView = new ImageView(item.getImagePath()); //placeholder for actual image stuff
-    imageView.setFitWidth(280);
-    imageView.setFitHeight(200);
-    imageView.setPreserveRatio(true);
+    String imagePath = item.getImagePath();
+    if (imagePath != null && !imagePath.isEmpty()) {
+      ImageView imageView = new ImageView(imagePath);
+      imageView.setFitWidth(280);
+      imageView.setFitHeight(200);
+      imageView.setPreserveRatio(true);
+      this.getChildren().add(imageView);
+    }
 
     Label nameLabel = new Label(item.getDisplayName());
     nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
@@ -26,7 +30,7 @@ public class ACCCard<T extends Displayable> extends VBox {
     Label infoLabel = new Label(item.getDisplayInfo());
     Label descLabel = new Label(item.getDescription());
 
-    this.getChildren().addAll(imageView, nameLabel, infoLabel, descLabel);
+    this.getChildren().addAll(nameLabel, infoLabel, descLabel);
 
     this.setOnMouseClicked(e -> onClickHandler.run());
     this.setCursor(Cursor.HAND);
