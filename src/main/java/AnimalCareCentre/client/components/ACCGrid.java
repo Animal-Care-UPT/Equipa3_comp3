@@ -1,12 +1,15 @@
 package AnimalCareCentre.client.components;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import AnimalCareCentre.client.records.Displayable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Pagination;
+import javafx.scene.image.Image;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 
@@ -17,13 +20,14 @@ public class ACCGrid<T extends Displayable> extends VBox {
   private List<T> lst;
   private Pagination pagination;
   private Consumer<T> cardClick;
+  private Function<List<T>, Map<Long, Image>> imageFetcher;
 
-  public ACCGrid(Consumer<T> clickHandler) {
+  public ACCGrid(Consumer<T> clickHandler, Function<List<T>, Map<Long, Image>> imageFetcher) {
     this.cardClick = clickHandler;
+    this.imageFetcher = imageFetcher;
     this.setSpacing(20);
     this.setPadding(new Insets(20));
     this.setAlignment(Pos.CENTER);
-
     pagination = new Pagination();
     pagination.setMaxPageIndicatorCount(5);
     this.getChildren().add(pagination);
@@ -46,10 +50,13 @@ public class ACCGrid<T extends Displayable> extends VBox {
 
     int start = pageIndex * ITEMS_PER_PAGE;
     int end = Math.min(start + ITEMS_PER_PAGE, lst.size());
+    List<T> pageItems = lst.subList(start, end);
 
-    for (int i = start; i < end; i++) {
-      T item = lst.get(i);
-      ACCCard<T> card = new ACCCard<>(item, () -> handleCardClick(item));
+    Map<Long, Image> images = imageFetcher.apply(pageItems);
+
+    for (T item : pageItems) {
+      Image image = images.get(item.getId());
+      ACCCard<T> card = new ACCCard<>(item, image, () -> handleCardClick(item));
       tilePane.getChildren().add(card);
     }
 

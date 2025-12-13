@@ -63,6 +63,9 @@ public class RegisterAnimal {
     Label adoptTypeLabel = new Label("Adoption Type");
     ACCComboBox<AdoptionType> adoptType = new ACCComboBox<>();
     adoptType.getItems().addAll(AdoptionType.values());
+    Label descLabel = new Label("Description:");
+    ACCTextField desc = new ACCTextField();
+    desc.setMinHeight(100);
     Label uploadStatus = new Label("No image selected");
     uploadStatus.setStyle("-fx-text-fill: red;");
 
@@ -79,9 +82,9 @@ public class RegisterAnimal {
     });
 
     register.setOnAction(e -> {
-      String json = Utility.jsonString("type", type.getValue(), "name", name.getText(), "breed",
+      String json = Utility.jsonString("type", type.getValue(), "name", name.getText(), "race",
           breed.getValue(), "size", size.getValue(), "gender", gender.getValue(),
-          "age", age.getText(), "color", color.getValue(), "adoptionType", adoptType.getValue());
+          "age", age.getText(), "color", color.getValue(), "adoptionType", adoptType.getValue(), "description", desc.getText());
       registerAnimal(json, image);
       nav.shelterHomepage();
     });
@@ -107,7 +110,7 @@ public class RegisterAnimal {
     vbox.setAlignment(Pos.CENTER_LEFT);
     vbox.getChildren().addAll(typeLabel, type, nameLabel, name, breedLabel, breed, sizeLabel, size, genderLabel,
         gender, ageLabel, age,
-        colorLabel, color, adoptTypeLabel, adoptType, uploadBox);
+        colorLabel, color, adoptTypeLabel, adoptType, descLabel, desc, uploadBox);
     vbox.setMaxWidth(250);
     vbox.setSpacing(10);
     scene.addItems(vbox, register, back);
@@ -123,7 +126,7 @@ public class RegisterAnimal {
       ShelterAnimal animal = Utility.parseResponse(response.getBody(), ShelterAnimal.class);
       ApiResponse imageResponse = ApiClient.postWithFile("/shelteranimals/" + animal.id() + "/images", image[0]);
       if (!imageResponse.isSuccess()) {
-        Utility.showAlert(AlertType.ERROR, "Error", response.getBody());
+        Utility.showAlert(AlertType.ERROR, "Error", imageResponse.getBody());
       }
     } else {
       Utility.showAlert(AlertType.ERROR, "Error", response.getBody());

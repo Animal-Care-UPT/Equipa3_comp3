@@ -4,20 +4,20 @@ import AnimalCareCentre.client.records.Displayable;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class ACCCard<T extends Displayable> extends VBox {
 
-  public ACCCard(T item, Runnable onClickHandler) {
+  public ACCCard(T item, Image image, Runnable onClickHandler) {
     this.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
     this.setPadding(new Insets(10));
     this.setSpacing(10);
     this.setMaxWidth(300);
 
-    String imagePath = item.getImagePath();
-    if (imagePath != null && !imagePath.isEmpty()) {
-      ImageView imageView = new ImageView(imagePath);
+    if (image != null) {
+      ImageView imageView = new ImageView(image);
       imageView.setFitWidth(280);
       imageView.setFitHeight(200);
       imageView.setPreserveRatio(true);

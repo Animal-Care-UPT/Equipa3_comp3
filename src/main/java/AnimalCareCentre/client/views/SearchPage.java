@@ -1,12 +1,18 @@
 package AnimalCareCentre.client.views;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import AnimalCareCentre.client.ApiClient;
+import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
+import AnimalCareCentre.client.Utility;
 import AnimalCareCentre.client.components.ACCGrid;
 import AnimalCareCentre.client.components.ACCScene;
 import AnimalCareCentre.client.components.ACCVBox;
 import AnimalCareCentre.client.records.Displayable;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class SearchPage<T extends Displayable> {
@@ -24,12 +30,26 @@ public class SearchPage<T extends Displayable> {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(nav.getLoggedRole(), nav, scene);
 
-    ACCGrid<T> grid = new ACCGrid<>(e -> {
-      nav.showAnimal(e);
-      System.out.println("Test");
-    });
+    ACCGrid<T> grid = new ACCGrid<>(e -> nav.showAnimal(e), this::fetchImagesForPage);
 
     grid.add(lst);
     scene.addItems(grid);
+  }
+
+  private Map<Long, Image> fetchImagesForPage(List<T> pageItems) {
+    Map<Long, Image> images = new HashMap<>();
+
+    for (T item : pageItems) {
+      String imageUrl = item.getImagePath();
+      if (imageUrl != null && !imageUrl.isEmpty()) {
+        ApiResponse response = ApiClient.get(imageUrl);
+        Image image = Utility.parseImage(response);
+        if (image != null) {
+          images.put(item.getId(), image);
+        }
+      }
+    }
+
+    return images;
   }
 }

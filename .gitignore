@@ -44,6 +44,9 @@ bin/
 *.tar.gz
 *.rar
 
+#Images
+images/*
+
 # Hibernate
 hibernate.cfg.xml
 
