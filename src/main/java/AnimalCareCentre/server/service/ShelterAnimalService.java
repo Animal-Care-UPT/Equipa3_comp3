@@ -38,7 +38,8 @@ public class ShelterAnimalService {
   }
 
   public List<ShelterAnimal> searchWithFilters(SearchAnimalDTO search) {
-    List<ShelterAnimal> animals = shelterAnimalRepository.searchWithFilters(search.getKeyword(), Status.AVAILABLE, search.getType(), search.getGender(), search.getAdoptionType());
+    List<ShelterAnimal> animals = shelterAnimalRepository.searchWithFilters(search.getKeyword(), Status.AVAILABLE,
+        search.getType(), search.getGender(), search.getAdoptionType());
     animals.sort(Comparator.comparing(ShelterAnimal::getType).thenComparing(ShelterAnimal::getRace));
     return animals;
   }
@@ -88,6 +89,11 @@ public class ShelterAnimalService {
       animal.setAdoptionType(AdoptionType.FOR_ADOPTION);
     }
     return shelterAnimalRepository.save(animal);
+  }
+
+  public void addImagePath(ShelterAnimal animal, String imagePath) {
+    animal.getImages().add(imagePath);
+    shelterAnimalRepository.save(animal);
   }
 
 }

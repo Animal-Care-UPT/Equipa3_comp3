@@ -95,4 +95,12 @@ public class ShelterAnimal extends Animal {
     this.sponsors = sponsors;
   }
 
+  public List<String> getImages() {
+    return images;
+  }
+
+  public void setImages(List<String> images) {
+    this.images = images;
+  }
+
 }

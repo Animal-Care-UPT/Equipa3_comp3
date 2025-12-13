@@ -1,9 +1,16 @@
 package AnimalCareCentre.client.views;
 
+import java.io.File;
+
+import AnimalCareCentre.client.ApiClient;
+import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
+import AnimalCareCentre.client.Utility;
 import AnimalCareCentre.client.components.ACCButton;
 import AnimalCareCentre.client.components.ACCComboBox;
+import AnimalCareCentre.client.components.ACCHBox;
 import AnimalCareCentre.client.components.ACCScene;
+import AnimalCareCentre.client.components.ACCTextButton;
 import AnimalCareCentre.client.components.ACCTextField;
 import AnimalCareCentre.client.components.ACCVBox;
 import AnimalCareCentre.client.enums.AdoptionType;
@@ -11,9 +18,11 @@ import AnimalCareCentre.client.enums.AnimalColor;
 import AnimalCareCentre.client.enums.AnimalGender;
 import AnimalCareCentre.client.enums.AnimalSize;
 import AnimalCareCentre.client.enums.AnimalType;
+import AnimalCareCentre.client.records.ShelterAnimal;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -32,6 +41,7 @@ public class RegisterAnimal {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(nav.getLoggedRole(), nav, scene);
 
+    final File[] image = { null };
     Label typeLabel = new Label("Animal type:");
     ACCComboBox<AnimalType> type = new ACCComboBox<>();
     type.getItems().addAll(AnimalType.values());
@@ -53,10 +63,29 @@ public class RegisterAnimal {
     Label adoptTypeLabel = new Label("Adoption Type");
     ACCComboBox<AdoptionType> adoptType = new ACCComboBox<>();
     adoptType.getItems().addAll(AdoptionType.values());
+    Label uploadStatus = new Label("No image selected");
+    uploadStatus.setStyle("-fx-text-fill: red;");
+
+    ACCTextButton upload = new ACCTextButton("Upload Image");
     ACCButton register = new ACCButton("Register");
     ACCButton back = new ACCButton("Back");
 
-    register.setOnAction(e -> registerAnimal());
+    upload.setOnAction(e -> {
+      image[0] = uploadImage();
+      if (image[0] != null) {
+        uploadStatus.setText("Image uploaded");
+        uploadStatus.setStyle("-fx-text-fill: green;");
+      }
+    });
+
+    register.setOnAction(e -> {
+      String json = Utility.jsonString("type", type.getValue(), "name", name.getText(), "breed",
+          breed.getValue(), "size", size.getValue(), "gender", gender.getValue(),
+          "age", age.getText(), "color", color.getValue(), "adoptionType", adoptType.getValue());
+      registerAnimal(json, image);
+      nav.shelterHomepage();
+    });
+
     back.setOnAction(e -> nav.shelterHomepage());
 
     age.setTextFormatter(new TextFormatter<>(change -> {
@@ -72,20 +101,32 @@ public class RegisterAnimal {
       breed.getItems().addAll(selected.getBreeds());
     });
 
+    ACCHBox uploadBox = new ACCHBox();
+    uploadBox.addItems(upload, uploadStatus);
     VBox vbox = new VBox();
     vbox.setAlignment(Pos.CENTER_LEFT);
     vbox.getChildren().addAll(typeLabel, type, nameLabel, name, breedLabel, breed, sizeLabel, size, genderLabel,
         gender, ageLabel, age,
-        colorLabel, color, adoptTypeLabel, adoptType);
+        colorLabel, color, adoptTypeLabel, adoptType, uploadBox);
     vbox.setMaxWidth(250);
     vbox.setSpacing(10);
     scene.addItems(vbox, register, back);
   }
 
-  private String uploadImage() {
-    return null;
+  private File uploadImage() {
+    return Utility.selectImageFile(stage);
   }
 
-  private void registerAnimal() {
+  private void registerAnimal(String json, File[] image) {
+    ApiResponse response = ApiClient.post("/shelteranimals/register", json);
+    if (response.isSuccess()) {
+      ShelterAnimal animal = Utility.parseResponse(response.getBody(), ShelterAnimal.class);
+      ApiResponse imageResponse = ApiClient.postWithFile("/shelteranimals/" + animal.id() + "/images", image[0]);
+      if (!imageResponse.isSuccess()) {
+        Utility.showAlert(AlertType.ERROR, "Error", response.getBody());
+      }
+    } else {
+      Utility.showAlert(AlertType.ERROR, "Error", response.getBody());
+    }
   }
 }
