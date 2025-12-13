@@ -23,7 +23,7 @@ public class AnimalProfile {
     private Navigator nav;
     private Stage stage;
     private ShelterAnimal animal;
-    ACCPopover popover;
+    private ACCPopover popover;
 
     public AnimalProfile(Navigator nav, Stage stage, ShelterAnimal animal) {
             this.nav = nav;
