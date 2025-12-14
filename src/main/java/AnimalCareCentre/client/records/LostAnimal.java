@@ -37,4 +37,9 @@ public record LostAnimal(long id, String name, AnimalType type, String race, Ani
     // todo
       return null;
   }
+
+  @Override
+  public Long getId() {
+      return id;
+  }
 }

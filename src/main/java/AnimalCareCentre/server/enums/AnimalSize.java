@@ -8,7 +8,8 @@ public enum AnimalSize {
 
   SMALL("Small"),
   MEDIUM("Medium"),
-  LARGE("Large");
+  LARGE("Large"),
+  INAPPLICABLE("Inapplicable");
 
   private final String animalSize;
 

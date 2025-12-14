@@ -34,6 +34,7 @@ public class NavBar {
 
     home.setOnAction(e -> nav.userHomepage());
     animals.setOnAction(e -> new SearchAnimalPopover(nav).show(animals));
+    shelters.setOnAction(e -> new SearchShelterPopover(nav).show(shelters));
     shelters.setOnAction(e -> nav.userHomepage());
     lostFound.setOnAction(e -> nav.lostAndFoundHomepage());
     acc.setOnAction(e -> new AccountPopover(nav).show(acc));

@@ -1,9 +1,7 @@
 package AnimalCareCentre.client.views;
 
-import AnimalCareCentre.client.views.*;
 import AnimalCareCentre.client.*;
 import AnimalCareCentre.client.enums.*;
-import AnimalCareCentre.client.records.*;
 import AnimalCareCentre.client.components.*;
 
 import javafx.geometry.Pos;
@@ -58,7 +56,6 @@ public class MainMenu {
     ACCTextField email = new ACCTextField();
     Label passLabel = new Label("Password:");
     ACCPasswordField password = new ACCPasswordField();
-    password.setMaxWidth(250);
     ACCButton enter = new ACCButton("Enter");
     ACCButton back = new ACCButton("Back");
     ACCTextButton changePassword = new ACCTextButton("Forgot Password?");
@@ -81,14 +78,8 @@ public class MainMenu {
       }
 
       nav.setLoggedRole(response.getBody());
+      nav.home();
 
-      if (nav.getLoggedRole().equals("ROLE_USER")) {
-        nav.userHomepage();
-      } else if (nav.getLoggedRole().equals("ROLE_SHELTER")) {
-        nav.shelterHomepage();
-      } else {
-        nav.adminHomepage();
-      }
     });
 
     back.setOnAction(e -> {
@@ -160,7 +151,6 @@ public class MainMenu {
     ACCTextField email = new ACCTextField();
     Label passLabel = new Label("Password:");
     ACCPasswordField password = new ACCPasswordField();
-    password.setMaxWidth(250);
     Label locationLabel = new Label("Location:");
     ACCTextField location = new ACCTextField();
     Label secLabel = new Label("Security Question:");
@@ -179,10 +169,8 @@ public class MainMenu {
     scene.addItems(vbox);
 
     ACCPasswordField adminCode = new ACCPasswordField();
-    adminCode.setMaxWidth(250);
     Label birthLabel = new Label("Birthdate:");
     ACCDatePicker birthDate = new ACCDatePicker();
-    birthDate.setMaxWidth(250);
     Label contactLabel = new Label("Contact:");
     ACCTextField contact = new ACCTextField();
     Label foundYear = new Label("Foundation year:");
