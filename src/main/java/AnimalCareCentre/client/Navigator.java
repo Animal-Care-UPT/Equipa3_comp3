@@ -58,8 +58,21 @@ public class Navigator {
   }
 
   public void registerAnimal() {
-
     new RegisterAnimal(this, stage);
+  }
+
+  public void changeSecurityQuestion() {
+    new ChangeSq(this, stage);
+  }
+
+  public void home() {
+    if (loggedRole.equals("ROLE_ADMIN")) {
+      adminHomepage();
+    } else if (loggedRole.equals("ROLE_SHELTER")) {
+      shelterHomepage();
+    } else if (loggedRole.equals("ROLE_USER")) {
+      userHomepage();
+    }
   }
 
   public String getLoggedRole() {
