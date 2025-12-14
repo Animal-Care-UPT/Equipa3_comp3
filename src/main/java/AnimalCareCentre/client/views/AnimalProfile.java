@@ -4,10 +4,7 @@ import AnimalCareCentre.client.ApiClient;
 import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
 import AnimalCareCentre.client.Utility;
-import AnimalCareCentre.client.components.ACCMenuButton;
-import AnimalCareCentre.client.components.ACCPopover;
-import AnimalCareCentre.client.components.ACCScene;
-import AnimalCareCentre.client.components.ACCVBox;
+import AnimalCareCentre.client.components.*;
 import AnimalCareCentre.client.records.Adoption;
 import AnimalCareCentre.client.records.ShelterAnimal;
 import AnimalCareCentre.client.records.Sponsorship;
@@ -54,7 +51,7 @@ public class AnimalProfile {
 
     }
 
-    public void sponsorshipPopover(Button button){
+    public void sponsorshipPopover(ACCMenuButton button){
         ApiResponse response = ApiClient.get("/sponsorships/animal/" + animal.id());
 
         ACCVBox content = new ACCVBox();
@@ -86,7 +83,7 @@ public class AnimalProfile {
 
     }
 
-    public void adoptionHistory (Button button){
+    public void adoptionHistory (ACCMenuButton button){
         ApiResponse response = ApiClient.get("/adoptions/animal/" + animal.id());
 
         ACCVBox content = new ACCVBox();
