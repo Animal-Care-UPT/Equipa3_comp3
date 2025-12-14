@@ -3,6 +3,7 @@ package AnimalCareCentre.client.views;
 import AnimalCareCentre.client.ApiClient;
 import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
+import AnimalCareCentre.client.Utility;
 import AnimalCareCentre.client.components.ACCMenuButton;
 import AnimalCareCentre.client.components.ACCPopover;
 import AnimalCareCentre.client.components.ACCScene;
@@ -10,7 +11,6 @@ import AnimalCareCentre.client.components.ACCVBox;
 import AnimalCareCentre.client.enums.AdoptionType;
 import AnimalCareCentre.client.records.ShelterAnimal;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -49,6 +49,7 @@ public class UserProfile {
             fosterButton.setOnAction(e -> {
                 requestAdoptionPopover(fosterButton, "FOSTER");
             });
+            root.addItems(fosterButton);
         }
 
         ACCMenuButton sponsorButton = new ACCMenuButton("Sponsor");
@@ -84,19 +85,17 @@ public class UserProfile {
 
     private void requestAdoption(String adoptionType){
 
-        String requestBody = String.format(
-                "{\"animalId\": %d, \"type\": \"%s\"}",
-                animal.id(),
-                adoptionType
-        );
+        String requestBody = Utility.jsonString("animalId", animal.id(), "type", adoptionType);
 
         ApiResponse response = ApiClient.post("/adoptions/request", requestBody);
 
         if(response.isSuccess()){
-            showSuccessAlert(adoptionType);
+            String message = "Your request has been submitted successfully!\nThe shelter will review it soon.";
+            Utility.showAlert(Alert.AlertType.INFORMATION, adoptionType + " Request Submitted", message);
         }
         else{
-            showErrorAlert(response.getBody());
+            String errorMessage = response.getBody() != null ? response.getBody() : "An error occurred while processing your request.";
+            Utility.showAlert(Alert.AlertType.ERROR, "Request Failed", errorMessage);
         }
 
     }
@@ -109,17 +108,12 @@ public class UserProfile {
         Label titleLabel = new Label("Become a sponsor for " + animal.getDisplayName());
         titleLabel.setStyle("-fx-font-weight: bold;");
 
-        ApiResponse  response = ApiClient.get("/sponsorships/create" + animal.id());
-
-        Label label = new Label("Are you sure you want to become a sponsor for " + animal.getDisplayName());
-        titleLabel.setStyle("-fx-font-weight: bold;");
-
         Label amountLabel = new Label("Enter sponsorship amount (€):");
         TextField amountField = new TextField();
         amountField.setPromptText("0.00");
 
-        Button submitButton = new Button("Submit");
-        Button cancelButton = new Button("Cancel");
+        ACCMenuButton submitButton = new ACCMenuButton("Submit");
+        ACCMenuButton cancelButton = new ACCMenuButton("Cancel");
 
 
         submitButton.setOnAction(e -> {
@@ -129,7 +123,7 @@ public class UserProfile {
                 float amount = Float.parseFloat(input);
 
                 if (amount <= 0) {
-                    showErrorAlert("Invalid Amount");
+                    Utility.showAlert(Alert.AlertType.ERROR, "Invalid amount", "Please enter an amount greater than 0.");
                     return;
                 }
 
@@ -137,7 +131,7 @@ public class UserProfile {
                 createSponsorship(amount);
             }
             catch(NumberFormatException ex){
-                showErrorAlert("Invalid Amount");
+                Utility.showAlert(Alert.AlertType.ERROR, "Invalid amount", "Please enter a valid number");
             }
         });
 
@@ -149,32 +143,17 @@ public class UserProfile {
     }
 
     private  void createSponsorship(float amount){
-        String url = String.format("/sponsorships/create?animalId=%d&amount=%.2f", animal.id(), amount);
+        String requestBody = Utility.jsonString("animalId", animal.id(), "amount", amount);
 
-        ApiResponse response = ApiClient.post(url, "");
+        ApiResponse response = ApiClient.post("/sponsorships/create", requestBody);
 
         if(response.isSuccess()){
-            showSuccessAlert("Thank you for becoming a sponsor for " + animal.getDisplayName());
+            Utility.showAlert(Alert.AlertType.INFORMATION, "Sponsorship", "Thank you for becoming a sponsor");
         }
         else{
-            showErrorAlert(response.getBody());
+            Utility.showAlert(Alert.AlertType.ERROR, "Request Failed", response.getBody());
         }
 
     }
 
-    private void showSuccessAlert(String type) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText(type + " Request Submitted");
-        alert.setContentText("Your " + type.toLowerCase() + " request has been submitted successfully!\nThe shelter will review it soon.");
-        alert.showAndWait();
-    }
-
-    private void showErrorAlert(String errorMessage){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Request Failed");
-        alert.setContentText(errorMessage != null ? errorMessage : "An error occurred while processing your request.");
-        alert.showAndWait();
-    }
 }

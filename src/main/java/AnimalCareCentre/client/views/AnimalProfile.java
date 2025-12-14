@@ -59,7 +59,7 @@ public class AnimalProfile {
         content.setSpacing(8);
 
         if(!response.isSuccess()){
-            showErrorAlert("Sponsorships History Error", "Failed to load sponsorships", response.getBody());
+            Utility.showAlert(Alert.AlertType.ERROR, "Failed to load sponsorships", response.getBody());
             return;
         }
         else{
@@ -94,12 +94,11 @@ public class AnimalProfile {
         content.setSpacing(8);
 
         if(!response.isSuccess()){
-            showErrorAlert("Adoption History Error", "Failed to load adoption history", response.getBody());
+            Utility.showAlert(Alert.AlertType.ERROR, "Failed to load adoptions", response.getBody());
             return;
         }
-        else{
             List<Adoption> adoptions = Utility.parseList(response.getBody(), Adoption.class);
-            if(adoptions.isEmpty()){
+            if(adoptions==null ||adoptions.isEmpty()){
                 content.addItems(new Label("No record of adoptions or fosterings"));
             }
             else{
@@ -109,7 +108,7 @@ public class AnimalProfile {
                     content.addItems(label);
                 }
             }
-        }
+
 
         ScrollPane scroll = new ScrollPane(content);
         scroll.setFitToWidth(true);
@@ -117,19 +116,6 @@ public class AnimalProfile {
         popover = new ACCPopover(scroll, "Adoptions/Fosters History");
         popover.show(button);
     }
-
-    private void showErrorAlert(String title, String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content != null ? content : "An unexpected error occurred.");
-        alert.showAndWait();
-    }
-
-
-
-
-
 
 
 }

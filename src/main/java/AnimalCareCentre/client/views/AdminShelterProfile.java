@@ -57,10 +57,9 @@ public class AdminShelterProfile {
         content.setSpacing(8);
 
         if(!response.isSuccess()){
-            showErrorAlert("Donations History Error", "Error loading donations", response.getBody());
+            Utility.showAlert(Alert.AlertType.ERROR, "Error loading donations", response.getBody());
             return;
         }
-        else{
             List<ShelterDonation> donations = Utility.parseList(response.getBody(), ShelterDonation.class);
 
             if(donations==null || donations.isEmpty()){
@@ -73,7 +72,7 @@ public class AdminShelterProfile {
                     content.addItems(label);
                 }
             }
-        }
+
 
         ScrollPane scrollPane = new ScrollPane(content);
         scrollPane.setFitToWidth(true);
@@ -83,14 +82,5 @@ public class AdminShelterProfile {
         popover.show(button);
 
     }
-
-    private void showErrorAlert(String title, String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content != null ? content : "An unexpected error occurred.");
-        alert.showAndWait();
-    }
-
 
 }

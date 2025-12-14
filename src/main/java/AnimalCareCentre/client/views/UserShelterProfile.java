@@ -3,6 +3,7 @@ package AnimalCareCentre.client.views;
 import AnimalCareCentre.client.ApiClient;
 import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
+import AnimalCareCentre.client.Utility;
 import AnimalCareCentre.client.components.ACCMenuButton;
 import AnimalCareCentre.client.components.ACCPopover;
 import AnimalCareCentre.client.components.ACCScene;
@@ -65,7 +66,7 @@ public class UserShelterProfile {
                 float amount = Float.parseFloat(input);
 
                 if (amount <= 0) {
-                    showErrorAlert("Invalid Amount", "Please enter a valid amount");
+                    Utility.showAlert(Alert.AlertType.ERROR, "Invalid amount", "Please enter a valid amount");
                     return;
                 }
 
@@ -73,7 +74,7 @@ public class UserShelterProfile {
                 createDonation(amount);
 
             } catch (NumberFormatException ex) {
-                showErrorAlert("Invalid Input", "Please enter a valid number");
+                Utility.showAlert(Alert.AlertType.ERROR, "Invalid input", "Please enter a valid number");
             }
         });
 
@@ -86,34 +87,15 @@ public class UserShelterProfile {
     }
 
     private void createDonation(float amount) {
-        String requestBody = String.format(
-                "{\"shelterId\": %d, \"amount\": %.2f}",
-                shelter.id(),
-                amount
-        );
+        String requestBody = Utility.jsonString("Shelter", shelter.name(), "amount", amount);
 
         ApiResponse response = ApiClient.post("/donations/create", requestBody);
 
         if (response.isSuccess()) {
-            showSuccessAlert("Donation Successful", "Thank you for your donation!");
+            Utility.showAlert(Alert.AlertType.INFORMATION, "Donation Created", "Successfully created donation");
         } else {
-            showErrorAlert("Donation Failed", response.getBody());
+            Utility.showAlert(Alert.AlertType.ERROR, "Donation failed", "An error occurred while processing your request.");
         }
     }
 
-    private void showSuccessAlert(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-    private void showErrorAlert(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(header);
-        alert.setContentText(content != null ? content : "An error occurred while processing your request.");
-        alert.showAndWait();
-    }
 }
