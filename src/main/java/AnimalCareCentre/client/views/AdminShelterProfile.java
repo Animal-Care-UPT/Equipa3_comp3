@@ -10,7 +10,6 @@ import AnimalCareCentre.client.components.ACCVBox;
 import AnimalCareCentre.client.records.Shelter;
 import AnimalCareCentre.server.model.ShelterDonation;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
@@ -18,14 +17,14 @@ import javafx.stage.Stage;
 import java.util.List;
 
 
-public class ShelterProfile {
+public class AdminShelterProfile {
 
     private Navigator nav;
     private Stage stage;
     private Shelter shelter;
     private ACCPopover popover;
 
-    public ShelterProfile(Navigator nav, Stage stage, Shelter shelter) {
+    public AdminShelterProfile(Navigator nav, Stage stage, Shelter shelter) {
         this.nav = nav;
         this.stage = stage;
         this.shelter = shelter;
@@ -48,14 +47,11 @@ public class ShelterProfile {
 
         root.addItems(shelterProfile, donationsButton);
 
-
-
-
-
     }
 
-    private void donationsPopover(Button button){
-        ApiResponse response = ApiClient.get("/donations/admin/{shelterId}" + shelter.id());
+    public void donationsPopover(ACCMenuButton button){
+        ApiResponse response = ApiClient.get("/donations/admin/" + shelter.id());
+
 
         ACCVBox content = new ACCVBox();
         content.setSpacing(8);
