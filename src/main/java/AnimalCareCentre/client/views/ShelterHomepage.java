@@ -1,8 +1,7 @@
 package AnimalCareCentre.client.views;
 
 import AnimalCareCentre.client.Navigator;
-import AnimalCareCentre.client.components.ACCScene;
-import AnimalCareCentre.client.components.ACCVBox;
+import AnimalCareCentre.client.components.*;
 import javafx.stage.Stage;
 
 public class ShelterHomepage {
@@ -19,6 +18,20 @@ public class ShelterHomepage {
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(nav.getLoggedRole(), nav, scene);
+
+    ACCMenuButton registerAnimal = new ACCMenuButton ("1. Register Animal");
+    ACCMenuButton viewPendingRequests = new ACCMenuButton("2. Pending Requests");
+
+    registerAnimal.setOnAction(e -> {
+
+    });
+
+    viewPendingRequests.setOnAction(e ->{
+
+    });
+    
+    scene.addItems(registerAnimal, viewPendingRequests);
   }
 
 }
+
