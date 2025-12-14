@@ -34,7 +34,11 @@ public class AdoptionController {
     this.shelterService = shelterService;
   }
 
-  // Adoption request
+    /**
+     * Adoption request
+     * @param dto
+     * @return
+     */
   @PreAuthorize("hasRole('USER')")
   @PostMapping("/request")
   public ResponseEntity<?> requestAdoption(@RequestBody AdoptionRequestDTO dto) {
@@ -49,7 +53,12 @@ public class AdoptionController {
     return ResponseEntity.status(201).body(adoption);
   }
 
-  // Change the status of an adoption/foster request
+
+    /**
+     * To change the status of an adoption/foster request
+     * @param status
+     * @return
+     */
   @PreAuthorize("hasRole('SHELTER')")
   @PutMapping("/change/status")
   public ResponseEntity<?> changeStatus(@RequestBody AdoptionChangeStatusDTO status) {
@@ -67,9 +76,12 @@ public class AdoptionController {
     return ResponseEntity.ok("Status updated successfully.");
   }
 
-  // Pending request to the shelter
+    /**
+     * Pending request to the shelter
+     * @return
+     */
   @PreAuthorize("hasRole('SHELTER')")
-  @GetMapping("/pending")
+  @GetMapping("/shelter/pending")
   public ResponseEntity<?> pendingRequests() {
 
     String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -88,7 +100,35 @@ public class AdoptionController {
 
   }
 
-  // User historic - Pending adoptions
+  /**
+   * Shelter's accepted requests
+   * @return
+   */
+  @PreAuthorize("hasRole('SHELTER')")
+  @GetMapping("/shelter/accepted")
+  public ResponseEntity<?> acceptedRequests() {
+
+      String email = SecurityContextHolder.getContext().getAuthentication().getName();
+      Shelter shelter = shelterService.findByEmail(email);
+      if (shelter == null) {
+          return ResponseEntity.status(404).body("Shelter not found!");
+      }
+
+      List<AdoptionDTO> accepted = adoptionService.getAcceptedRequestsByShelter(shelter);
+
+      if (accepted == null || accepted.isEmpty()) {
+          return ResponseEntity.status(404).body("No accepted requests found for this shelter.");
+      }
+
+      return ResponseEntity.ok(accepted);
+
+  }
+
+
+    /**
+     * User pending requests
+     * @return
+     */
   @PreAuthorize("hasRole('USER')")
   @GetMapping("/user/pending")
   public ResponseEntity<?> userPendingAdoptions() {
@@ -104,9 +144,45 @@ public class AdoptionController {
     return ResponseEntity.ok(pendingAdoptions);
   }
 
-  // User historic - Accepted adoptions
+    /**
+     * Cancel pending request
+     */
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping("/user/cancel")
+    public ResponseEntity<?> cancelUserPendingAdoptions(@RequestBody Long id) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.status(404).body("User not found!");
+        }
+
+        Adoption adoption = adoptionService.findAdoptionById(id);
+
+        if(adoption==null){
+            return ResponseEntity.status(404).body("Adoption not found!");
+        }
+
+        if(adoption.getUser().getId()!=user.getId()){
+            return ResponseEntity.status(404).body("This adoption request does not belong to you!");
+        }
+
+        if(adoption.getStatus() != Status.PENDING) {
+            return ResponseEntity.status(400).body("Only pending requests can be cancelled.");
+        }
+
+        adoptionService.changeStatus(adoption, Status.REJECTED);
+        return  ResponseEntity.ok("Request cancelled successfully.");
+
+
+    }
+
+    /**
+     * User historic - Accepted adoptions
+     * @return
+     */
   @PreAuthorize("hasRole('USER')")
-  @GetMapping("/user/accepted")
+  @GetMapping("/user/adoptions/historic")
   public ResponseEntity<?> userAcceptedAdoptions() {
     String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -120,6 +196,29 @@ public class AdoptionController {
     return ResponseEntity.ok(acceptedAdoptions);
   }
 
+    /**
+     * User historic - Accepted fosters
+     * @return
+     */
+  @PreAuthorize("hasRole('USER')")
+  @GetMapping("/user/fosters/historic")
+  public ResponseEntity<?> userFosterAdoptions() {
+      String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+      User user = userService.findByEmail(email);
+      if (user == null) {
+          return ResponseEntity.status(404).body("User not found!");
+      }
+
+      List<AdoptionDTO> acceptedFosters = adoptionService.getUserAcceptedFosters(user);
+
+      return ResponseEntity.ok(acceptedFosters);
+  }
+
+    /**
+     * Admins can see all adoptions
+     * @return
+     */
   @PreAuthorize("hasRole('ADMIN')")
   @GetMapping("/all")
   public ResponseEntity<?> viewAllAdoptions() {
@@ -130,6 +229,10 @@ public class AdoptionController {
     return ResponseEntity.ok(adoptions);
   }
 
+    /**
+     * Admins can sww all accepted foster requests
+     * @return
+     */
   @PreAuthorize("hasRole('ADMIN')")
   @GetMapping("/fosters/all")
   public ResponseEntity<?> viewAllFosters() {
@@ -139,5 +242,6 @@ public class AdoptionController {
     }
     return ResponseEntity.ok(adoptions);
   }
+
 
 }

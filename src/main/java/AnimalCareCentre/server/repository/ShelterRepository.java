@@ -24,4 +24,5 @@ public interface ShelterRepository extends JpaRepository<Shelter, Long> {
   public List<Shelter> findByStatus(Status status);
 
   public Shelter findByEmail(String email);
+  Shelter findById(long id);
 }

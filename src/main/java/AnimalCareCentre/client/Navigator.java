@@ -35,6 +35,8 @@ public class Navigator {
     new UserHomepage(this, stage);
   }
 
+  public void lostAndFoundHomepage(){new LostAndFoundHomepage(this,stage);}
+
   public void adminHomepage() {
     new AdminHomepage(this, stage);
   }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import AnimalCareCentre.server.enums.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -36,7 +37,12 @@ public class Shelter extends Account {
   @ElementCollection
   private List<String> images = new ArrayList<>();
 
-  protected Shelter() {
+  @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL)
+  @JsonManagedReference("shelter-donations")
+  private List<ShelterDonation> donations = new ArrayList<>();
+
+
+  public Shelter() {
   }
 
   // Getters
@@ -59,6 +65,9 @@ public class Shelter extends Account {
   public void setStatus(Status status) {
     this.status = status;
   }
+
+  public List<ShelterDonation> getDonations() { return donations; }
+  public void setDonations(List<ShelterDonation> donations) { this.donations = donations; }
 
   @Override
   public String toString() {

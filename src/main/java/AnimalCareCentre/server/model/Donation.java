@@ -2,56 +2,82 @@ package AnimalCareCentre.server.model;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 /**
  * This class describes the model of a Donation with its attributes and how it
  * works.
  *
  */
-@Entity
-@Table (name = "Donations")
-public class Donation {
+@MappedSuperclass
+public abstract class Donation {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "donation_id")
   private long id;
+
   @NotNull(message = "The amount is mandatory")
-  private Float amount;
+  @Positive(message = "Amount must be positive!")
+  @Min(5)
+  @Max(100)
+  private float amount;
+
+  @Column(name = "donation_date")
   private LocalDate donationDate;
+
   @ManyToOne
-  @JoinColumn(name = "Sponsorship_id")
-  private Sponsorship sponsorship;
+  @JoinColumn(name = "user_id", nullable = false)
+  private User donor;
 
-  public Donation() {  
-  }
-  
-  public float getAmount() {
-    return amount;
-  }
+    public Donation() {
+        this.donationDate = LocalDate.now();
+    }
 
-  public LocalDate getDonationDate() {
-    return donationDate;
-  }
-  
-  
-  public void setSponsorship(Sponsorship sponsorship) {
-	this.sponsorship = sponsorship;
-}
+    public Donation(User donor, float amount) {
+        this(); // chama o construtor vazio → cria a data
+        this.donor = donor;
+        this.amount = amount;
+    }
 
-// ToString from the class
-  @Override
-  public String toString() {
-    return "Donation{" +
-        ", amount=" + amount +
-        ", donationDate=" + donationDate +
-        '}';
-  }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public float getAmount() {
+        return amount;
+    }
+
+    public void setAmount(float amount) {
+        this.amount = amount;
+    }
+
+    public LocalDate getDonationDate() {
+        return donationDate;
+    }
+
+    public void setDonationDate(LocalDate donationDate) {
+        this.donationDate = donationDate;
+    }
+
+    public User getDonor() {
+        return donor;
+    }
+
+    public void setDonor(User donor) {
+        this.donor = donor;
+    }
+
+    public abstract String getDonationType();
+
+
 }
