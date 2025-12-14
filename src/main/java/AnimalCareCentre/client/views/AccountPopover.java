@@ -48,7 +48,7 @@ public class AccountPopover {
     accInfo.setSpacing(5);
 
     ACCTextButton secQuestion = new ACCTextButton("Change Security Question");
-    secQuestion.setOnAction(e -> changeSecurityQuestion());
+    secQuestion.setOnAction(e -> nav.changeSecurityQuestion());
 
     ACCButton logout = new ACCButton("Logout");
     logout.setOnAction(e -> logout());
@@ -63,8 +63,5 @@ public class AccountPopover {
     ApiClient.clearSession();
     nav.showMainMenu();
     return;
-  }
-
-  private void changeSecurityQuestion() {
   }
 }

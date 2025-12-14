@@ -1,5 +1,7 @@
 package AnimalCareCentre.client;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 /**
  * Class with helper methods
@@ -85,4 +90,32 @@ public class Utility {
     }
   }
 
+  /**
+   * Parse image from Base64 response
+   */
+  public static Image parseImage(ApiResponse response) {
+    if (!response.isSuccess() || response.getBody() == null) {
+      return null;
+    }
+    try {
+      byte[] imageBytes = java.util.Base64.getDecoder().decode(response.getBody());
+      return new Image(new ByteArrayInputStream(imageBytes));
+    } catch (Exception e) {
+      System.out.println("Failed to parse image: " + e.getMessage());
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  /**
+   * Selects an image file
+   */
+  public static File selectImageFile(Stage stage) {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Select Image");
+    fileChooser.getExtensionFilters().add(
+        new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.jpeg", "*.png"));
+
+    return fileChooser.showOpenDialog(stage);
+  }
 }

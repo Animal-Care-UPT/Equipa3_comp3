@@ -34,8 +34,9 @@ public class NavBar {
 
     home.setOnAction(e -> nav.userHomepage());
     animals.setOnAction(e -> new SearchAnimalPopover(nav).show(animals));
+    shelters.setOnAction(e -> new SearchShelterPopover(nav).show(shelters));
     shelters.setOnAction(e -> nav.userHomepage());
-    lostFound.setOnAction(e -> nav.userHomepage());
+    lostFound.setOnAction(e -> nav.lostAndFoundHomepage());
     acc.setOnAction(e -> new AccountPopover(nav).show(acc));
 
     scene.setHeader(home, animals, shelters, lostFound, acc);
@@ -51,7 +52,7 @@ public class NavBar {
     home.setOnAction(e -> nav.adminHomepage());
     animals.setOnAction(e -> nav.adminHomepage());
     shelters.setOnAction(e -> nav.adminHomepage());
-    lostFound.setOnAction(e -> nav.adminHomepage());
+    lostFound.setOnAction(e -> nav.lostAndFoundHomepage());
     acc.setOnAction(e -> new AccountPopover(nav).show(acc));
 
     scene.setHeader(home, animals, shelters, lostFound, acc);
@@ -65,7 +66,7 @@ public class NavBar {
 
     home.setOnAction(e -> nav.shelterHomepage());
     animals.setOnAction(e -> nav.shelterHomepage());
-    lostFound.setOnAction(e -> nav.shelterHomepage());
+    lostFound.setOnAction(e -> nav.lostAndFoundHomepage());
     acc.setOnAction(e -> new AccountPopover(nav).show(acc));
 
     scene.setHeader(home, animals, lostFound, acc);

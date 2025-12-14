@@ -2,15 +2,10 @@ package AnimalCareCentre.server.model;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 
 import AnimalCareCentre.server.enums.Status;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * This class describes the model of a sponsorhip to the animals and how it
@@ -21,16 +16,6 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 @Table(name = "Sponsorships")
 public class Sponsorship extends Donation {
-
-  @Id
-  @Column(name = "Sponsorship_id")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
-
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  @JsonBackReference("user-sponsorships")
-  private User user;
 
   @ManyToOne
   @JoinColumn(name = "animal_id")
@@ -53,8 +38,8 @@ public class Sponsorship extends Donation {
   public Sponsorship() {
   }
 
-  public Sponsorship(User donor, ShelterAnimal animal, float amount) {
-      super(donor, amount);
+  public Sponsorship(User user, ShelterAnimal animal, float amount) {
+      super(user, amount);
       this.animal = animal;
       this.status = Status.ACTIVE;
       this.startDate = LocalDate.now();
@@ -62,19 +47,15 @@ public class Sponsorship extends Donation {
     }
 
   public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
+    return super.getId();
   }
 
   public User getUser() {
-    return user;
+    return super.getUser();
   }
 
   public void setUser(User user) {
-    this.user = user;
+    super.setUser(user);
   }
 
   public ShelterAnimal getAnimal() {

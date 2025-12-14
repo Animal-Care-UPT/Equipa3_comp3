@@ -18,22 +18,28 @@ public record Shelter(long id, String name, String email, String location, Secur
 
   @Override
   public String getDisplayName() {
-      return "Name: " + name;
+    return "Name: " + name;
   }
 
   @Override
   public String getDisplayInfo() {
-      return "Location: " + location;
+    return "Location: " + location;
   }
 
   @Override
   public String getDescription() {
-      return "Contact: " + contact;
+    return "Contact: " + contact;
   }
-    @Override
+
+  @Override
   public String getImagePath() {
     // todo
-      return null;
+    return null;
+  }
+
+  @Override
+  public Long getId() {
+    return id;
   }
 
 }

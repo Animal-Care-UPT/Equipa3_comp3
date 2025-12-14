@@ -58,7 +58,11 @@
         <artifactId>javafx-controls</artifactId>
         <version>21</version>
     </dependency>
-
+    <dependency>
+        <groupId>io.github.makbn</groupId>
+        <artifactId>jlmap-fx</artifactId>
+        <version>2.0.0</version>
+    </dependency>
     <dependency>
         <groupId>org.controlsfx</groupId>
         <artifactId>controlsfx</artifactId>
@@ -80,6 +84,12 @@
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>2.15.1</version>
     </dependency>
 	</dependencies>
 

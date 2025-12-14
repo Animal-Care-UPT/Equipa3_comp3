@@ -25,7 +25,8 @@ public class AccountService {
     this.passwordEncoder = passwordEncoder;
   }
 
-  public Account createAccount(String name, String email, String password, String location, SecurityQuestion securityQuestion, String answer) {
+  public Account createAccount(String name, String email, String password, String location,
+      SecurityQuestion securityQuestion, String answer) {
 
     Account acc = new Account();
     acc.setName(name);
@@ -33,7 +34,7 @@ public class AccountService {
     acc.setPassword(passwordEncoder.encode(password));
     acc.setLocation(location);
     acc.setSecurityQuestion(securityQuestion);
-    acc.setAnswer(answer);
+    acc.setAnswer(passwordEncoder.encode(answer));
     return accountRepository.save(acc);
   }
 
@@ -50,24 +51,25 @@ public class AccountService {
     return accountRepository.save(acc);
   }
 
-  public Account changeSQandAns(String email, SecurityQuestion question, String answer){
-      Account acc = accountRepository.findByEmail(email);
-      if (acc == null) {
-        return null;
-      }
-      if (question != null && !question.toString().isBlank()) {
-        acc.setSecurityQuestion(question);
-      }
-      if (answer != null && !answer.isBlank()) {
-        acc.setAnswer(answer);
-      }
-      return accountRepository.save(acc);
+  public Account changeSQandAns(String email, SecurityQuestion question, String answer) {
+    Account acc = accountRepository.findByEmail(email);
+    if (acc == null) {
+      return null;
+    }
+    if (question != null && !question.toString().isBlank()) {
+      acc.setSecurityQuestion(question);
+    }
+    if (answer != null && !answer.isBlank()) {
+      answer = passwordEncoder.encode(answer);
+      acc.setAnswer(answer);
+    }
+    return accountRepository.save(acc);
   }
 
   public boolean verifySecurityAnswer(String email, String answer) {
     Account acc = findAccount(email);
     if (acc != null) {
-      if (acc.getAnswer().equals(answer)) {
+      if (passwordEncoder.matches(answer, acc.getAnswer())) {
         return true;
       }
     }

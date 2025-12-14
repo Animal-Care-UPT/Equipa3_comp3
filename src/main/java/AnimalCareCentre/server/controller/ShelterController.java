@@ -74,20 +74,20 @@ public class ShelterController {
 
   @PreAuthorize("hasRole('USER')")
   @GetMapping
-  public ResponseEntity<?> viewAvailableShelters() {
-    List<Shelter> shelters = shelterService.getShelters();
+  public ResponseEntity<?> searchAvailableShelters(@RequestParam String keyword) {
+    List<Shelter> shelters = shelterService.searchAvailableShelters(keyword);
     if (shelters.isEmpty()) {
-      return ResponseEntity.status(404).body("There are no registered shelters!");
+      return ResponseEntity.status(404).body("There are no results!");
     }
     return ResponseEntity.ok(shelters);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
   @GetMapping("/all")
-  public ResponseEntity<?> viewAllShelters() {
-    List<Shelter> shelters = shelterService.getAllShelters();
+  public ResponseEntity<?> searchAllShelters(@RequestParam String keyword) {
+    List<Shelter> shelters = shelterService.searchAllShelters(keyword);
     if (shelters.isEmpty()) {
-      return ResponseEntity.status(404).body("There are no registered shelters!");
+      return ResponseEntity.status(404).body("There are no results!");
     }
     return ResponseEntity.ok(shelters);
   }
