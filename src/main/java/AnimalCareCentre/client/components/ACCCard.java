@@ -11,25 +11,24 @@ import javafx.scene.layout.VBox;
 
 public class ACCCard<T extends Displayable> extends ACCVBox {
 
-
   public ACCCard(T item, Image image, Runnable onClickHandler) {
     this.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
     this.setPrefWidth(250);
     this.setMaxWidth(250);
-    this.setMinHeight(350);
-    this.setMaxHeight(350);
+    this.setMinHeight(380);
+    this.setMaxHeight(380);
 
     VBox imageContainer = new VBox();
     imageContainer.setAlignment(Pos.CENTER);
-    imageContainer.setPrefHeight(240);
-    imageContainer.setMinHeight(240);
-    imageContainer.setMaxHeight(240);
+    imageContainer.setPrefHeight(250);
+    imageContainer.setMinHeight(250);
+    imageContainer.setMaxHeight(250);
     imageContainer.setStyle("-fx-background-color: white;");
 
     if (image != null) {
       ImageView imageView = new ImageView(image);
-      imageView.setFitWidth(240);
-      imageView.setFitHeight(240);
+      imageView.setFitWidth(250);
+      imageView.setFitHeight(250);
       imageView.setPreserveRatio(true);
       imageView.setSmooth(true);
       imageContainer.getChildren().add(imageView);
@@ -64,7 +63,14 @@ public class ACCCard<T extends Displayable> extends ACCVBox {
     this.setOnMouseClicked(e -> onClickHandler.run());
     this.setCursor(Cursor.HAND);
 
-    this.setOnMouseEntered(e -> this.setStyle("-fx-background-color: #f0f0f0; -fx-background-radius: 10;"));
-    this.setOnMouseExited(e -> this.setStyle("-fx-background-color: white; -fx-background-radius: 10;"));
+    this.setOnMouseEntered(e -> {
+      this.setStyle("-fx-background-color: #f9f9f9; -fx-background-radius: 10;");
+      imageContainer.setStyle("-fx-background-color: #f9f9f9; -fx-background-radius: 10;");
+    });
+
+    this.setOnMouseExited(e -> {
+      this.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
+      imageContainer.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
+    });
   }
 }
