@@ -19,15 +19,13 @@ public class ShelterHomepage {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(nav.getLoggedRole(), nav, scene);
 
-    ACCMenuButton registerAnimal = new ACCMenuButton ("1. Register Animal");
-    ACCMenuButton viewPendingRequests = new ACCMenuButton("2. Pending Requests");
+    ACCMenuButton registerAnimal = new ACCMenuButton ("Register Animal");
+    ACCMenuButton viewPendingRequests = new ACCMenuButton("Pending Requests");
 
-    registerAnimal.setOnAction(e -> {
-
+    registerAnimal.setOnAction(e -> { nav.registerAnimal();
     });
 
     viewPendingRequests.setOnAction(e ->{
-
     });
     
     scene.addItems(registerAnimal, viewPendingRequests);

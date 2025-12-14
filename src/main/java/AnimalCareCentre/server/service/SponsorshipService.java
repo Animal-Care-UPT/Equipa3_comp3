@@ -51,7 +51,7 @@ public class SponsorshipService {
      * @return
      */
   public List<Sponsorship> getUserSponsorships(User donor) {
-      return sponsorshipRepository.findByDonorOrderByStartDateDesc(donor);
+      return sponsorshipRepository.findByUserOrderByStartDateDesc(donor);
   }
 
     /**

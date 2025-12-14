@@ -54,9 +54,9 @@ public class ShelterDonationService {
 
       return donations.stream().map(d-> {
           ShelterDonationDTO dto = new ShelterDonationDTO();
-          dto.setUserId(d.getDonor().getId());
-          dto.setUserName(d.getDonor().getName());
-          dto.setUserEmail(d.getDonor().getEmail());
+          dto.setUserId(d.getUser().getId());
+          dto.setUserName(d.getUser().getName());
+          dto.setUserEmail(d.getUser().getEmail());
           dto.setShelterId(shelter.getId());
           dto.setShelterName(shelter.getName());
           dto.setAmount(d.getAmount());
@@ -72,7 +72,7 @@ public class ShelterDonationService {
      * @return
      */
   public List<ShelterDonationDTO> getUserDonations(User user) {
-      List<ShelterDonation> donations = donationRepository.findByDonorOrderByDonationDateDesc(user);
+      List<ShelterDonation> donations = donationRepository.findByUserOrderByDonationDateDesc(user);
 
       return donations.stream().map(d->{
           ShelterDonationDTO dto = new ShelterDonationDTO();

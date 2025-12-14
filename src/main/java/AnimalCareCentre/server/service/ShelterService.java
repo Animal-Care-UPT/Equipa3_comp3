@@ -51,14 +51,14 @@ public class ShelterService {
     return shelterRepository.save(shelter);
   }
 
-  public List<Shelter> getShelters() {
-    List<Shelter> shelters = shelterRepository.findByStatus(Status.AVAILABLE);
+  public List<Shelter> searchAvailableShelters(String keyword) {
+    List<Shelter> shelters = shelterRepository.findByStatusAndKeyword(Status.AVAILABLE, keyword);
     shelters.sort(Comparator.comparing(Shelter::getLocation).thenComparing(Shelter::getName));
     return shelters;
   }
 
-  public List<Shelter> getAllShelters() {
-    List<Shelter> shelters = shelterRepository.findAll();
+  public List<Shelter> searchAllShelters(String keyword) {
+    List<Shelter> shelters = shelterRepository.findByKeyword(keyword);
     shelters.sort(Comparator.comparing(Shelter::getLocation).thenComparing(Shelter::getName));
     return shelters;
   }

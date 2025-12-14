@@ -32,52 +32,50 @@ public abstract class Donation {
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
-  private User donor;
+  private User user;
 
-    public Donation() {
-        this.donationDate = LocalDate.now();
-    }
+  public Donation() {
+    this.donationDate = LocalDate.now();
+  }
 
-    public Donation(User donor, float amount) {
-        this(); // chama o construtor vazio → cria a data
-        this.donor = donor;
-        this.amount = amount;
-    }
+  public Donation(User user, float amount) {
+    this(); // chama o construtor vazio → cria a data
+    this.user = user;
+    this.amount = amount;
+  }
 
+  public long getId() {
+    return id;
+  }
 
-    public long getId() {
-        return id;
-    }
+  public void setId(long id) {
+    this.id = id;
+  }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+  public float getAmount() {
+    return amount;
+  }
 
-    public float getAmount() {
-        return amount;
-    }
+  public void setAmount(float amount) {
+    this.amount = amount;
+  }
 
-    public void setAmount(float amount) {
-        this.amount = amount;
-    }
+  public LocalDate getDonationDate() {
+    return donationDate;
+  }
 
-    public LocalDate getDonationDate() {
-        return donationDate;
-    }
+  public void setDonationDate(LocalDate donationDate) {
+    this.donationDate = donationDate;
+  }
 
-    public void setDonationDate(LocalDate donationDate) {
-        this.donationDate = donationDate;
-    }
+  public User getUser() {
+    return user;
+  }
 
-    public User getDonor() {
-        return donor;
-    }
+  public void setUser(User user) {
+    this.user = user;
+  }
 
-    public void setDonor(User donor) {
-        this.donor = donor;
-    }
-
-    public abstract String getDonationType();
-
+  public abstract String getDonationType();
 
 }

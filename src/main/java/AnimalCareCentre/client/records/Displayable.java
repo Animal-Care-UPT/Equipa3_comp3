@@ -6,4 +6,5 @@ public interface Displayable {
   public String getDisplayInfo();
   public String getDescription();
   public String getImagePath();
+  public Long getId();
 }
