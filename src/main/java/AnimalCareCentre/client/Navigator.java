@@ -54,6 +54,9 @@ public class Navigator {
   public void showAnimal(Displayable animal) {
   }
 
+  public void showShelter(Displayable shelter) {
+  }
+
   public void registerAnimal() {
 
     new RegisterAnimal(this, stage);

@@ -7,18 +7,10 @@ import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
 import AnimalCareCentre.client.Utility;
 import AnimalCareCentre.client.components.*;
-import AnimalCareCentre.client.enums.AdoptionType;
-import AnimalCareCentre.client.enums.AnimalGender;
-import AnimalCareCentre.client.enums.AnimalType;
 import AnimalCareCentre.client.records.Shelter;
-import AnimalCareCentre.client.records.ShelterAnimal;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.TilePane;
-import javafx.scene.text.Font;
 
 public class SearchShelterPopover {
 
@@ -52,7 +44,7 @@ public class SearchShelterPopover {
 
   private void searchShelter(String keyword) {
     if (nav.getLoggedRole().equals("ROLE_ADMIN")) {
-      ApiResponse response = ApiClient.get("/shelters/all?keyword+" + keyword);
+      ApiResponse response = ApiClient.get("/shelters/all?keyword=" + keyword);
       if (!response.isSuccess()) {
         Utility.showAlert(AlertType.ERROR, "Error", response.getBody());
       } else {
@@ -60,7 +52,7 @@ public class SearchShelterPopover {
         nav.searchShelter(shelters);
       }
     } else {
-      ApiResponse response = ApiClient.get("/shelters/?keyword+" + keyword);
+      ApiResponse response = ApiClient.get("/shelters/?keyword=" + keyword);
       if (!response.isSuccess()) {
         Utility.showAlert(AlertType.ERROR, "Error", response.getBody());
       } else {
