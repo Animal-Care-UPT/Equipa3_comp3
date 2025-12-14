@@ -2,6 +2,7 @@ package AnimalCareCentre.server.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -30,9 +31,10 @@ public abstract class Donation {
   @Column(name = "donation_date")
   private LocalDate donationDate;
 
-  @ManyToOne
-  @JoinColumn(name = "user_id", nullable = false)
-  private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference("user-sponsorships")
+    private User user;
 
   public Donation() {
     this.donationDate = LocalDate.now();
