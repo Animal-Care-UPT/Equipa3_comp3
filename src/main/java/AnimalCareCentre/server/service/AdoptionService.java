@@ -214,4 +214,18 @@ public class AdoptionService {
           return dto;
       }).toList();
   }
+
+    public List<AdoptionDTO> getAdoptionsByAnimal(ShelterAnimal animal) {
+        List<Adoption> adoptions = adoptionRepository.findByAnimal(animal);
+        return adoptions.stream().map(a-> {
+            AdoptionDTO dto = new AdoptionDTO();
+            dto.setAnimal(a.getAnimal());
+            dto.setUser(a.getUser());
+            dto.setAdoptionDate(a.getAdoptionDate());
+            dto.setType(a.getType());
+            dto.setStatus(a.getStatus());
+            return dto;
+
+        } ).toList();
+    }
 }

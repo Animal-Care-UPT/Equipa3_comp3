@@ -15,4 +15,5 @@ public interface AdoptionRepository extends JpaRepository<Adoption, Long> {
     List<Adoption> findByType(AdoptionType type);
     List<Adoption> findByUserAndStatus(User user, Status status);
     List<Adoption> findByUserAndStatusAndType(User user, Status status, AdoptionType type);
+    List<Adoption> findByAnimal(ShelterAnimal animal);
 }
