@@ -1,5 +1,5 @@
-package AnimalCareCentre.client.views;
 
+package AnimalCareCentre.client.views;
 import AnimalCareCentre.client.ApiClient;
 import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
@@ -119,7 +119,7 @@ public class AnimalProfile {
     content.setPadding(new Insets(15));
 
     if (!response.isSuccess()) {
-      Utility.showAlert(Alert.AlertType.ERROR, "Failed to load sponsorships", response.getBody());
+      Utility.showAlert(Alert.AlertType.ERROR, "Error", response.getBody());
       return;
     } else {
       List<Sponsorship> sponsors = Utility.parseList(response.getBody(), Sponsorship.class);

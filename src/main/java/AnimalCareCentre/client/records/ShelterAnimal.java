@@ -18,7 +18,6 @@ public record ShelterAnimal(long id, String name, AnimalType type, String race, 
         "\nSize: " + size +
         "\nGender: " + gender +
         "\nColor: " + color +
-        "\nDescription: " + description +
         "\nVacination Status: " + vacinated +
         "\nAge: " + age +
         "\nShelter: " + (shelter != null ? shelter.name() : "N/A") + "\n";

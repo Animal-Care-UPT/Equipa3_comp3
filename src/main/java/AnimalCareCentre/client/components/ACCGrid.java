@@ -46,7 +46,6 @@ public class ACCGrid<T extends Displayable> extends VBox {
     tilePane.setHgap(20);
     tilePane.setVgap(20);
     tilePane.setAlignment(Pos.CENTER);
-    tilePane.setPrefColumns(2);
     tilePane.setMaxWidth(600);
 
     int start = pageIndex * ITEMS_PER_PAGE;
