@@ -1,7 +1,14 @@
 package AnimalCareCentre.client.views;
 
+import AnimalCareCentre.client.ApiClient;
+import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
+import AnimalCareCentre.client.Utility;
 import AnimalCareCentre.client.components.*;
+import AnimalCareCentre.client.records.ShelterAnimal;
+import javafx.scene.control.Alert;
+
+import java.util.List;
 
 /**
  * This class defines the navigation bar used throughout the platform
@@ -35,7 +42,6 @@ public class NavBar {
     home.setOnAction(e -> nav.userHomepage());
     animals.setOnAction(e -> new SearchAnimalPopover(nav).show(animals));
     shelters.setOnAction(e -> new SearchShelterPopover(nav).show(shelters));
-    shelters.setOnAction(e -> nav.userHomepage());
     lostFound.setOnAction(e -> nav.lostAndFoundHomepage());
     acc.setOnAction(e -> new AccountPopover(nav).show(acc));
 
@@ -50,8 +56,8 @@ public class NavBar {
     ACCNavButton acc = new ACCNavButton("Account");
 
     home.setOnAction(e -> nav.adminHomepage());
-    animals.setOnAction(e -> nav.adminHomepage());
-    shelters.setOnAction(e -> nav.adminHomepage());
+    animals.setOnAction(e -> new SearchAnimalPopover(nav).show(animals));
+    shelters.setOnAction(e -> new SearchShelterPopover(nav).show(shelters));
     lostFound.setOnAction(e -> nav.lostAndFoundHomepage());
     acc.setOnAction(e -> new AccountPopover(nav).show(acc));
 
@@ -65,11 +71,22 @@ public class NavBar {
     ACCNavButton acc = new ACCNavButton("Account");
 
     home.setOnAction(e -> nav.shelterHomepage());
-    animals.setOnAction(e -> nav.shelterHomepage());
+    animals.setOnAction(e -> shelterViewAnimals());
     lostFound.setOnAction(e -> nav.lostAndFoundHomepage());
     acc.setOnAction(e -> new AccountPopover(nav).show(acc));
 
     scene.setHeader(home, animals, lostFound, acc);
+  }
+
+  private void shelterViewAnimals(){
+      ApiResponse response = ApiClient.get("/shelteranimals/search/self");
+      if (!response.isSuccess()) {
+          Utility.showAlert(Alert.AlertType.ERROR, "Error", response.getBody());
+      } else {
+          List<ShelterAnimal> animals = Utility.parseList(response.getBody(), ShelterAnimal.class);
+          nav.searchAnimal(animals);
+      }
+
   }
 
 }
