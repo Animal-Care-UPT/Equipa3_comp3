@@ -1,17 +1,24 @@
 package AnimalCareCentre.server.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import AnimalCareCentre.server.dto.ChangeStatusDTO;
 import AnimalCareCentre.server.model.Shelter;
@@ -90,5 +97,79 @@ public class ShelterController {
       return ResponseEntity.status(404).body("There are no results!");
     }
     return ResponseEntity.ok(shelters);
+  }
+
+  @PostMapping("/{id}/images")
+  public ResponseEntity<?> uploadImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+
+    if (file.isEmpty()) {
+      return ResponseEntity.badRequest().body("No file provided");
+    }
+
+    Shelter shelter = shelterService.findById(id);
+    if (shelter == null) {
+      return ResponseEntity.status(404).body("Shelter not found");
+    }
+
+    try {
+      int index = shelter.getImages().size();
+      String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+      String filename = "shelter" + id + "_" + index + "." + extension;
+
+      String uploadPath = "src/main/resources/images/shelters/";
+      File uploadDir = new File(uploadPath);
+      FileUtils.forceMkdir(uploadDir);
+
+      File destFile = new File(uploadDir, filename);
+      FileUtils.copyInputStreamToFile(file.getInputStream(), destFile);
+
+      String imageUrl = "/shelters/" + id + "/images/" + index;
+      shelterService.addImagePath(shelter, imageUrl);
+
+      return ResponseEntity.ok("Image uploaded successfully");
+
+    } catch (IOException e) {
+      return ResponseEntity.status(500).body("Failed to upload image: " + e.getMessage());
+    }
+  }
+
+  @GetMapping("/{id}/images/{index}")
+  public ResponseEntity<?> getImage(@PathVariable Long id, @PathVariable int index) {
+
+    Shelter shelter = shelterService.findById(id);
+    if (shelter == null) {
+      return ResponseEntity.status(404).body("Shelter not found");
+    }
+
+    if (index < 0 || index >= shelter.getImages().size()) {
+      return ResponseEntity.status(404).body("Image not found");
+    }
+
+    try {
+      String uploadPath = "src/main/resources/images/shelters/";
+      File imageDir = new File(uploadPath);
+
+      String filePattern = "shelter" + id + "_" + index + ".";
+      File imageFile = null;
+
+      for (File file : imageDir.listFiles()) {
+        if (file.getName().startsWith(filePattern)) {
+          imageFile = file;
+          break;
+        }
+      }
+
+      if (imageFile == null || !imageFile.exists()) {
+        return ResponseEntity.status(404).body("Image file not found");
+      }
+
+      byte[] imageBytes = FileUtils.readFileToByteArray(imageFile);
+      String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+      return ResponseEntity.ok(base64Image);
+
+    } catch (IOException e) {
+      return ResponseEntity.status(500).body("Failed to read image: " + e.getMessage());
+    }
   }
 }
