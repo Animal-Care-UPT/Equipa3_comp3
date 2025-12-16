@@ -4,7 +4,7 @@ import AnimalCareCentre.server.model.Sponsorship;
 import java.time.LocalDate;
 
 public class SponsorshipDTO {
-    private Long id;
+    private Long sponsorshipId;
     private Long userId;
     private String userName;
     private String userEmail;
@@ -26,7 +26,7 @@ public class SponsorshipDTO {
 
     public static SponsorshipDTO fromEntity(Sponsorship sponsorship) {
         SponsorshipDTO dto = new SponsorshipDTO();
-        dto.setId(sponsorship.getId());
+        dto.setSponsorshipId(sponsorship.getId());
 
 
         if (sponsorship.getUser() != null) {
@@ -56,12 +56,12 @@ public class SponsorshipDTO {
 
     // Getters e Setters
 
-    public Long getId() {
-        return id;
+    public Long getSponsorshipId() {
+        return sponsorshipId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setSponsorshipId(Long id) {
+        this.sponsorshipId = id;
     }
 
     public Long getUserId() {

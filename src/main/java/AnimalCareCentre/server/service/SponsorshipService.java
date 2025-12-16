@@ -47,12 +47,16 @@ public class SponsorshipService {
 
     /**
      * To get the sponsorship of a certain user
-     * @param donor
+     * @param user
      * @return
      */
-  public List<Sponsorship> getUserSponsorships(User donor) {
-      return sponsorshipRepository.findByUserOrderByStartDateDesc(donor);
-  }
+    public List<SponsorshipDTO> getUserSponsorshipDTOs(User user) {
+        return sponsorshipRepository.findByUserOrderByStartDateDesc(user)
+                .stream()
+                .map(SponsorshipDTO::fromEntity)
+                .toList();
+    }
+
 
     /**
      * To get the sponsorships of a certain animal

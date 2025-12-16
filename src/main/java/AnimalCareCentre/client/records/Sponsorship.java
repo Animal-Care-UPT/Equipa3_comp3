@@ -3,6 +3,7 @@ package AnimalCareCentre.client.records;
 import java.time.LocalDate;
 
 public record Sponsorship(
+    Long sponsorshipId,
     Long userId,
     String userName,
     Long animalId,
@@ -13,7 +14,8 @@ public record Sponsorship(
     LocalDate endDate) {
   @Override
   public String toString() {
-    return "\nUser ID: " + userId +
+    return "\nSponsorship ID: " + sponsorshipId +
+            "\nUser ID: " + userId +
         "\nUser: " + (userName != null ? userName : "N/A") +
         "\nAnimal ID: " + animalId +
         "\nAnimal: " + (animalName != null ? animalName : "N/A") +

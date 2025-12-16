@@ -87,7 +87,7 @@ public class SponsorshipController {
             return ResponseEntity.status(404).body("User not found!");
         }
 
-        List<Sponsorship> sponsorships = sponsorshipService.getUserSponsorships(user);
+        List<SponsorshipDTO> sponsorships = sponsorshipService.getUserSponsorshipDTOs(user);
         return ResponseEntity.status(200).body(sponsorships);
   }
 
