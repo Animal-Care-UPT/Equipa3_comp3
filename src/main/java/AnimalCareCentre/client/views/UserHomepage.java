@@ -68,12 +68,12 @@ public class UserHomepage {
     
     ApiResponse requestResponse = ApiClient.get("/adoptions/user/pending");
     if (requestResponse.isSuccess()){
-      List <Adoption> requests = parseList(requestResponse.getBody(), Adoption.class);
-      table.setItems(FXCollections.observableArrayList(requests));
+  //    List <Adoption> requests = parseList(requestResponse.getBody(), Adoption.class);
+   //   table.setItems(FXCollections.observableArrayList(requests));
     }
     ACCBigPopover popover = new ACCBigPopover(table, "Pending Requests");
     popover.setPrefSize(500, 400);
-    popover.show(seePendingRequests);
+//    popover.show(seePendingRequests);
     
   }
 }
