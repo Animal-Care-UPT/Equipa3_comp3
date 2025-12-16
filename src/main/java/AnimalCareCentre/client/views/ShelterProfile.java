@@ -181,18 +181,16 @@ public class ShelterProfile {
     popover.show(stage);
   }
 
-  private void createDonation(float amount) {
-    String requestBody = Utility.jsonString("Shelter", shelter.name(), "amount", amount);
+    private void createDonation(float amount) {
+        String requestBody = Utility.jsonString("shelterId", shelter.id(), "amount", amount);
 
-    ApiResponse response = ApiClient.post("/donations/create", requestBody);
+        ApiResponse response = ApiClient.post("/donations/create", requestBody);
 
-    if (response.isSuccess()) {
-      Utility.showAlert(Alert.AlertType.INFORMATION, "Donation Created", "Successfully created donation");
-    } else {
-      String errorMessage = response.getBody() != null ? response.getBody()
-          : "An error occurred while processing your request.";
-      Utility.showAlert(Alert.AlertType.ERROR, "Donation failed", errorMessage);
+        if (response.isSuccess()) {
+            Utility.showAlert(Alert.AlertType.INFORMATION, "Donation Created", "Successfully created donation");
+        } else {
+            Utility.showAlert(Alert.AlertType.ERROR, "Donation failed", response.getBody());
+        }
     }
-  }
 
 }
