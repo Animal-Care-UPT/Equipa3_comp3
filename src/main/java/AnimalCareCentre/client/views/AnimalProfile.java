@@ -1,5 +1,5 @@
-package AnimalCareCentre.client.views;
 
+package AnimalCareCentre.client.views;
 import AnimalCareCentre.client.ApiClient;
 import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;

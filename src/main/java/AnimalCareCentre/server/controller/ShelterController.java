@@ -101,8 +101,7 @@ public class ShelterController {
     return ResponseEntity.ok(shelters);
   }
 
-  @PreAuthorize("hasRole('SHELTER')")
-  @GetMapping("isAvailable")
+  @GetMapping("/isAvailable")
   public ResponseEntity<?> checkIfAvailable() {
     String email = SecurityContextHolder.getContext().getAuthentication().getName();
     Shelter shelter = shelterService.findByEmail(email);
@@ -191,4 +190,41 @@ public class ShelterController {
       return ResponseEntity.status(500).body("Failed to read image: " + e.getMessage());
     }
   }
+
+  @PreAuthorize("hasRole('SHELTER')")
+  @PostMapping("/images/self")
+  public ResponseEntity<?> uploadImageToSelf(@RequestParam("file") MultipartFile file) {
+
+    if (file.isEmpty()) {
+      return ResponseEntity.badRequest().body("No file provided");
+    }
+
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    Shelter shelter = shelterService.findByEmail(email);
+    if (shelter == null) {
+      return ResponseEntity.status(404).body("Shelter not found");
+    }
+
+    try {
+      int index = shelter.getImages().size();
+      String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+      String filename = "shelter" + shelter.getId() + "_" + index + "." + extension;
+
+      String uploadPath = "src/main/resources/images/shelters/";
+      File uploadDir = new File(uploadPath);
+      FileUtils.forceMkdir(uploadDir);
+
+      File destFile = new File(uploadDir, filename);
+      FileUtils.copyInputStreamToFile(file.getInputStream(), destFile);
+
+      String imageUrl = "/shelters/" + shelter.getId() + "/images/" + index;
+      shelterService.addImagePath(shelter, imageUrl);
+
+      return ResponseEntity.ok("Image uploaded successfully");
+
+    } catch (IOException e) {
+      return ResponseEntity.status(500).body("Failed to upload image: " + e.getMessage());
+    }
+  }
+
 }

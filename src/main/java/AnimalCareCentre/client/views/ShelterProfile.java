@@ -65,7 +65,7 @@ public class ShelterProfile {
       // img popover soon
     });
 
-    String imageUrl = shelter.imagePath();
+    String imageUrl = shelter.getImagePath();
     if (imageUrl != null && !imageUrl.isEmpty()) {
       ApiResponse response = ApiClient.get(imageUrl);
       Image image = Utility.parseImage(response);
