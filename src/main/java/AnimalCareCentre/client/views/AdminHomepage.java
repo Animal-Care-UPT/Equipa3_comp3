@@ -53,39 +53,20 @@ public class AdminHomepage {
     ACCTableView<Shelter> table = new ACCTableView<>();
 
     TableColumn<Shelter, String> shelterIDColumn = new TableColumn<>("Shelter ID");
-    shelterIDColumn.setCellValueFactory(cellData -> {
-      Shelter shelter = cellData.getValue();
-      String value = (shelter != null) ? String.valueOf(shelter.id()) : "";
-      return new SimpleStringProperty(value);
-    });
+    shelterIDColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().id())));
 
     TableColumn<Shelter, String> shelterColumn = new TableColumn<>("Shelter Name");
-    shelterColumn.setCellValueFactory(cellData -> {
-      Shelter shelter = cellData.getValue();
-      String value = (shelter != null) ? shelter.name() : "";
-      return new SimpleStringProperty(value);
-    });
+    shelterColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().name()));
 
     TableColumn<Shelter, String> localColumn = new TableColumn<>("Location");
-    localColumn.setCellValueFactory(cellData -> {
-      Shelter shelter = cellData.getValue();
-      String value = (shelter != null) ? shelter.location() : "";
-      return new SimpleStringProperty(value);
-    });
+    localColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().location()));
 
     TableColumn<Shelter, String> yearColumn = new TableColumn<>("Foundation Year");
-    yearColumn.setCellValueFactory(cellData -> {
-      Shelter shelter = cellData.getValue();
-      String value = (shelter != null) ? String.valueOf(shelter.foundationYear()) : "";
-      return new SimpleStringProperty(value);
-    });
+    yearColumn.setCellValueFactory(
+        cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().foundationYear())));
 
     TableColumn<Shelter, String> contactColumn = new TableColumn<>("Contact");
-    contactColumn.setCellValueFactory(cellData -> {
-      Shelter shelter = cellData.getValue();
-      String value = (shelter != null) ? shelter.contact() : "";
-      return new SimpleStringProperty(value);
-    });
+    contactColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().contact()));
 
     TableColumn<Shelter, Void> buttonColumn = new TableColumn<>("Action");
     buttonColumn.setCellFactory(col -> new TableCell<Shelter, Void>() {
@@ -145,46 +126,26 @@ public class AdminHomepage {
     ACCTableView<Sponsorship> table = new ACCTableView<>();
 
     TableColumn<Sponsorship, String> userIDColumn = new TableColumn<>("User ID");
-    userIDColumn.setCellValueFactory(cellData -> {
-      Sponsorship sponsorship = cellData.getValue();
-      String value = (sponsorship != null) ? String.valueOf(sponsorship.userId()) : "";
-      return new SimpleStringProperty(value);
-    });
+    userIDColumn
+        .setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().userId())));
 
     TableColumn<Sponsorship, String> userColumn = new TableColumn<>("User");
-    userColumn.setCellValueFactory(cellData -> {
-      Sponsorship sponsorship = cellData.getValue();
-      String value = (sponsorship != null) ? sponsorship.userName() : "";
-      return new SimpleStringProperty(value);
-    });
+    userColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().userName()));
 
     TableColumn<Sponsorship, String> animalIDColumn = new TableColumn<>("Animal ID");
-    animalIDColumn.setCellValueFactory(cellData -> {
-      Sponsorship sponsorship = cellData.getValue();
-      String value = (sponsorship != null) ? String.valueOf(sponsorship.animalId()) : "";
-      return new SimpleStringProperty(value);
-    });
+    animalIDColumn
+        .setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().animalId())));
 
     TableColumn<Sponsorship, String> animalColumn = new TableColumn<>("Animal");
-    animalColumn.setCellValueFactory(cellData -> {
-      Sponsorship sponsorship = cellData.getValue();
-      String value = (sponsorship != null) ? sponsorship.animalName() : "";
-      return new SimpleStringProperty(value);
-    });
+    animalColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().animalName()));
 
     TableColumn<Sponsorship, String> amountColumn = new TableColumn<>("Amount");
-    amountColumn.setCellValueFactory(cellData -> {
-      Sponsorship sponsorship = cellData.getValue();
-      String value = (sponsorship != null) ? String.valueOf(sponsorship.amount()) : "";
-      return new SimpleStringProperty(value);
-    });
+    amountColumn
+        .setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().amount())));
 
     TableColumn<Sponsorship, String> dateColumn = new TableColumn<>("Start Date");
-    dateColumn.setCellValueFactory(cellData -> {
-      Sponsorship sponsorship = cellData.getValue();
-      String value = (sponsorship != null) ? String.valueOf(sponsorship.startDate()) : "";
-      return new SimpleStringProperty(value);
-    });
+    dateColumn
+        .setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().startDate())));
 
     table.getColumns().addAll(userIDColumn, userColumn, animalIDColumn, animalColumn, amountColumn, dateColumn);
     table.setPrefHeight(300);
@@ -222,23 +183,20 @@ public class AdminHomepage {
 
     TableColumn<Adoption, String> userColumn = new TableColumn<>("User");
     userColumn.setCellValueFactory(cellData -> {
-      Adoption adoption = cellData.getValue();
-      String value = (adoption != null && adoption.user() != null) ? adoption.user().name() : "";
-      return new SimpleStringProperty(value);
+      var user = cellData.getValue().user();
+      return new SimpleStringProperty(user != null ? user.name() : "N/A");
     });
 
     TableColumn<Adoption, String> shelterColumn = new TableColumn<>("Shelter");
     shelterColumn.setCellValueFactory(cellData -> {
-      Adoption adoption = cellData.getValue();
-      String value = (adoption != null && adoption.shelter() != null) ? adoption.shelter().name() : "";
-      return new SimpleStringProperty(value);
+      var shelter = cellData.getValue().shelter();
+      return new SimpleStringProperty(shelter != null ? shelter.name() : "N/A");
     });
 
     TableColumn<Adoption, String> animalColumn = new TableColumn<>("Animal");
     animalColumn.setCellValueFactory(cellData -> {
-      Adoption adoption = cellData.getValue();
-      String value = (adoption != null && adoption.animal() != null) ? adoption.animal().name() : "";
-      return new SimpleStringProperty(value);
+      var animal = cellData.getValue().animal();
+      return new SimpleStringProperty(animal != null ? animal.name() : "N/A");
     });
 
     table.getColumns().addAll(userColumn, shelterColumn, animalColumn);
@@ -274,23 +232,20 @@ public class AdminHomepage {
 
     TableColumn<Adoption, String> userColumn = new TableColumn<>("User");
     userColumn.setCellValueFactory(cellData -> {
-      Adoption adoption = cellData.getValue();
-      String value = (adoption != null && adoption.user() != null) ? adoption.user().name() : "";
-      return new SimpleStringProperty(value);
+      var user = cellData.getValue().user();
+      return new SimpleStringProperty(user != null ? user.name() : "N/A");
     });
 
     TableColumn<Adoption, String> shelterColumn = new TableColumn<>("Shelter");
     shelterColumn.setCellValueFactory(cellData -> {
-      Adoption adoption = cellData.getValue();
-      String value = (adoption != null && adoption.shelter() != null) ? adoption.shelter().name() : "";
-      return new SimpleStringProperty(value);
+      var shelter = cellData.getValue().shelter();
+      return new SimpleStringProperty(shelter != null ? shelter.name() : "N/A");
     });
 
     TableColumn<Adoption, String> animalColumn = new TableColumn<>("Animal");
     animalColumn.setCellValueFactory(cellData -> {
-      Adoption adoption = cellData.getValue();
-      String value = (adoption != null && adoption.animal() != null) ? adoption.animal().name() : "";
-      return new SimpleStringProperty(value);
+      var animal = cellData.getValue().animal();
+      return new SimpleStringProperty(animal != null ? animal.name() : "N/A");
     });
 
     table.getColumns().addAll(userColumn, shelterColumn, animalColumn);
