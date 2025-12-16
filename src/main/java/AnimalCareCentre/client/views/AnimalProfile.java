@@ -14,6 +14,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -86,14 +87,14 @@ public class AnimalProfile {
     ACCHBox buttonsBox = new ACCHBox();
 
     ACCMenuButton sponsorshipsButton = new ACCMenuButton("Sponsorships");
-
     ACCMenuButton historyButton = new ACCMenuButton("History");
-
     ACCMenuButton addImg = new ACCMenuButton("Add Image");
+    ACCMenuButton manage = new ACCMenuButton("Manage");
 
     sponsorshipsButton.setOnAction(e -> sponsorshipPopover(sponsorshipsButton));
     historyButton.setOnAction(e -> adoptionHistory(historyButton));
     addImg.setOnAction(e -> addImage());
+    manage.setOnAction(e -> manageAnimal());
 
     ACCMenuButton sponsorButton = new ACCMenuButton("Sponsor");
     sponsorButton.setOnAction(e -> newSponsorshipPopover(sponsorButton));
@@ -112,7 +113,7 @@ public class AnimalProfile {
       }
     } else if (nav.getLoggedRole().equals("ROLE_SHELTER")) {
 
-      buttonsBox.addItems(sponsorshipsButton, historyButton, addImg);
+      buttonsBox.addItems(sponsorshipsButton, historyButton, addImg, manage);
 
     } else {
       buttonsBox.addItems(sponsorshipsButton, historyButton);
@@ -120,6 +121,99 @@ public class AnimalProfile {
     }
     mainBox.addItems(imgContainer, animalProfile);
     scene.addItems(mainBox, buttonsBox);
+  }
+
+  private void manageAnimal() {
+    ACCVBox content = new ACCVBox();
+    content.setPadding(new Insets(15));
+    ACCMenuButton vacine = new ACCMenuButton("Change Vacination");
+    ACCMenuButton age = new ACCMenuButton("Change Age");
+    ACCMenuButton adoptType = new ACCMenuButton("Change Adoption Type");
+    ACCMenuButton status = new ACCMenuButton("Change Status");
+    content.addItems(vacine, age, adoptType, status);
+    popover = new ACCPopover(content, "Manage " + animal.name());
+    popover.show(stage);
+
+    vacine.setOnAction(e -> {
+      ApiResponse response = ApiClient.put("/shelteranimals/vacination?id=" + animal.id(), "");
+      if (response.isSuccess()) {
+        Utility.showAlert(AlertType.INFORMATION, "Success", response.getBody());
+        ApiResponse updated = ApiClient.get("/shelteranimals/search/byid?id=" + animal.id());
+        if (updated.isSuccess()) {
+          animal = Utility.parseResponse(updated.getBody(), ShelterAnimal.class);
+          nav.showAnimal(animal);
+          show();
+        }
+      } else {
+        Utility.showAlert(AlertType.ERROR, "Error", "An error occured!");
+      }
+
+    });
+
+    age.setOnAction(e -> {
+      Label ageLabel = new Label("Age:");
+      ACCTextField ageField = new ACCTextField();
+      ACCMenuButton confirm = new ACCMenuButton("Confirm");
+      ACCMenuButton cancel = new ACCMenuButton("Cancel");
+      ageField.setPromptText(String.valueOf(animal.age()));
+
+      ageField.setTextFormatter(new TextFormatter<>(change -> {
+        String num = change.getControlNewText();
+        if (num.matches("\\d{0,9}")) {
+          return change;
+        }
+        return null;
+      }));
+
+      cancel.setOnAction(ev -> popover.hide());
+
+      confirm.setOnAction(ev -> {
+        ApiResponse response = ApiClient
+            .put("/shelteranimals/age?id=" + animal.id() + "&age=" + Integer.parseInt(ageField.getText()), "");
+        if (response.isSuccess()) {
+          Utility.showAlert(AlertType.INFORMATION, "Success", response.getBody());
+          ApiResponse updated = ApiClient.get("/shelteranimals/search/byid?id=" + animal.id());
+
+          if (updated.isSuccess()) {
+            animal = Utility.parseResponse(updated.getBody(), ShelterAnimal.class);
+            nav.showAnimal(animal);
+            show();
+          }
+        }
+      });
+      content.clear();
+      content.addItems(ageLabel, ageField, confirm, cancel);
+    });
+
+    adoptType.setOnAction(e -> {
+
+      ApiResponse response = ApiClient.put("/shelteranimals/adoptiontype?id=" + animal.id(), "");
+      if (response.isSuccess()) {
+        Utility.showAlert(AlertType.INFORMATION, "Success", response.getBody());
+
+        ApiResponse updated = ApiClient.get("/shelteranimals/search/byid?id=" + animal.id());
+        if (updated.isSuccess()) {
+          animal = Utility.parseResponse(updated.getBody(), ShelterAnimal.class);
+          nav.showAnimal(animal);
+          show();
+        }
+      }
+    });
+
+    status.setOnAction(e -> {
+      ApiResponse response = ApiClient.put("/shelteranimals/status?id=" + animal.id(), "");
+      if (response.isSuccess()) {
+        Utility.showAlert(AlertType.INFORMATION, "Success", response.getBody());
+
+        ApiResponse updated = ApiClient.get("/shelteranimals/search/byid?id=" + animal.id());
+        if (updated.isSuccess()) {
+          animal = Utility.parseResponse(updated.getBody(), ShelterAnimal.class);
+          nav.showAnimal(animal);
+          show();
+        }
+      }
+    });
+
   }
 
   private void imgCarousel() {
