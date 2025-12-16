@@ -62,6 +62,17 @@ public class ShelterController {
   }
 
   @PreAuthorize("hasRole('ADMIN')")
+  @GetMapping("/{id}")
+  public ResponseEntity<?> getShelterById(@PathVariable Long id) {
+    Shelter shelter = shelterService.findById(id);
+    if (shelter == null) {
+      return ResponseEntity.status(404).body("Shelter with ID " + id + " not found!");
+    }
+    shelter.setPassword(null);
+    return ResponseEntity.ok(shelter);
+  }
+
+  @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/status")
   public ResponseEntity<?> changeStatus(@RequestParam long id, @Valid @RequestBody ChangeStatusDTO status) {
     Shelter shelter = shelterService.findById(id);
