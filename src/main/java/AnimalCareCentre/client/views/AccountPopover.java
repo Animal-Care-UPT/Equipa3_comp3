@@ -59,7 +59,6 @@ public class AccountPopover {
 
   private void logout() {
     ApiResponse response = ApiClient.post("/accounts/logout", "");
-    System.out.println(response.getBody());
     ApiClient.clearSession();
     nav.showMainMenu();
     return;
