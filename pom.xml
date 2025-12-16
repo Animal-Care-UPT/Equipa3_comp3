@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>Equipa3</groupId>
-	<artifactId>Equipa3_comp2</artifactId>
+	<artifactId>Equipa3_comp3</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>AnimalCareCentre</name>
 	<description>A pet adoption portal developed as a group as part of the Programming Lab module.</description>
@@ -53,9 +53,19 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-    <dependency>
+<dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-controls</artifactId>
+        <version>21</version>
+    </dependency>
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-graphics</artifactId>
+        <version>21</version>
+    </dependency>
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-base</artifactId>
         <version>21</version>
     </dependency>
     <dependency>
