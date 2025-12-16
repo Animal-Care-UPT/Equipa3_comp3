@@ -961,27 +961,7 @@
 //             searchShelter();
 //             return;
 //           }
-//
-//           case 3 -> {
-//             System.out.println("\n=== PENDING REQUESTS ===");
-//
-//             ApiResponse requestResponse = ApiClient.get("/adoptions/user/pending");
-//             if (requestResponse.isSuccess()) {
-//               List<Adoption> requests = parseList(requestResponse.getBody(), Adoption.class);
-//
-//               System.out.println("Total: " + requests.size() + " Requests ");
-//
-//               for (Adoption req : requests) {
-//                 System.out.println(req.animal().name() + " - " + req.type() + " - " + req.user().name());
-//               }
-//
-//             } else {
-//               System.out.println("Error: " + requestResponse.getBody());
-//             }
-//             userHomepage();
-//             return;
-//           }
-//
+
 //           case 4 -> {
 //             System.out.println("\n=== ACCEPTED REQUESTS ===");
 //

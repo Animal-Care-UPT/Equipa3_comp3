@@ -21,10 +21,10 @@ public class AdminHomepage {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(nav.getLoggedRole(), nav, scene);
 
-    ACCMenuButton viewShelterRequests = new ACCMenuButton("1. Shelter Requests");
-    ACCMenuButton viewAllSponsorships = new ACCMenuButton("2. Sponsorships");
-    ACCMenuButton viewAllAdoptions = new ACCMenuButton("3. Adoptions");
-    ACCMenuButton viewAllFosters = new ACCMenuButton("4. Fosters");
+    ACCMenuButton viewShelterRequests = new ACCMenuButton("Shelter Requests");
+    ACCMenuButton viewAllSponsorships = new ACCMenuButton("Sponsorships");
+    ACCMenuButton viewAllAdoptions = new ACCMenuButton("Adoptions");
+    ACCMenuButton viewAllFosters = new ACCMenuButton("Fosters");
 
     viewShelterRequests.setOnAction(e -> {
 

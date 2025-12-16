@@ -16,14 +16,17 @@ public class ACCBigPopover extends PopOver {
 
   private Node setup(Node content, String title) {
     setHeaderAlwaysVisible(false);
-    setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
     setDetachable(false);
-    setMinSize(500, 400);
+    setCornerRadius(10);
+    setArrowSize(0);
+    setArrowIndent(0);
+    setMinSize(1000, 800);
     setHideOnEscape(true);
     setAutoHide(true);
+    setAutoFix(false);
     setArrowSize(0);
     setCloseButtonEnabled(false);
-
+    setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
     Text titleText = new Text(title);
     titleText.setStyle("-fx-fill: #FFFAF1; -fx-font-size: 16px; -fx-font-weight: bold;");
 
