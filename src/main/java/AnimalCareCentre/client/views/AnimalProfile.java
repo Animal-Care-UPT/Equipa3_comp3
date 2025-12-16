@@ -1,5 +1,5 @@
-
 package AnimalCareCentre.client.views;
+
 import AnimalCareCentre.client.ApiClient;
 import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
@@ -12,11 +12,14 @@ import AnimalCareCentre.client.records.Sponsorship;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
+
+import java.io.File;
 import java.util.List;
 
 public class AnimalProfile {
@@ -86,8 +89,11 @@ public class AnimalProfile {
 
     ACCMenuButton historyButton = new ACCMenuButton("History");
 
+    ACCMenuButton addImg = new ACCMenuButton("Add Image");
+
     sponsorshipsButton.setOnAction(e -> sponsorshipPopover(sponsorshipsButton));
     historyButton.setOnAction(e -> adoptionHistory(historyButton));
+    addImg.setOnAction(e -> addImage());
 
     ACCMenuButton sponsorButton = new ACCMenuButton("Sponsor");
     sponsorButton.setOnAction(e -> newSponsorshipPopover(sponsorButton));
@@ -104,8 +110,13 @@ public class AnimalProfile {
       } else {
         buttonsBox.addItems(adoptButton);
       }
+    } else if (nav.getLoggedRole().equals("ROLE_SHELTER")) {
+
+      buttonsBox.addItems(sponsorshipsButton, historyButton, addImg);
+
     } else {
       buttonsBox.addItems(sponsorshipsButton, historyButton);
+
     }
     mainBox.addItems(imgContainer, animalProfile);
     scene.addItems(mainBox, buttonsBox);
@@ -269,4 +280,14 @@ public class AnimalProfile {
 
   }
 
+  private void addImage() {
+    File image = Utility.selectImageFile(stage);
+    ApiResponse response = ApiClient.postWithFile("/shelteranimals/" + animal.id() + "/images", image);
+    if (response.isSuccess()) {
+      Utility.showAlert(AlertType.INFORMATION, "Success", response.getBody());
+    } else {
+      Utility.showAlert(AlertType.ERROR, "Error", response.getBody());
+    }
+
+  }
 }
