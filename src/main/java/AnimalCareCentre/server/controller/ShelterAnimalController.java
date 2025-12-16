@@ -10,6 +10,7 @@ import AnimalCareCentre.server.service.ShelterAnimalService;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -210,6 +211,9 @@ public class ShelterAnimalController {
     }
   }
 
+  /**
+   * Returns the profile image of an animal
+   */
   @GetMapping("/{id}/images/{index}")
   public ResponseEntity<?> getImage(@PathVariable Long id, @PathVariable int index) {
 
@@ -247,6 +251,49 @@ public class ShelterAnimalController {
 
     } catch (IOException e) {
       return ResponseEntity.status(500).body("Failed to read image: " + e.getMessage());
+    }
+  }
+
+  /**
+   * Returns all images from an animal
+   */
+  @GetMapping("/{id}/images")
+  public ResponseEntity<?> getAllImages(@PathVariable Long id) {
+    ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(id);
+    if (animal == null) {
+      return ResponseEntity.status(404).body("Animal not found");
+    }
+
+    try {
+      String uploadPath = "src/main/resources/images/shelteranimals/";
+      File imageDir = new File(uploadPath);
+      List<String> base64Images = new ArrayList<>();
+
+      int imageCount = animal.getImages().size();
+
+      for (int i = 0; i < imageCount; i++) {
+        String filePattern = "shelteranimal" + id + "_" + i + ".";
+        File imageFile = null;
+
+        for (File file : imageDir.listFiles()) {
+          if (file.getName().startsWith(filePattern)) {
+            imageFile = file;
+            break;
+          }
+        }
+
+        if (imageFile != null && imageFile.exists()) {
+          byte[] imageBytes = FileUtils.readFileToByteArray(imageFile);
+          String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+          base64Images.add(base64Image);
+        } else {
+          return ResponseEntity.status(404).body("There are no images!");
+        }
+      }
+
+      return ResponseEntity.ok(base64Images);
+    } catch (IOException e) {
+      return ResponseEntity.status(500).body("Failed to read images: " + e.getMessage());
     }
   }
 

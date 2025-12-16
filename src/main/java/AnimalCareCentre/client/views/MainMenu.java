@@ -240,7 +240,6 @@ public class MainMenu {
 
         if (response.isSuccess()) {
           Utility.showAlert(AlertType.INFORMATION, "Success", "Account created with success!");
-          System.out.println(response.getBody());
           nav.showMainMenu();
         } else {
           Utility.showAlert(AlertType.ERROR, "Error", response.getBody());
@@ -256,7 +255,6 @@ public class MainMenu {
 
         if (response.isSuccess()) {
           Utility.showAlert(AlertType.INFORMATION, "Success", "Account created with success!");
-          System.out.println(response.getBody());
           nav.showMainMenu();
         } else {
           Utility.showAlert(AlertType.ERROR, "Error", response.getBody());
