@@ -8,7 +8,9 @@ public record Sponsorship(
     Long animalId,
     String animalName,
     Float amount,
-    LocalDate startDate) {
+    LocalDate startDate,
+    Float totalDonated,
+    LocalDate endDate) {
   @Override
   public String toString() {
     return "\nUser ID: " + userId +
@@ -16,6 +18,8 @@ public record Sponsorship(
         "\nAnimal ID: " + animalId +
         "\nAnimal: " + (animalName != null ? animalName : "N/A") +
         "\nAmount: $" + amount +
-        "\nStart Date: " + startDate + "\n";
+        "\nStart Date: " + startDate + "\n" +
+        "\nEnd Date : " + endDate + "\n" +
+        "\nTotal Donated: " + totalDonated + "\n";
   }
 }

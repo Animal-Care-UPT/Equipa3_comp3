@@ -21,13 +21,13 @@ public class SponsorshipService {
 
     /**
      * Create a new sponsorship
-     * @param donor
+     * @param user
      * @param animal
      * @param amount
      * @return
      */
-  public Sponsorship newSponsorship (User donor, ShelterAnimal animal, float amount) {
-      Sponsorship sponsorship = new Sponsorship(donor, animal, amount);
+  public Sponsorship newSponsorship (User user, ShelterAnimal animal, float amount) {
+      Sponsorship sponsorship = new Sponsorship(user, animal, amount);
       return sponsorshipRepository.save(sponsorship);
 
   }

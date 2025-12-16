@@ -101,16 +101,13 @@ public class SponsorshipController {
   public ResponseEntity<?> listShelterSponsorships(@PathVariable Long animalId){
       ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(animalId);
       if (animal == null) {
-          return ResponseEntity.status(404).body("Animal not found");
+          return ResponseEntity.status(404).body("Animal not found!");
       }
 
       List<Sponsorship> sponsorships = sponsorshipService.getAnimalSponsorships(animal);
+      List<SponsorshipDTO> dtos = sponsorships.stream().map(SponsorshipDTO::fromEntity).toList();
 
-      if (sponsorships.isEmpty()) {
-          return ResponseEntity.status(404).body("No sponsorships found for this animal");
-      }
-
-      return ResponseEntity.status(200).body(sponsorships);
+      return ResponseEntity.ok(dtos);
 
   }
 

@@ -41,7 +41,7 @@ public abstract class Donation {
   }
 
   public Donation(User user, float amount) {
-    this(); // chama o construtor vazio → cria a data
+    this();
     this.user = user;
     this.amount = amount;
   }
