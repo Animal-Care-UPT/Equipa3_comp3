@@ -7,6 +7,7 @@ import AnimalCareCentre.client.Utility;
 import AnimalCareCentre.client.components.*;
 import AnimalCareCentre.client.enums.Status;
 import AnimalCareCentre.client.records.Shelter;
+import AnimalCareCentre.client.records.ShelterAnimal;
 import AnimalCareCentre.server.model.ShelterDonation;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
@@ -84,19 +85,34 @@ public class ShelterProfile {
     ACCMenuButton donationsHistoryButton = new ACCMenuButton("Donations");
     ACCMenuButton donationsButton = new ACCMenuButton("Donate");
     ACCMenuButton changeStatus = new ACCMenuButton("Change Status");
+    ACCMenuButton viewAnimals = new ACCMenuButton("View Animals");
 
     donationsHistoryButton.setOnAction(e -> donationsPopover(donationsHistoryButton));
     donationsButton.setOnAction(e -> newDonationPopover(donationsButton));
     changeStatus.setOnAction(e -> changeShelterStatus());
+    viewAnimals.setOnAction(e -> viewShelterAnimals());
 
     if (nav.getLoggedRole().equals("ROLE_USER")) {
-      buttonsBox.addItems(donationsButton);
+      buttonsBox.addItems(donationsButton, viewAnimals);
     } else {
-      buttonsBox.addItems(donationsHistoryButton, changeStatus);
+      buttonsBox.addItems(donationsHistoryButton, viewAnimals, changeStatus);
     }
 
     mainBox.addItems(imgContainer, shelterProfile);
     scene.addItems(mainBox, buttonsBox);
+  }
+
+  private void viewShelterAnimals() {
+    ApiResponse response = ApiClient.get("/shelteranimals/search/shelter/available?id=" + shelter.id());
+
+    if (response.isSuccess()) {
+      List<ShelterAnimal> animals = Utility.parseList(response.getBody(),
+          ShelterAnimal.class);
+      nav.searchAnimal(animals);
+
+    } else {
+      Utility.showAlert(AlertType.ERROR, "Error", response.getBody());
+    }
   }
 
   private void donationsPopover(ACCMenuButton button) {
@@ -204,6 +220,7 @@ public class ShelterProfile {
   private void changeShelterStatus() {
     ACCVBox content = new ACCVBox();
     content.setPadding(new Insets(15));
+    content.setMinSize(300, 300);
 
     Label selec = new Label("Select Status:");
     ACCComboBox<String> status = new ACCComboBox<>();
