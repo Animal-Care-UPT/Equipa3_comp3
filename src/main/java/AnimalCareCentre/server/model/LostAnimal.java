@@ -1,17 +1,24 @@
 package AnimalCareCentre.server.model;
 
+import AnimalCareCentre.server.enums.District;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class LostAnimal extends Animal {
 
-  String location;
+    @Enumerated(EnumType.STRING)
+  District location;
 
-  boolean isLost;
 
   String contact;
+  @ElementCollection
+  List<String> images = new ArrayList<>();
 
-  @ManyToOne
+
+    @ManyToOne
   @JoinColumn(name = "account_id")
   private Account account;
 
@@ -25,10 +32,10 @@ public class LostAnimal extends Animal {
   }
 
   public String getLocation() {
-    return location;
+    return location.name();
   }
 
-  public void setLocation(String location) {
+  public void setLocation(District location) {
     this.location = location;
   }
 
@@ -44,16 +51,17 @@ public class LostAnimal extends Animal {
     return account;
   }
 
-    public boolean getIsLost() {
-        return isLost;
-    }
 
-    public void setIsLost(boolean lost) {
-        isLost = lost;
-    }
 
     public void setAccount(Account account) {
     this.account = account;
   }
 
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
 }

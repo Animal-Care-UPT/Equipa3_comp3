@@ -3,7 +3,7 @@ package AnimalCareCentre.client.records;
 import AnimalCareCentre.client.enums.*;
 
 public record LostAnimal(long id, String name, AnimalType type, String race, AnimalSize size, AnimalGender gender,
-    AnimalColor color, String description, String location, boolean isLost, int contact) implements Displayable {
+    AnimalColor color, String description, District location, boolean isLost, int contact) implements Displayable {
   @Override
   public String toString() {
     return "Name: " + name + '\n' +
@@ -13,7 +13,7 @@ public record LostAnimal(long id, String name, AnimalType type, String race, Ani
         "Gender: " + gender + '\n' +
         "Color: " + color + '\n' +
         "Description: " + description + '\n' +
-        "Location: " + location + '\n' +
+        "Location: " + location.name() + '\n' +
         "Contact: " + contact;
   }
 
@@ -36,6 +36,9 @@ public record LostAnimal(long id, String name, AnimalType type, String race, Ani
   public String getImagePath() {
     // todo
       return null;
+  }
+  public District getLocation(){
+      return this.location;
   }
 
   @Override

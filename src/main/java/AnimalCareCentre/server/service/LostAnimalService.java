@@ -3,6 +3,7 @@ package AnimalCareCentre.server.service;
 import AnimalCareCentre.server.enums.AnimalType;
 import AnimalCareCentre.server.enums.AnimalColor;
 import AnimalCareCentre.server.enums.AnimalSize;
+import AnimalCareCentre.server.enums.District;
 import AnimalCareCentre.server.model.Account;
 import AnimalCareCentre.server.model.LostAnimal;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +13,8 @@ import AnimalCareCentre.server.repository.LostAnimalRepository;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+
 
 @Service
 public class LostAnimalService {
@@ -29,12 +32,13 @@ public class LostAnimalService {
   public List<LostAnimal> findLostAnimals(){
         return lostAnimalRepository.findAll();
   }
-  public List<LostAnimal> findRescuedAnimals(){
-      return lostAnimalRepository.findByIsLost(false);
-  }
 
-  public List<LostAnimal> findByLocation(String location){
+  public List<LostAnimal> findByLocation(District location){
       return lostAnimalRepository.findByLocation(location);
+  }
+  public LostAnimal findLostAnimalById(long id){
+      return lostAnimalRepository.findById(id).orElse(null);
+
   }
 
   public void registerLostAnimal(LostAnimal lostAnimal){
@@ -66,5 +70,10 @@ public class LostAnimalService {
 
     public void deleteById(long lostAnimalId) {
       lostAnimalRepository.deleteById(lostAnimalId);
+    }
+
+    public void addImagePath(LostAnimal animal, String imageUrl) {
+        animal.getImages().add(imageUrl);
+        lostAnimalRepository.save(animal);
     }
 }

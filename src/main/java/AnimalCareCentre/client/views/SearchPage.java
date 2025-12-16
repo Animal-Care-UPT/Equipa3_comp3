@@ -13,6 +13,7 @@ import AnimalCareCentre.client.components.ACCScene;
 import AnimalCareCentre.client.components.ACCVBox;
 import AnimalCareCentre.client.records.Displayable;
 import AnimalCareCentre.client.records.ShelterAnimal;
+import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -39,6 +40,8 @@ public class SearchPage<T extends Displayable> {
     }
 
     grid.add(lst);
+      SplitPane splitPane = new SplitPane();
+      splitPane.getItems().add(grid);
     scene.addItems(grid);
   }
 

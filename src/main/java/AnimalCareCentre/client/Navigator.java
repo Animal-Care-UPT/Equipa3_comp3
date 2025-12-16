@@ -3,6 +3,7 @@ package AnimalCareCentre.client;
 import java.util.List;
 
 import AnimalCareCentre.client.records.Displayable;
+import AnimalCareCentre.client.records.LostAnimal;
 import AnimalCareCentre.client.records.Shelter;
 import AnimalCareCentre.client.records.ShelterAnimal;
 import AnimalCareCentre.client.views.*;
@@ -37,6 +38,8 @@ public class Navigator {
 
   public void lostAndFoundHomepage(){new LostAndFoundHomepage(this,stage);}
 
+    public void registerLostAnimal(){new RegisterLostAnimal(this,stage);}
+
   public void adminHomepage() {
     new AdminHomepage(this, stage);
   }
@@ -48,9 +51,16 @@ public class Navigator {
   public void searchAnimal(List<ShelterAnimal> animals) {
     new SearchPage<>(this, stage, animals);
   }
+    public void searchLostAnimal(List<LostAnimal> animals) {
+        new SearchPage<>(this, stage, animals);
+    }
 
   public void searchShelter(List<Shelter> shelters) {
     new SearchPage<>(this, stage, shelters);
+  }
+
+  public void showLostAnimal(Displayable animal){
+      LostAnimal lostAnimal = (LostAnimal) animal;
   }
 
   public void showAnimal(Displayable animal) {
