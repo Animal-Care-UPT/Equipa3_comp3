@@ -6,7 +6,7 @@ import AnimalCareCentre.client.Navigator;
 import AnimalCareCentre.client.Utility;
 import AnimalCareCentre.client.components.*;
 import AnimalCareCentre.client.records.Shelter;
-import AnimalCareCentre.server.model.ShelterDonation;
+import AnimalCareCentre.client.records.ShelterDonation;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -38,7 +38,7 @@ public class ShelterProfile {
         Label label = new Label(shelter.toString());
         box.addItems(label);
 
-        ACCMenuButton donationsButton = new ACCMenuButton("Donations");
+        ACCMenuButton donationsButton = new ACCMenuButton("Donate");
         donationsButton.setOnAction((event) -> {
             newDonationPopover(donationsButton);
         });
@@ -46,7 +46,7 @@ public class ShelterProfile {
         ACCMenuButton donationsHistoryButton =  new ACCMenuButton("Donations");
 
         donationsHistoryButton.setOnAction(e -> {
-            donationsPopover(donationsButton);
+            donationsPopover(donationsHistoryButton);
 
         });
 
