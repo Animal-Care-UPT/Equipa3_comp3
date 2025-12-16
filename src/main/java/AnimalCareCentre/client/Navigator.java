@@ -61,6 +61,7 @@ public class Navigator {
 
   public void showLostAnimal(Displayable animal){
       LostAnimal lostAnimal = (LostAnimal) animal;
+      new LostAnimalProfile(this,stage,lostAnimal);
   }
 
   public void showAnimal(Displayable animal) {

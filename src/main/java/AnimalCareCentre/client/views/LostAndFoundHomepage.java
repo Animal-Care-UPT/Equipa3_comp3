@@ -30,6 +30,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.HashMap;
@@ -42,20 +43,25 @@ public class LostAndFoundHomepage {
   private Stage stage;
   private JLMapView map;
   private SplitPane splitPane;
+  private int loaded;
 
   public LostAndFoundHomepage(Navigator nav, Stage stage) {
     this.nav = nav;
     this.stage = stage;
-    this.splitPane = new SplitPane();
-    splitPane.setOrientation(Orientation.HORIZONTAL);
+    this.splitPane= new SplitPane();
+    splitPane.setOrientation(Orientation.VERTICAL);
     this.map = generateMap();
+    loaded = 0;
     show();
   }
 
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
-
-    splitPane.getItems().addAll(map);
+    ACCVBox mapVbox = new ACCVBox();
+    mapVbox.addItems(map);
+    mapVbox.setMaxHeight(300);
+    splitPane.getItems().add(mapVbox);
+    splitPane.setMaxWidth(900);
     scene.addItems(splitPane);
 
     new NavBar(nav.getLoggedRole(), nav, scene);
@@ -75,7 +81,13 @@ public class LostAndFoundHomepage {
               .build();
       map.setOnActionListener((source, event) -> {
           if (event instanceof ClickEvent) {
-              LostAndFoundHomepage.this.bootStrapCheckmarks((JLUiLayer) map.getUiLayer());
+              if(loaded == 0){
+
+                  LostAndFoundHomepage.this.bootStrapCheckmarks((JLUiLayer) map.getUiLayer());
+                  map.setZoom(7);
+              }
+
+              loaded = 1;
           }
       });
 
@@ -125,8 +137,11 @@ public class LostAndFoundHomepage {
                       return;
                   }
                   grid.add(animalByLocation);
-                  ScrollPane scrollPane = new ScrollPane(grid);
-                  splitPane.getItems().add(scrollPane);
+
+                  ACCVBox gridVbox= new ACCVBox();
+                  gridVbox.addItems(grid);
+                  gridVbox.setMaxHeight(400);
+                  splitPane.getItems().add(gridVbox);
                  }
 
 

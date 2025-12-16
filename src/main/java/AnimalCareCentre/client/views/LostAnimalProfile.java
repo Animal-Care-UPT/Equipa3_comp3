@@ -1,4 +1,4 @@
-/*package AnimalCareCentre.client.views;
+package AnimalCareCentre.client.views;
 
 import AnimalCareCentre.client.ApiClient;
 import AnimalCareCentre.client.ApiResponse;
@@ -42,11 +42,9 @@ public class LostAnimalProfile {
 
           Label animalProfile = new Label(animal.toString());
 
-          ACCMenuButton backButton= new ACCMenuButton("Back");
-          backButton.setOnAction();
 
 
-        root.addItems(animalProfile, sponsorshipsButton, historyButton);
+          scene.addItems(animalProfile);
 
     }
 
@@ -90,4 +88,4 @@ public class LostAnimalProfile {
 
 }
 
-*/
+
