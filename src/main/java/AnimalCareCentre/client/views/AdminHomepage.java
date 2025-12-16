@@ -6,7 +6,6 @@ import AnimalCareCentre.client.ApiClient;
 import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
 import AnimalCareCentre.client.Utility;
-import AnimalCareCentre.client.components.ACCBigPopover;
 import AnimalCareCentre.client.components.ACCMenuButton;
 import AnimalCareCentre.client.components.ACCPopover;
 import AnimalCareCentre.client.components.ACCScene;
