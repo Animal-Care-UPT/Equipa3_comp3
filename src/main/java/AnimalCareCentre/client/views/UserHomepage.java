@@ -11,6 +11,7 @@ import AnimalCareCentre.client.records.Sponsorship;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
+import java.util.List;
 import javafx.stage.Stage;
 
 
@@ -31,7 +32,7 @@ public class UserHomepage {
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(nav.getLoggedRole(), nav, scene);
-
+    
       ACCMenuButton pendingRequests = new ACCMenuButton("Pending Requests");
       pendingRequests.setOnAction(e -> pendingRequestPopover(pendingRequests));
       ACCMenuButton adoptionsHistory  = new ACCMenuButton("Adoptions History");

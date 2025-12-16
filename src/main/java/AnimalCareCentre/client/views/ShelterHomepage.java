@@ -25,12 +25,14 @@ public class ShelterHomepage {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(nav.getLoggedRole(), nav, scene);
     ACCMenuButton register = new ACCMenuButton("Register Animal");
+    ACCMenuButton viewPendingRequests = new ACCMenuButton("Pending Requests");
     ACCMenuButton addImage = new ACCMenuButton("Add Image");
-
+    
     register.setOnAction(e -> nav.registerAnimal());
+    viewPendingRequests.setOnAction(e ->{});
     addImage.setOnAction(e -> addImage());
 
-    scene.addItems(register, addImage);
+    scene.addItems(register,viewPendingRequests ,addImage);
   }
 
   private void addImage() {
@@ -44,3 +46,4 @@ public class ShelterHomepage {
   }
 
 }
+
