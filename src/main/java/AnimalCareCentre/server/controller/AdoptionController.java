@@ -37,7 +37,6 @@ public class AdoptionController {
 
     /**
      * Adoption request
-     * @param dto
      * @return
      */
   @PreAuthorize("hasRole('USER')")

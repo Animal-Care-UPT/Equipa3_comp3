@@ -7,8 +7,8 @@ import AnimalCareCentre.client.Utility;
 import AnimalCareCentre.client.components.*;
 import AnimalCareCentre.client.enums.Status;
 import AnimalCareCentre.client.records.Shelter;
+import AnimalCareCentre.client.records.ShelterDonation;
 import AnimalCareCentre.client.records.ShelterAnimal;
-import AnimalCareCentre.server.model.ShelterDonation;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
@@ -83,10 +83,23 @@ public class ShelterProfile {
 
     ACCHBox buttonsBox = new ACCHBox();
 
-    ACCMenuButton donationsHistoryButton = new ACCMenuButton("Donations");
+
+    Label label = new Label(shelter.toString());
+
     ACCMenuButton donationsButton = new ACCMenuButton("Donate");
+    donationsButton.setOnAction((event) -> {
+        newDonationPopover(donationsButton);
+    });
+
+    ACCMenuButton donationsHistoryButton =  new ACCMenuButton("Donations");
+
+    donationsHistoryButton.setOnAction(e -> {
+        donationsPopover(donationsHistoryButton);
+
+    });
     ACCMenuButton changeStatus = new ACCMenuButton("Change Status");
     ACCMenuButton viewAnimals = new ACCMenuButton("View Animals");
+
 
     donationsHistoryButton.setOnAction(e -> donationsPopover(donationsHistoryButton));
     donationsButton.setOnAction(e -> newDonationPopover(donationsButton));
@@ -211,19 +224,17 @@ public class ShelterProfile {
     popover.show(stage);
   }
 
-  private void createDonation(float amount) {
-    String requestBody = Utility.jsonString("Shelter", shelter.name(), "amount", amount);
+    private void createDonation(float amount) {
+        String requestBody = Utility.jsonString("shelterId", shelter.id(), "amount", amount);
 
-    ApiResponse response = ApiClient.post("/donations/create", requestBody);
+        ApiResponse response = ApiClient.post("/donations/create", requestBody);
 
-    if (response.isSuccess()) {
-      Utility.showAlert(Alert.AlertType.INFORMATION, "Donation Created", "Successfully created donation");
-    } else {
-      String errorMessage = response.getBody() != null ? response.getBody()
-          : "An error occurred while processing your request.";
-      Utility.showAlert(Alert.AlertType.ERROR, "Donation failed", errorMessage);
+        if (response.isSuccess()) {
+            Utility.showAlert(Alert.AlertType.INFORMATION, "Donation Created", "Successfully created donation");
+        } else {
+            Utility.showAlert(Alert.AlertType.ERROR, "Donation failed", response.getBody());
+        }
     }
-  }
 
   private void changeShelterStatus() {
     ACCVBox content = new ACCVBox();
