@@ -1,10 +1,12 @@
 package AnimalCareCentre.client.records;
 
+import java.util.List;
+
 import AnimalCareCentre.client.enums.SecurityQuestion;
 import AnimalCareCentre.client.enums.Status;
 
 public record Shelter(long id, String name, String email, String location, SecurityQuestion securityQuestion,
-    Integer foundationYear, String contact, Status status) implements Displayable {
+    Integer foundationYear, String contact, Status status, List<String> images) implements Displayable {
 
   @Override
   public String toString() {
@@ -33,8 +35,7 @@ public record Shelter(long id, String name, String email, String location, Secur
 
   @Override
   public String getImagePath() {
-    // todo
-    return null;
+    return (images != null && !images.isEmpty()) ? images.get(0) : null;
   }
 
   @Override

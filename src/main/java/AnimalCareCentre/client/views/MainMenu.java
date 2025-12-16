@@ -1,7 +1,10 @@
 package AnimalCareCentre.client.views;
 
+import java.io.File;
+
 import AnimalCareCentre.client.*;
 import AnimalCareCentre.client.enums.*;
+import AnimalCareCentre.client.records.Shelter;
 import AnimalCareCentre.client.components.*;
 
 import javafx.geometry.Pos;
@@ -78,6 +81,14 @@ public class MainMenu {
       }
 
       nav.setLoggedRole(response.getBody());
+      if (nav.getLoggedRole().equals("ROLE_SHELTER")) {
+        ApiResponse shelterResponse = ApiClient.get("/shelters/isAvailable");
+        if (!shelterResponse.isSuccess()) {
+          Utility.showAlert(AlertType.ERROR, "Unauthorized", shelterResponse.getBody());
+          nav.showMainMenu();
+          return;
+        }
+      }
       nav.home();
 
     });
@@ -176,6 +187,21 @@ public class MainMenu {
     Label foundYear = new Label("Foundation year:");
     ACCTextField year = new ACCTextField();
     Label adminLabel = new Label("Admin code:");
+    Label uploadStatus = new Label("No image selected");
+    uploadStatus.setStyle("-fx-text-fill: red;");
+
+    ACCTextButton upload = new ACCTextButton("Upload Image");
+    final File[] image = { null };
+    ACCHBox uploadBox = new ACCHBox();
+    uploadBox.addItems(upload, uploadStatus);
+
+    upload.setOnAction(e -> {
+      image[0] = Utility.selectImageFile(stage);
+      if (image[0] != null) {
+        uploadStatus.setText("Image uploaded");
+        uploadStatus.setStyle("-fx-text-fill: green;");
+      }
+    });
 
     year.setTextFormatter(new TextFormatter<>(change -> {
       String num = change.getControlNewText();
@@ -247,7 +273,11 @@ public class MainMenu {
 
         if (response.isSuccess()) {
           Utility.showAlert(AlertType.INFORMATION, "Success", "Account created with success!");
-          System.out.println(response.getBody());
+          Shelter shelter = Utility.parseResponse(response.getBody(), Shelter.class);
+          ApiResponse imageResponse = ApiClient.postWithFile("/shelters/" + shelter.id() + "/images", image[0]);
+          if (!imageResponse.isSuccess()) {
+            Utility.showAlert(AlertType.ERROR, "Error", imageResponse.getBody());
+          }
           nav.showMainMenu();
         } else {
           Utility.showAlert(AlertType.ERROR, "Error", response.getBody());
@@ -271,7 +301,7 @@ public class MainMenu {
         vbox.getChildren().addAll(birthLabel, birthDate, contactLabel, contact);
 
       } else if (selected.equals("Shelter")) {
-        vbox.getChildren().addAll(contactLabel, contact, foundYear, year);
+        vbox.getChildren().addAll(contactLabel, contact, foundYear, year, uploadBox);
 
       } else {
         vbox.getChildren().addAll(adminLabel, adminCode);
