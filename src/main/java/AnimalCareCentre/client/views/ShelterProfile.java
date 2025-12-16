@@ -5,13 +5,17 @@ import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
 import AnimalCareCentre.client.Utility;
 import AnimalCareCentre.client.components.*;
+import AnimalCareCentre.client.enums.Status;
 import AnimalCareCentre.client.records.Shelter;
+import AnimalCareCentre.client.records.ShelterAnimal;
 import AnimalCareCentre.server.model.ShelterDonation;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -61,9 +65,7 @@ public class ShelterProfile {
       imageView.setCursor(Cursor.HAND);
     });
 
-    imageView.setOnMouseClicked(event -> {
-      // img popover soon
-    });
+    imageView.setOnMouseClicked(event -> imgCarousel());
 
     String imageUrl = shelter.getImagePath();
     if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -75,25 +77,43 @@ public class ShelterProfile {
       }
     }
 
-    Label shelterProfile = new Label(shelter.toString());
+    Label shelterProfile = new Label(
+        shelter.toString());
     shelterProfile.setStyle("-fx-font-size: 16px; -fx-line-spacing: 5px;");
 
     ACCHBox buttonsBox = new ACCHBox();
 
     ACCMenuButton donationsHistoryButton = new ACCMenuButton("Donations");
     ACCMenuButton donationsButton = new ACCMenuButton("Donate");
+    ACCMenuButton changeStatus = new ACCMenuButton("Change Status");
+    ACCMenuButton viewAnimals = new ACCMenuButton("View Animals");
 
     donationsHistoryButton.setOnAction(e -> donationsPopover(donationsHistoryButton));
     donationsButton.setOnAction(e -> newDonationPopover(donationsButton));
+    changeStatus.setOnAction(e -> changeShelterStatus());
+    viewAnimals.setOnAction(e -> viewShelterAnimals());
 
     if (nav.getLoggedRole().equals("ROLE_USER")) {
-      buttonsBox.addItems(donationsButton);
-    } else { // missing change status for admin
-      buttonsBox.addItems(donationsHistoryButton);
+      buttonsBox.addItems(donationsButton, viewAnimals);
+    } else {
+      buttonsBox.addItems(donationsHistoryButton, viewAnimals, changeStatus);
     }
 
     mainBox.addItems(imgContainer, shelterProfile);
     scene.addItems(mainBox, buttonsBox);
+  }
+
+  private void viewShelterAnimals() {
+    ApiResponse response = ApiClient.get("/shelteranimals/search/shelter/available?id=" + shelter.id());
+
+    if (response.isSuccess()) {
+      List<ShelterAnimal> animals = Utility.parseList(response.getBody(),
+          ShelterAnimal.class);
+      nav.searchAnimal(animals);
+
+    } else {
+      Utility.showAlert(AlertType.ERROR, "Error", response.getBody());
+    }
   }
 
   private void donationsPopover(ACCMenuButton button) {
@@ -126,6 +146,21 @@ public class ShelterProfile {
     popover.show(stage);
   }
 
+  private void imgCarousel() {
+    ApiResponse response = ApiClient.get("/shelters/" + shelter.id() + "/images");
+    if (!response.isSuccess()) {
+      Utility.showAlert(Alert.AlertType.ERROR, "Error", response.getBody());
+      return;
+    }
+    List<Image> images = Utility.parseImageList(response);
+
+    ACCCarousel carousel = new ACCCarousel(images);
+    carousel.setPadding(new Insets(20));
+
+    popover = new ACCPopover(carousel, shelter.name() + " - Images");
+    popover.show(stage);
+  }
+
   private void newDonationPopover(ACCMenuButton button) {
     ACCVBox content = new ACCVBox();
     content.setPadding(new Insets(15));
@@ -138,6 +173,13 @@ public class ShelterProfile {
 
     ACCTextField amountField = new ACCTextField();
     amountField.setPromptText("0.00");
+    amountField.setTextFormatter(new TextFormatter<>(change -> {
+      String num = change.getControlNewText();
+      if (num.matches("\\d{0,9}")) {
+        return change;
+      }
+      return null;
+    }));
 
     ACCMenuButton submitButton = new ACCMenuButton("Submit");
     ACCMenuButton cancelButton = new ACCMenuButton("Cancel");
@@ -181,6 +223,56 @@ public class ShelterProfile {
           : "An error occurred while processing your request.";
       Utility.showAlert(Alert.AlertType.ERROR, "Donation failed", errorMessage);
     }
+  }
+
+  private void changeShelterStatus() {
+    ACCVBox content = new ACCVBox();
+    content.setPadding(new Insets(15));
+    content.setMinSize(300, 300);
+
+    Label selec = new Label("Select Status:");
+    ACCComboBox<String> status = new ACCComboBox<>();
+    status.getItems().addAll("Set as Available", "Ban Shelter");
+    ACCMenuButton confirm = new ACCMenuButton("Confirm");
+    ACCMenuButton cancelButton = new ACCMenuButton("Cancel");
+    confirm.setOnAction(e -> {
+      if (status.getValue() == null) {
+        Utility.showAlert(AlertType.ERROR, "Error", "Please select a Status");
+        return;
+      }
+      if (status.getValue() == "Set as Available") {
+        String jsonStatus = Utility.jsonString("status", Status.AVAILABLE);
+        ApiResponse acptResponse = ApiClient.put("/shelters/status?id=" +
+            shelter.id(), jsonStatus);
+        if (acptResponse.isSuccess()) {
+          Utility.showAlert(AlertType.INFORMATION, "Success", "Shelter as been made available with success!");
+        } else {
+          Utility.showAlert(AlertType.ERROR, "Error", acptResponse.getBody());
+        }
+      } else {
+        String jsonStatus = Utility.jsonString("status", Status.BANNED);
+        ApiResponse banResponse = ApiClient.put("/shelters/status?id=" +
+            shelter.id(), jsonStatus);
+        if (banResponse.isSuccess()) {
+          Utility.showAlert(AlertType.INFORMATION, "Success", "Shelter banned with success");
+        } else {
+          Utility.showAlert(AlertType.ERROR, "Error", banResponse.getBody());
+        }
+      }
+      ApiResponse response = ApiClient.get("/shelters/" + shelter.id());
+      if (response.isSuccess()) {
+        shelter = Utility.parseResponse(response.getBody(), Shelter.class);
+      }
+      show();
+    });
+
+    cancelButton.setOnAction(e -> popover.hide());
+
+    content.addItems(selec, status, confirm, cancelButton);
+
+    popover = new ACCPopover(content, "Change Shelter Status");
+    popover.show(stage);
+
   }
 
 }

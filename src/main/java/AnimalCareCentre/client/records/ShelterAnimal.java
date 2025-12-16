@@ -2,6 +2,7 @@ package AnimalCareCentre.client.records;
 
 import java.util.List;
 
+import AnimalCareCentre.client.Navigator;
 import AnimalCareCentre.client.enums.*;
 
 public record ShelterAnimal(long id, String name, AnimalType type, String race, AnimalSize size, AnimalGender gender,
@@ -11,16 +12,30 @@ public record ShelterAnimal(long id, String name, AnimalType type, String race, 
 
   @Override
   public String toString() {
-    return "\nID: " + id +
-        "\nName: " + name +
-        "\nType: " + type +
-        "\nRace: " + race +
-        "\nSize: " + size +
-        "\nGender: " + gender +
-        "\nColor: " + color +
-        "\nVacination Status: " + vacinated +
-        "\nAge: " + age +
-        "\nShelter: " + (shelter != null ? shelter.name() : "N/A") + "\n";
+    if (Navigator.getLoggedRole().equals("ROLE_USER")) {
+      return "\nName: " + name +
+      "\nType: " + type +
+      "\nRace: " + race +
+      "\nSize: " + size +
+      "\nGender: " + gender +
+      "\nColor: " + color +
+      "\nVacination Status: " + vacinated +
+      "\nAge: " + age +
+      "\nShelter: " + (shelter != null ? shelter.name() : "N/A") + "\n";
+    } else {
+      return "\nId: " + id + 
+      "\nName: " + name +
+      "\nType: " + type +
+      "\nRace: " + race +
+      "\nSize: " + size +
+      "\nGender: " + gender +
+      "\nColor: " + color +
+      "\nVacination Status: " + vacinated +
+      "\nAge: " + age +
+      "\nShelter: " + (shelter != null ? shelter.name() : "N/A") + 
+      "\nAdoption Type: " + adoptionType + 
+      "\nStatus: " + status + "\n";
+    }
   }
 
   @Override

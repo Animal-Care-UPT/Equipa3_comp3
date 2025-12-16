@@ -1,3 +1,6 @@
+// WE KEEP THIS FOR LEGACY <3
+
+
 // package AnimalCareCentre.client;
 //
 // import java.awt.Toolkit;
