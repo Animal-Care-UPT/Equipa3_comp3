@@ -3,6 +3,7 @@ package AnimalCareCentre.server.controller;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -224,6 +225,47 @@ public class ShelterController {
 
     } catch (IOException e) {
       return ResponseEntity.status(500).body("Failed to upload image: " + e.getMessage());
+    }
+  }
+
+  /**
+   * Returns all images from a shelter
+   */
+  @GetMapping("/{id}/images")
+  public ResponseEntity<?> getAllImages(@PathVariable Long id) {
+    Shelter shelter = shelterService.findById(id);
+    if (shelter == null) {
+      return ResponseEntity.status(404).body("Shelter not found");
+    }
+    try {
+      String uploadPath = "src/main/resources/images/shelters/";
+      File imageDir = new File(uploadPath);
+      List<String> base64Images = new ArrayList<>();
+      int imageCount = shelter.getImages().size();
+
+      for (int i = 0; i < imageCount; i++) {
+        String filePattern = "shelter" + id + "_" + i + ".";
+        File imageFile = null;
+
+        for (File file : imageDir.listFiles()) {
+          if (file.getName().startsWith(filePattern)) {
+            imageFile = file;
+            break;
+          }
+        }
+
+        if (imageFile != null && imageFile.exists()) {
+          byte[] imageBytes = FileUtils.readFileToByteArray(imageFile);
+          String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+          base64Images.add(base64Image);
+        } else {
+          return ResponseEntity.status(404).body("There are no images!");
+        }
+      }
+
+      return ResponseEntity.ok(base64Images);
+    } catch (IOException e) {
+      return ResponseEntity.status(500).body("Failed to read images: " + e.getMessage());
     }
   }
 

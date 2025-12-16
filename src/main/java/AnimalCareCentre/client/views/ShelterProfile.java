@@ -61,9 +61,7 @@ public class ShelterProfile {
       imageView.setCursor(Cursor.HAND);
     });
 
-    imageView.setOnMouseClicked(event -> {
-      // img popover soon
-    });
+    imageView.setOnMouseClicked(event -> imgCarousel());
 
     String imageUrl = shelter.getImagePath();
     if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -75,7 +73,8 @@ public class ShelterProfile {
       }
     }
 
-    Label shelterProfile = new Label(shelter.toString());
+    Label shelterProfile = new Label(
+        shelter.toString());
     shelterProfile.setStyle("-fx-font-size: 16px; -fx-line-spacing: 5px;");
 
     ACCHBox buttonsBox = new ACCHBox();
@@ -83,7 +82,9 @@ public class ShelterProfile {
     ACCMenuButton donationsHistoryButton = new ACCMenuButton("Donations");
     ACCMenuButton donationsButton = new ACCMenuButton("Donate");
 
-    donationsHistoryButton.setOnAction(e -> donationsPopover(donationsHistoryButton));
+    donationsHistoryButton.setOnAction(e ->
+
+    donationsPopover(donationsHistoryButton));
     donationsButton.setOnAction(e -> newDonationPopover(donationsButton));
 
     if (nav.getLoggedRole().equals("ROLE_USER")) {
@@ -123,6 +124,21 @@ public class ShelterProfile {
     scroll.setPrefHeight(200);
 
     popover = new ACCPopover(scroll, "Donations History");
+    popover.show(stage);
+  }
+
+  private void imgCarousel() {
+    ApiResponse response = ApiClient.get("/shelters/" + shelter.id() + "/images");
+    if (!response.isSuccess()) {
+      Utility.showAlert(Alert.AlertType.ERROR, "Error", response.getBody());
+      return;
+    }
+    List<Image> images = Utility.parseImageList(response);
+
+    ACCCarousel carousel = new ACCCarousel(images);
+    carousel.setPadding(new Insets(20));
+
+    popover = new ACCPopover(carousel, shelter.name() + " - Images");
     popover.show(stage);
   }
 
