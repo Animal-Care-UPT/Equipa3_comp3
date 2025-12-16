@@ -4,24 +4,25 @@ import AnimalCareCentre.client.ApiClient;
 import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
 import AnimalCareCentre.client.Utility;
-import AnimalCareCentre.client.components.ACCMenuButton;
-import AnimalCareCentre.client.components.ACCPopover;
-import AnimalCareCentre.client.components.ACCScene;
-import AnimalCareCentre.client.components.ACCVBox;
+import AnimalCareCentre.client.components.*;
 import AnimalCareCentre.client.records.Shelter;
+import AnimalCareCentre.server.model.ShelterDonation;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class UserShelterProfile {
+import java.util.List;
+
+public class ShelterProfile {
 
     private Navigator nav;
     private Stage stage;
     private Shelter shelter;
     private ACCPopover popover;
 
-    public UserShelterProfile(Navigator nav, Stage stage, Shelter shelter){
+    public ShelterProfile(Navigator nav, Stage stage, Shelter shelter){
         this.nav = nav;
         this.stage = stage;
         this.shelter = shelter;
@@ -29,21 +30,38 @@ public class UserShelterProfile {
     }
 
     private void show(){
-        ACCVBox root = new ACCVBox();
-        ACCScene scene = new ACCScene(stage, root);
+        ACCScene scene = new ACCScene(stage, new ACCVBox());
         new NavBar(nav.getLoggedRole(), nav, scene);
 
+        ACCHBox box = new ACCHBox();
+
         Label label = new Label(shelter.toString());
+        box.addItems(label);
 
         ACCMenuButton donationsButton = new ACCMenuButton("Donations");
-        donationsButton.setOnMouseClicked((event) -> {
-            donationPopover(donationsButton);
+        donationsButton.setOnAction((event) -> {
+            newDonationPopover(donationsButton);
         });
 
-        root.addItems(label, donationsButton);
+        ACCMenuButton donationsHistoryButton =  new ACCMenuButton("Donations");
+
+        donationsHistoryButton.setOnAction(e -> {
+            donationsPopover(donationsButton);
+
+        });
+
+        if(nav.getLoggedRole().equals("ROLE_ADMIN")){
+            scene.addItems(box, donationsHistoryButton);
+        }
+
+        else if(nav.getLoggedRole().equals("ROLE_USER")){
+            scene.addItems(box, donationsButton);
+        }
+
+
     }
 
-    private void donationPopover(ACCMenuButton button) {
+    private void newDonationPopover(ACCMenuButton button) {
         ACCVBox content = new ACCVBox();
         content.setSpacing(10);
 
@@ -96,6 +114,40 @@ public class UserShelterProfile {
         } else {
             Utility.showAlert(Alert.AlertType.ERROR, "Donation failed", "An error occurred while processing your request.");
         }
+    }
+
+    public void donationsPopover(ACCMenuButton button){
+        ApiResponse response = ApiClient.get("/donations/admin/" + shelter.id());
+
+
+        ACCVBox content = new ACCVBox();
+        content.setSpacing(8);
+
+        if(!response.isSuccess()){
+            Utility.showAlert(Alert.AlertType.ERROR, "Error loading donations", response.getBody());
+            return;
+        }
+        List<ShelterDonation> donations = Utility.parseList(response.getBody(), ShelterDonation.class);
+
+        if(donations==null || donations.isEmpty()){
+            content.addItems(new Label("No donations found!"));
+        }
+        else{
+            for(ShelterDonation donation : donations){
+                Label label = new Label(donation.toString());
+                label.setStyle("-fx-padding: 5; -fx-background-color: #f0f0f0; -fx-background-radius: 5;");
+                content.addItems(label);
+            }
+        }
+
+
+        ScrollPane scrollPane = new ScrollPane(content);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(200);
+
+        popover = new ACCPopover(scrollPane, "Donations");
+        popover.show(button);
+
     }
 
 }

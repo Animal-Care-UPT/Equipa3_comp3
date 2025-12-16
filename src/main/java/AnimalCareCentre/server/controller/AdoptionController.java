@@ -1,6 +1,7 @@
 package AnimalCareCentre.server.controller;
 
 import AnimalCareCentre.server.dto.*;
+import AnimalCareCentre.server.enums.AdoptionType;
 import AnimalCareCentre.server.model.*;
 import AnimalCareCentre.server.enums.Status;
 import AnimalCareCentre.server.service.AdoptionService;
@@ -41,7 +42,7 @@ public class AdoptionController {
      */
   @PreAuthorize("hasRole('USER')")
   @PostMapping("/request")
-  public ResponseEntity<?> requestAdoption(@RequestBody AdoptionRequestDTO dto) {
+  public ResponseEntity<?> requestAdoption(@RequestParam Long animalId, @RequestParam String type) {
     String email = SecurityContextHolder.getContext().getAuthentication().getName();
     User user = userService.findByEmail(email);
 
@@ -49,7 +50,19 @@ public class AdoptionController {
       return ResponseEntity.status(404).body("This user isn't registered!");
     }
 
-    Adoption adoption = adoptionService.requestAdoption(user, dto.getAnimalId(), dto.getType());
+    String enumValue = switch (type.toUpperCase()) {
+        case "ADOPTION" -> "FOR_ADOPTION";
+        case "FOSTER" -> "FOR_FOSTER";
+        default -> null;
+      };
+
+      if (enumValue == null) {
+          return ResponseEntity.status(400).body("Invalid adoption type.");
+      }
+
+      AdoptionType adoptionType = AdoptionType.fromString(enumValue);
+
+    Adoption adoption = adoptionService.requestAdoption(user, animalId, adoptionType);
     return ResponseEntity.status(201).body(adoption);
   }
 
