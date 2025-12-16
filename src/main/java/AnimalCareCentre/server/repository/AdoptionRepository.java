@@ -12,7 +12,7 @@ public interface AdoptionRepository extends JpaRepository<Adoption, Long> {
 
 
     List<Adoption> findByAnimal_ShelterAndStatus(Shelter shelter, Status status);
-    List<Adoption> findByType(AdoptionType type);
+    List<Adoption> findByTypeAndStatus(AdoptionType type, Status status);
     List<Adoption> findByUserAndStatus(User user, Status status);
     List<Adoption> findByUserAndStatusAndType(User user, Status status, AdoptionType type);
     List<Adoption> findByAnimal(ShelterAnimal animal);
