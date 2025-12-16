@@ -14,6 +14,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -172,6 +173,13 @@ public class ShelterProfile {
 
     ACCTextField amountField = new ACCTextField();
     amountField.setPromptText("0.00");
+    amountField.setTextFormatter(new TextFormatter<>(change -> {
+      String num = change.getControlNewText();
+      if (num.matches("\\d{0,9}")) {
+        return change;
+      }
+      return null;
+    }));
 
     ACCMenuButton submitButton = new ACCMenuButton("Submit");
     ACCMenuButton cancelButton = new ACCMenuButton("Cancel");

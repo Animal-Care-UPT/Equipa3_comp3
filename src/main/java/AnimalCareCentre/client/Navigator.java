@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 public class Navigator {
 
   private Stage stage;
-  private String loggedRole;
+  private static String loggedRole;
 
   public Navigator(Stage stage) {
     this.stage = stage;
@@ -82,7 +82,7 @@ public class Navigator {
     }
   }
 
-  public String getLoggedRole() {
+  public static String getLoggedRole() {
     return loggedRole;
   }
 }

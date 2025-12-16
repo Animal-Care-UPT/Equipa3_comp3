@@ -345,6 +345,13 @@ public class AnimalProfile {
     amountLabel.setStyle("-fx-font-size: 12px;");
     ACCTextField amountField = new ACCTextField();
     amountField.setPromptText("0.00");
+    amountField.setTextFormatter(new TextFormatter<>(change -> {
+      String num = change.getControlNewText();
+      if (num.matches("\\d{0,9}")) {
+        return change;
+      }
+      return null;
+    }));
 
     ACCMenuButton submitButton = new ACCMenuButton("Submit");
     ACCMenuButton cancelButton = new ACCMenuButton("Cancel");
