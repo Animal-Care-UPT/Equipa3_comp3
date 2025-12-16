@@ -7,6 +7,7 @@ import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
 import AnimalCareCentre.client.Utility;
 import AnimalCareCentre.client.components.ACCMenuButton;
+import AnimalCareCentre.client.components.ACCTableView;
 import AnimalCareCentre.client.components.ACCPopover;
 import AnimalCareCentre.client.components.ACCScene;
 import AnimalCareCentre.client.components.ACCVBox;
@@ -62,7 +63,7 @@ public class AdminHomepage {
   }
   
   public void viewShelterRequests(){
-    TableView<Shelter> table = new TableView<>();
+    ACCTableView<Shelter> table = new ACCTableView<>();
     TableColumn<Shelter,String> shelterIDColumn = new TableColumn<>("Shelter ID");
     shelterIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 
@@ -103,7 +104,7 @@ public class AdminHomepage {
 
     table.getColumns().addAll(shelterIDColumn,shelterColumn,localColumn,yearColumn,contactColumn,buttonColumn);
     table.setPrefHeight(300);
-    table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    table.setColumnResizePolicy(ACCTableView.CONSTRAINED_RESIZE_POLICY);
 
     table.widthProperty().addListener((obs,oldVal,newVal) -> {
       double width = newVal.doubleValue();
@@ -133,7 +134,7 @@ public class AdminHomepage {
   }
 
   public void viewSponsorships(){
-    TableView<Sponsorship> table = new TableView<>();
+    ACCTableView<Sponsorship> table = new ACCTableView<>();
 
     TableColumn<Sponsorship,String> userIDColumn = new TableColumn<>("User ID");
     userIDColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
@@ -155,7 +156,7 @@ public class AdminHomepage {
     
     table.getColumns().addAll(userIDColumn,userColumn,animalIDColumn,animalColumn,amountColumn,dateColumn);
     table.setPrefHeight(300);
-    table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    table.setColumnResizePolicy(ACCTableView.CONSTRAINED_RESIZE_POLICY);
 
     table.widthProperty().addListener((obs, oldVal, newVal) -> {
     double width = newVal.doubleValue();
@@ -185,7 +186,7 @@ public class AdminHomepage {
   }
   
   public void seeAdoptions(){
-    TableView<Adoption> table = new TableView<>();
+    ACCTableView<Adoption> table = new ACCTableView<>();
 
     TableColumn<Adoption,String> userColumn = new TableColumn<>("User");
     userColumn.setCellValueFactory(new PropertyValueFactory<>("user"));
@@ -198,7 +199,7 @@ public class AdminHomepage {
 
     table.getColumns().addAll(userColumn,shelterColumn,animalColumn);
     table.setPrefHeight(300);
-    table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    table.setColumnResizePolicy(ACCTableView.CONSTRAINED_RESIZE_POLICY);
 
     table.widthProperty().addListener((obs,oldVal,newVal) ->{
     double width = newVal.doubleValue();
@@ -225,7 +226,7 @@ public class AdminHomepage {
   }
 
   public void seeFosters(){
-   TableView<Adoption> table = new TableView<>();
+   ACCTableView<Adoption> table = new ACCTableView<>();
 
     TableColumn<Adoption,String> userColumn = new TableColumn<>("User");
     userColumn.setCellValueFactory(new PropertyValueFactory<>("user"));
@@ -238,7 +239,7 @@ public class AdminHomepage {
 
     table.getColumns().addAll(userColumn,shelterColumn,animalColumn);
     table.setPrefHeight(300);
-    table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    table.setColumnResizePolicy(ACCTableView.CONSTRAINED_RESIZE_POLICY);
 
     table.widthProperty().addListener((obs,oldVal,newVal) ->{
     double width = newVal.doubleValue();
