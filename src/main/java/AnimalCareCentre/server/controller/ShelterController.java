@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import AnimalCareCentre.server.dto.ChangeStatusDTO;
+import AnimalCareCentre.server.enums.*;
 import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.service.AccountService;
 import AnimalCareCentre.server.service.ShelterService;
@@ -97,6 +99,23 @@ public class ShelterController {
       return ResponseEntity.status(404).body("There are no results!");
     }
     return ResponseEntity.ok(shelters);
+  }
+
+  @PreAuthorize("hasRole('SHELTER')")
+  @GetMapping("isAvailable")
+  public ResponseEntity<?> checkIfAvailable() {
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    Shelter shelter = shelterService.findByEmail(email);
+    if (shelter == null) {
+      return ResponseEntity.status(404).body("Shelter not registered");
+    }
+    if (shelter.getStatus() == Status.PENDING) {
+      return ResponseEntity.status(404).body("Your request to join the platform is still pending!");
+    } else if (shelter.getStatus() == Status.BANNED) {
+      return ResponseEntity.status(404).body("You have been banned from Animal Care Centre!");
+    } else {
+      return ResponseEntity.ok("Welcome!");
+    }
   }
 
   @PostMapping("/{id}/images")

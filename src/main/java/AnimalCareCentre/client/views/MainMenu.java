@@ -82,7 +82,11 @@ public class MainMenu {
 
       nav.setLoggedRole(response.getBody());
       if (nav.getLoggedRole().equals("ROLE_SHELTER")) {
-
+        ApiResponse shelterResponse = ApiClient.get("shelters/isAvailable");;
+        if (!response.isSuccess()) {
+          Utility.showAlert(AlertType.ERROR, "Unauthorized", shelterResponse.getBody());
+          nav.showMainMenu();
+        }
       }
       nav.home();
 
