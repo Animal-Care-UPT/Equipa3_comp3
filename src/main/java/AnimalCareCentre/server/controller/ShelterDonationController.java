@@ -102,8 +102,8 @@ public class ShelterDonationController {
   }
 
   @PreAuthorize("hasRole('ADMIN')")
-  @GetMapping("/admin")
-    public ResponseEntity<?> getShelterDonations(@RequestParam Long shelterId) {
+  @GetMapping("admin/{shelterId}")
+    public ResponseEntity<?> getShelterDonations(@PathVariable Long shelterId) {
         Shelter shelter = shelterService.findById(shelterId);
         if (shelter == null) {
             return ResponseEntity.status(404).body("Shelter not found");

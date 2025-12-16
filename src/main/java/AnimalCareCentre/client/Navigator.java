@@ -54,9 +54,14 @@ public class Navigator {
   }
 
   public void showAnimal(Displayable animal) {
+      ShelterAnimal shelterAnimal = (ShelterAnimal) animal;
+      new AnimalProfile(this, stage, shelterAnimal);
   }
 
   public void showShelter(Displayable shelter) {
+      Shelter shelterRecord = (Shelter) shelter;
+      new ShelterProfile(this, stage, shelterRecord);
+
   }
 
   public void registerAnimal() {

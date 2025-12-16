@@ -1,9 +1,8 @@
 package AnimalCareCentre.server.controller;
 
 import AnimalCareCentre.server.dto.*;
-import AnimalCareCentre.server.model.Adoption;
-import AnimalCareCentre.server.model.Shelter;
-import AnimalCareCentre.server.model.User;
+import AnimalCareCentre.server.enums.AdoptionType;
+import AnimalCareCentre.server.model.*;
 import AnimalCareCentre.server.enums.Status;
 import AnimalCareCentre.server.service.AdoptionService;
 import AnimalCareCentre.server.service.ShelterAnimalService;
@@ -25,6 +24,7 @@ public class AdoptionController {
   private final AdoptionService adoptionService;
   private final UserService userService;
   private final ShelterService shelterService;
+  private final ShelterAnimalService shelterAnimalService;
 
   public AdoptionController(AdoptionService adoptionService, ShelterAnimalService shelterAnimalService,
       UserService userService, ShelterService shelterService) {
@@ -32,6 +32,7 @@ public class AdoptionController {
     this.adoptionService = adoptionService;
     this.userService = userService;
     this.shelterService = shelterService;
+    this.shelterAnimalService = shelterAnimalService;
   }
 
     /**
@@ -41,7 +42,7 @@ public class AdoptionController {
      */
   @PreAuthorize("hasRole('USER')")
   @PostMapping("/request")
-  public ResponseEntity<?> requestAdoption(@RequestBody AdoptionRequestDTO dto) {
+  public ResponseEntity<?> requestAdoption(@RequestParam Long animalId, @RequestParam String type) {
     String email = SecurityContextHolder.getContext().getAuthentication().getName();
     User user = userService.findByEmail(email);
 
@@ -49,7 +50,19 @@ public class AdoptionController {
       return ResponseEntity.status(404).body("This user isn't registered!");
     }
 
-    Adoption adoption = adoptionService.requestAdoption(user, dto.getAnimalId(), dto.getType());
+    String enumValue = switch (type.toUpperCase()) {
+        case "ADOPTION" -> "FOR_ADOPTION";
+        case "FOSTER" -> "FOR_FOSTER";
+        default -> null;
+      };
+
+      if (enumValue == null) {
+          return ResponseEntity.status(400).body("Invalid adoption type.");
+      }
+
+      AdoptionType adoptionType = AdoptionType.fromString(enumValue);
+
+    Adoption adoption = adoptionService.requestAdoption(user, animalId, adoptionType);
     return ResponseEntity.status(201).body(adoption);
   }
 
@@ -242,6 +255,29 @@ public class AdoptionController {
     }
     return ResponseEntity.ok(adoptions);
   }
+
+  /**
+  * To see the adoption/foster historic of a certain animal
+  * @param animalId
+  * @return
+  */
+  @PreAuthorize("hasAnyRole('SHELTER','ADMIN')")
+  @GetMapping("/animal/{animalId}")
+  public ResponseEntity<?> listAnimalHistoric(@PathVariable Long animalId){
+      ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(animalId);
+      if (animal == null) {
+          return ResponseEntity.status(404).body("Animal not found");
+      }
+
+      List<AdoptionDTO> historic = adoptionService.getAdoptionsByAnimal(animal);
+
+      if (historic.isEmpty()) {
+            return ResponseEntity.status(404).body("This animal was never adopted or fostered");
+        }
+
+        return ResponseEntity.status(200).body(historic);
+
+    }
 
 
 }
