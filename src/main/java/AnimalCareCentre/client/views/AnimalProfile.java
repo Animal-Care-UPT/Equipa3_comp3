@@ -67,7 +67,7 @@ public class AnimalProfile {
     });
 
     imageView.setOnMouseClicked(event -> {
-      // img popover soon
+      imgCarousel();
     });
 
     String imageUrl = animal.getImagePath();
@@ -120,6 +120,21 @@ public class AnimalProfile {
     }
     mainBox.addItems(imgContainer, animalProfile);
     scene.addItems(mainBox, buttonsBox);
+  }
+
+  private void imgCarousel() {
+    ApiResponse response = ApiClient.get("/shelteranimals/" + animal.id() + "/images");
+    if (!response.isSuccess()) {
+      Utility.showAlert(AlertType.ERROR, "Error", response.getBody());
+      return;
+    }
+    List<Image> images = Utility.parseImageList(response);
+
+    ACCCarousel carousel = new ACCCarousel(images);
+    carousel.setPadding(new Insets(20));
+
+    popover = new ACCPopover(carousel, animal.name() + " - Images");
+    popover.show(stage);
   }
 
   private void sponsorshipPopover(ACCMenuButton button) {
