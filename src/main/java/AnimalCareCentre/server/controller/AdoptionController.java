@@ -261,7 +261,7 @@ public class AdoptionController {
   * @param animalId
   * @return
   */
-  @PreAuthorize("hasAnyRole('SHELTER','ADMIN', 'USER')")
+  @PreAuthorize("hasAnyRole('SHELTER','ADMIN')")
   @GetMapping("/animal/{animalId}")
   public ResponseEntity<?> listAnimalHistoric(@PathVariable Long animalId){
       ShelterAnimal animal = shelterAnimalService.findShelterAnimalById(animalId);
@@ -272,7 +272,7 @@ public class AdoptionController {
       List<AdoptionDTO> historic = adoptionService.getAdoptionsByAnimal(animal);
 
       if (historic.isEmpty()) {
-            return ResponseEntity.status(200).body("This animal was never adopted or fostered");
+            return ResponseEntity.status(404).body("This animal was never adopted or fostered");
         }
 
         return ResponseEntity.status(200).body(historic);
