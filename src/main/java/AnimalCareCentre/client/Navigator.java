@@ -71,7 +71,7 @@ public class Navigator {
 
   public void showLostAnimalPosting(Displayable animal) {
     LostAnimal lostAnimal = (LostAnimal) animal;
-    new LostAnimalProfile(this, stage, lostAnimal);
+    new MyPostingView(this, stage, lostAnimal);
   }
 
   public void showAnimal(Displayable animal) {
