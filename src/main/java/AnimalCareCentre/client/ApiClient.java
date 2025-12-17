@@ -52,6 +52,20 @@ public class ApiClient {
     }
   }
 
+  public static ApiResponse getWithParam(String endpoint, String json) {
+    try {
+
+      HttpHeaders headers = createHeadersWithCookie(MediaType.APPLICATION_JSON);
+      HttpEntity<String> request = new HttpEntity<>(json, headers);
+      ResponseEntity<String> response = rest.exchange(BASE_URL + endpoint, HttpMethod.GET, request, String.class);
+
+      return new ApiResponse(true, response.getBody(), response.getStatusCode().value());
+
+    } catch (HttpClientErrorException | HttpServerErrorException e) {
+      return new ApiResponse(false, e.getResponseBodyAsString(), e.getStatusCode().value());
+    }
+  }
+
   /**
    * Sends a PUT request
    */

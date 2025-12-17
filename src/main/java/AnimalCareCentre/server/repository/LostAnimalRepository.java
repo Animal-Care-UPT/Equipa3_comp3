@@ -11,9 +11,8 @@ public interface LostAnimalRepository extends JpaRepository<LostAnimal, Long> {
 
    public List<LostAnimal> findByAccountId(long accountId);
 
-   public List<LostAnimal> findByLocation(String location);
+   public List<LostAnimal> findByLocation(District location);
 
-    public List<LostAnimal> findByIsLost(boolean isLost);
 
     public List<LostAnimal> findByGender(AnimalGender gender);
 

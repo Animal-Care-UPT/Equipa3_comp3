@@ -2,8 +2,10 @@ package AnimalCareCentre.client.records;
 
 import AnimalCareCentre.client.enums.*;
 
+import java.util.List;
+
 public record LostAnimal(long id, String name, AnimalType type, String race, AnimalSize size, AnimalGender gender,
-    AnimalColor color, String description, String location, boolean isLost, int contact) implements Displayable {
+    AnimalColor color, String description, District location, boolean isLost, int contact, List<String> images) implements Displayable {
   @Override
   public String toString() {
     return "Name: " + name + '\n' +
@@ -13,7 +15,7 @@ public record LostAnimal(long id, String name, AnimalType type, String race, Ani
         "Gender: " + gender + '\n' +
         "Color: " + color + '\n' +
         "Description: " + description + '\n' +
-        "Location: " + location + '\n' +
+        "Location: " + location.name() + '\n' +
         "Contact: " + contact;
   }
 
@@ -34,8 +36,11 @@ public record LostAnimal(long id, String name, AnimalType type, String race, Ani
 
   @Override
   public String getImagePath() {
-    // todo
-      return null;
+
+      return (images != null && !images.isEmpty()) ? images.get(0) : null;
+  }
+  public District getLocation(){
+      return this.location;
   }
 
   @Override

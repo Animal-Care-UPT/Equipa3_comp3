@@ -28,6 +28,7 @@ public class ACCScene extends Scene {
    * @param stage
    * @param vbox
    */
+
   public ACCScene(Stage stage, ACCVBox vbox) {
     super(wrapInScroll(vbox));
     mainVbox = vbox;
