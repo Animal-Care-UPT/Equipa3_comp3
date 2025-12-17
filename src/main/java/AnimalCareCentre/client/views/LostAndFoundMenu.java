@@ -24,6 +24,9 @@ public class LostAndFoundMenu {
     show();
   }
 
+  /**
+   * Displays the lost and found menu
+   */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(nav.getLoggedRole(), nav, scene);
@@ -38,6 +41,9 @@ public class LostAndFoundMenu {
     scene.addItems(register, homepage, myPosting);
   }
 
+  /**
+   * Gets my postings of lost animals
+   */
   private List<LostAnimal> myPostings() {
 
     ApiResponse response = ApiClient.get("/lostandfound/showanimalsbyaccount");

@@ -8,6 +8,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+/**
+ * Popover used throughout the platform
+ *
+ */
 public class ACCPopover extends PopOver {
 
   public ACCPopover(Node content, String title) {

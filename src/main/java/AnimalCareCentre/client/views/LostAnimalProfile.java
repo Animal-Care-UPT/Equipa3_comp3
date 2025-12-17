@@ -35,6 +35,9 @@ public class LostAnimalProfile {
     show();
   }
 
+  /**
+   * Displays the profile of a lost animal
+   */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(nav.getLoggedRole(), nav, scene);

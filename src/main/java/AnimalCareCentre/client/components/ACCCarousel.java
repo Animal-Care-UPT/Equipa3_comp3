@@ -11,6 +11,10 @@ import javafx.util.Duration;
 
 import java.util.List;
 
+/**
+ * Carousel used in profiles to display all the item's images
+ *
+ */
 public class ACCCarousel extends ACCVBox {
   private List<Image> images;
   private int currentIndex = 0;

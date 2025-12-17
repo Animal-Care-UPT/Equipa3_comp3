@@ -29,6 +29,9 @@ public class MainMenu {
     show();
   }
 
+  /**
+   * Displays the main menu
+   */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
 

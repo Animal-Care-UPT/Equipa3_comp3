@@ -31,6 +31,9 @@ public class MyPostingView {
     show();
   }
 
+  /**
+   * Displays my posted animal
+   */
   private void show() {
     ACCVBox root = new ACCVBox();
     ACCScene scene = new ACCScene(stage, root);
@@ -92,6 +95,9 @@ public class MyPostingView {
     scene.addItems(mainBox, buttonsBox);
   }
 
+  /**
+   * Allows removing my post
+   */
   private void removePosting() {
 
     ApiResponse response = ApiClient.delete("/lostandfound/delete/" + animal.getId());
@@ -119,6 +125,9 @@ public class MyPostingView {
    * }
    */
 
+  /**
+   * Adds image to my lost animal
+   */
   private void addImage() {
     File image = Utility.selectImageFile(stage);
     ApiResponse response = ApiClient.postWithFile("/shelteranimals/" + animal.id() + "/images", image);

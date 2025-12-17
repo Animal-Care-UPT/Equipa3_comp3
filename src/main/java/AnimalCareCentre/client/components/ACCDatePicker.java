@@ -2,6 +2,10 @@ package AnimalCareCentre.client.components;
 
 import javafx.scene.control.DatePicker;
 
+/**
+ * DatePicker used throughout the platform
+ *
+ */
 public class ACCDatePicker extends DatePicker {
   public ACCDatePicker() {
     setMaxWidth(250);

@@ -55,6 +55,9 @@ public class LostAndFoundHomepage {
     show();
   }
 
+  /**
+   * Shows the lost and found homepage
+   */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     ACCVBox mapVbox = new ACCVBox();
@@ -65,6 +68,9 @@ public class LostAndFoundHomepage {
     new NavBar(nav.getLoggedRole(), nav, scene);
   }
 
+  /**
+   * Generates the map
+   */
   private JLMapView generateMap() {
     JLMapView map = JLMapView.builder()
 
@@ -92,6 +98,9 @@ public class LostAndFoundHomepage {
     return map;
   }
 
+  /**
+   * Searches lost animals by location
+   */
   private List<LostAnimal> searchAnimalByLocation(District district) {
     ApiResponse response = ApiClient.get("/lostandfound/showByLocation?location=" + district.name());
     if (!response.isSuccess()) {
@@ -103,6 +112,9 @@ public class LostAndFoundHomepage {
     }
   }
 
+  /**
+   * Shows all lost animals
+   */
   private List<LostAnimal> getAllLostAnimals() {
 
     ApiResponse response = ApiClient.get("/lostandfound/showlostanimals");
@@ -149,6 +161,9 @@ public class LostAndFoundHomepage {
     }
   }
 
+  /**
+   * Fetches the profile image of each animal
+   */
   private Map<Long, Image> fetchImagesForPage(List<LostAnimal> lostAnimals) {
     Map<Long, Image> images = new HashMap<>();
 

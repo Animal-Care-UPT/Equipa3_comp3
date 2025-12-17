@@ -2,6 +2,10 @@ package AnimalCareCentre.client.components;
 
 import javafx.scene.control.TextField;
 
+/**
+ * TextField used throughout the platform
+ *
+ */
 public class ACCTextField extends TextField {
 
   public ACCTextField() {

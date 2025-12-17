@@ -3,6 +3,10 @@ package AnimalCareCentre.client.components;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+/**
+ * TableView used throughout the platform
+ *
+ */
 public class ACCTableView<S> extends TableView<S> {
 
   public ACCTableView() {

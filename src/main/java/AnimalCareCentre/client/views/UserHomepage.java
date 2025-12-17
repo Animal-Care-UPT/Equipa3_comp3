@@ -30,6 +30,9 @@ public class UserHomepage {
     show();
   }
 
+  /**
+   * Displays the user home page
+   */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(Navigator.getLoggedRole(), nav, scene);
@@ -48,6 +51,9 @@ public class UserHomepage {
     scene.addItems(pendingRequests, adoptionsHistory, donationsHistory, sponsorships, fostersHistory);
   }
 
+  /**
+   * Displays the user's pending adoption and foster requests
+   */
   private void pendingRequestPopover(ACCMenuButton button) {
     ACCTableView<Adoption> table = new ACCTableView<>();
 
@@ -116,6 +122,9 @@ public class UserHomepage {
     popover.show(stage);
   }
 
+  /**
+   * Allows the user to cancel a request
+   */
   private void handleCancelRequest(Adoption adoption, ACCTableView<Adoption> table) {
     Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confirmAlert.setTitle("Cancel Request");
@@ -136,6 +145,9 @@ public class UserHomepage {
     });
   }
 
+  /**
+   * Displays the user's adoption history popover
+   */
   private void adoptionsHistoryPopover(ACCMenuButton button) {
     ACCTableView<Adoption> table = new ACCTableView<>();
 
@@ -181,6 +193,9 @@ public class UserHomepage {
     popover.show(stage);
   }
 
+  /**
+   * Displays teh user's fosters history
+   */
   private void fostersHistoryPopover(ACCMenuButton button) {
     ACCTableView<Adoption> table = new ACCTableView<>();
 
@@ -226,6 +241,9 @@ public class UserHomepage {
     popover.show(stage);
   }
 
+  /**
+   * Displays the user's donations history popover
+   */
   private void donationsHistoryPopover(ACCMenuButton button) {
     ACCTableView<ShelterDonation> table = new ACCTableView<>();
 
@@ -274,6 +292,9 @@ public class UserHomepage {
     popover.show(stage);
   }
 
+  /**
+   * Displays the user's sponsorships history popover
+   */
   private void sponsorshipsPopover(ACCMenuButton button) {
     ACCTableView<Sponsorship> table = new ACCTableView<>();
 

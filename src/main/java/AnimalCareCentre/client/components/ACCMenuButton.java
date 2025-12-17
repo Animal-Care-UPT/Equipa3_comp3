@@ -7,6 +7,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
+/**
+ * Menu Button used throughout the platform
+ *
+ */
 public class ACCMenuButton extends Button {
 
   private static final Font QUICKSAND_BOLD;

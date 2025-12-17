@@ -31,6 +31,9 @@ public class SearchPage<T extends Displayable> {
     show(lst);
   }
 
+  /**
+   * Displays the search page with a grid
+   */
   private void show(List<T> lst) {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(Navigator.getLoggedRole(), nav, scene);
@@ -38,18 +41,21 @@ public class SearchPage<T extends Displayable> {
     ACCGrid<T> grid;
     if (lst.get(0) instanceof ShelterAnimal) {
       grid = new ACCGrid<>(e -> nav.showAnimal(e), this::fetchImagesForPage);
-    } else if(lst.get(0) instanceof Shelter){
+    } else if (lst.get(0) instanceof Shelter) {
       grid = new ACCGrid<>(e -> nav.showShelter(e), this::fetchImagesForPage);
-    }else {
-        grid = new ACCGrid<>(e->nav.showLostAnimal(e),this::fetchImagesForPage);
+    } else {
+      grid = new ACCGrid<>(e -> nav.showLostAnimal(e), this::fetchImagesForPage);
     }
 
     grid.add(lst);
-      SplitPane splitPane = new SplitPane();
-      splitPane.getItems().add(grid);
+    SplitPane splitPane = new SplitPane();
+    splitPane.getItems().add(grid);
     scene.addItems(grid);
   }
 
+  /**
+   * Fetches the profile images of each item
+   */
   private Map<Long, Image> fetchImagesForPage(List<T> pageItems) {
     Map<Long, Image> images = new HashMap<>();
 

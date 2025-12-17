@@ -29,6 +29,9 @@ public class SearchPageMyPosting<T extends Displayable> {
     show(lst);
   }
 
+  /**
+   * Displays the page to view my lost animal postings
+   */
   private void show(List<T> lst) {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(nav.getLoggedRole(), nav, scene);
@@ -42,6 +45,9 @@ public class SearchPageMyPosting<T extends Displayable> {
     scene.addItems(grid);
   }
 
+  /**
+   * Fetches the profile image for each of my postings
+   */
   private Map<Long, Image> fetchImagesForPage(List<T> pageItems) {
     Map<Long, Image> images = new HashMap<>();
 

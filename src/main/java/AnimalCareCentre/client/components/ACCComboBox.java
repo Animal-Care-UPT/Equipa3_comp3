@@ -3,8 +3,15 @@ package AnimalCareCentre.client.components;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 
+/**
+ * ComboBox used throughout the platform
+ *
+ */
 public class ACCComboBox<T> extends ComboBox<T> {
 
+  /**
+   * Default constructor
+   */
   public ACCComboBox() {
     this(false);
   }

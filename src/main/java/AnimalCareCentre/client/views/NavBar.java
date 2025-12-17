@@ -32,6 +32,9 @@ public class NavBar {
     }
   }
 
+  /**
+   * User nav bar buttons
+   */
   private void userNavButtons() {
     ACCNavButton home = new ACCNavButton("Home");
     ACCNavButton animals = new ACCNavButton("Search Animals");
@@ -42,13 +45,15 @@ public class NavBar {
     home.setOnAction(e -> nav.userHomepage());
     animals.setOnAction(e -> new SearchAnimalPopover(nav).show(animals));
     shelters.setOnAction(e -> new SearchShelterPopover(nav).show(shelters));
-    shelters.setOnAction(e -> nav.userHomepage());
     lostFound.setOnAction(e -> nav.lostAndFoundMenu());
     acc.setOnAction(e -> new AccountPopover(nav).show(acc));
 
     scene.setHeader(home, animals, shelters, lostFound, acc);
   }
 
+  /**
+   * Admin nav bar buttons
+   */
   private void adminNavButtons() {
     ACCNavButton home = new ACCNavButton("Home");
     ACCNavButton animals = new ACCNavButton("Search Animals");
@@ -65,6 +70,9 @@ public class NavBar {
     scene.setHeader(home, animals, shelters, lostFound, acc);
   }
 
+  /**
+   * Shelter nav bar button
+   */
   private void shelterNavButtons() {
     ACCNavButton home = new ACCNavButton("Home");
     ACCNavButton animals = new ACCNavButton("My Animals");
@@ -79,6 +87,9 @@ public class NavBar {
     scene.setHeader(home, animals, lostFound, acc);
   }
 
+  /**
+   * Gets "My animals" for shelters
+   */
   private void shelterViewAnimals() {
     ApiResponse response = ApiClient.get("/shelteranimals/search/self");
     if (!response.isSuccess()) {

@@ -36,6 +36,9 @@ public class ShelterProfile {
     show();
   }
 
+  /**
+   * Displays the shelter profile
+   */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(Navigator.getLoggedRole(), nav, scene);
@@ -83,21 +86,19 @@ public class ShelterProfile {
 
     ACCHBox buttonsBox = new ACCHBox();
 
-
     ACCMenuButton donationsButton = new ACCMenuButton("Donate");
     donationsButton.setOnAction((event) -> {
-        newDonationPopover(donationsButton);
+      newDonationPopover(donationsButton);
     });
 
-    ACCMenuButton donationsHistoryButton =  new ACCMenuButton("Donations");
+    ACCMenuButton donationsHistoryButton = new ACCMenuButton("Donations");
 
     donationsHistoryButton.setOnAction(e -> {
-        donationsPopover(donationsHistoryButton);
+      donationsPopover(donationsHistoryButton);
 
     });
     ACCMenuButton changeStatus = new ACCMenuButton("Change Status");
     ACCMenuButton viewAnimals = new ACCMenuButton("View Animals");
-
 
     donationsHistoryButton.setOnAction(e -> donationsPopover(donationsHistoryButton));
     donationsButton.setOnAction(e -> newDonationPopover(donationsButton));
@@ -114,6 +115,9 @@ public class ShelterProfile {
     scene.addItems(mainBox, buttonsBox);
   }
 
+  /**
+   * Displays the animals from the shelter
+   */
   private void viewShelterAnimals() {
     ApiResponse response = ApiClient.get("/shelteranimals/search/shelter/available?id=" + shelter.id());
 
@@ -127,6 +131,9 @@ public class ShelterProfile {
     }
   }
 
+  /**
+   * Displays the popover to donate to the shelter
+   */
   private void donationsPopover(ACCMenuButton button) {
     ApiResponse response = ApiClient.get("/donations/admin/" + shelter.id());
 
@@ -157,6 +164,9 @@ public class ShelterProfile {
     popover.show(stage);
   }
 
+  /**
+   * Displays the shelter's image carousel
+   */
   private void imgCarousel() {
     ApiResponse response = ApiClient.get("/shelters/" + shelter.id() + "/images");
     if (!response.isSuccess()) {
@@ -222,18 +232,26 @@ public class ShelterProfile {
     popover.show(stage);
   }
 
-    private void createDonation(float amount) {
-        String requestBody = Utility.jsonString("shelterId", shelter.id(), "amount", amount);
+  /**
+   * Allows the user to donate to the shelter
+   *
+   * @param amount
+   */
+  private void createDonation(float amount) {
+    String requestBody = Utility.jsonString("shelterId", shelter.id(), "amount", amount);
 
-        ApiResponse response = ApiClient.post("/donations/create", requestBody);
+    ApiResponse response = ApiClient.post("/donations/create", requestBody);
 
-        if (response.isSuccess()) {
-            Utility.showAlert(Alert.AlertType.INFORMATION, "Donation Created", "Successfully created donation");
-        } else {
-            Utility.showAlert(Alert.AlertType.ERROR, "Donation failed", response.getBody());
-        }
+    if (response.isSuccess()) {
+      Utility.showAlert(Alert.AlertType.INFORMATION, "Donation Created", "Successfully created donation");
+    } else {
+      Utility.showAlert(Alert.AlertType.ERROR, "Donation failed", response.getBody());
     }
+  }
 
+  /**
+   * Displays the popover to allow the admin to change the shelter's status
+   */
   private void changeShelterStatus() {
     ACCVBox content = new ACCVBox();
     content.setPadding(new Insets(15));

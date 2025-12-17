@@ -27,6 +27,9 @@ public class ChangeSq {
     show();
   }
 
+  /**
+   * Shows the change secret info view
+   */
   public void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     Label secLabel = new Label("New Security Question:");
@@ -55,6 +58,9 @@ public class ChangeSq {
 
   }
 
+  /**
+   * Allows secret info change
+   */
   public void changeSq(String json) {
     ApiResponse response = ApiClient.put("/accounts/changesq", json);
     if (response.isSuccess()) {

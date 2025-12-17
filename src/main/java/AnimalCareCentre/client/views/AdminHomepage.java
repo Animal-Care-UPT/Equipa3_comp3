@@ -33,6 +33,9 @@ public class AdminHomepage {
     show();
   }
 
+  /**
+   * Shows the admin homepage
+   */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(Navigator.getLoggedRole(), nav, scene);
@@ -50,6 +53,9 @@ public class AdminHomepage {
     scene.addItems(viewShelterRequests, viewAllSponsorships, viewAllAdoptions, viewAllFosters);
   }
 
+  /**
+   * Shows the popup with the shelter pending requests
+   */
   public void viewShelterRequests() {
     ACCTableView<Shelter> table = new ACCTableView<>();
 
@@ -123,6 +129,9 @@ public class AdminHomepage {
     popover.show(stage);
   }
 
+  /**
+   * Shows the popup to view all Sponsorships
+   */
   public void viewSponsorships() {
     ACCTableView<Sponsorship> table = new ACCTableView<>();
 
@@ -179,6 +188,9 @@ public class AdminHomepage {
     popover.show(stage);
   }
 
+  /**
+   * Shows the popup to see all adoptions
+   */
   public void seeAdoptions() {
     ACCTableView<Adoption> table = new ACCTableView<>();
 
@@ -228,6 +240,9 @@ public class AdminHomepage {
     popover.show(stage);
   }
 
+  /**
+   * Shows the popup to view all fosters
+   */
   public void seeFosters() {
     ACCTableView<Adoption> table = new ACCTableView<>();
 

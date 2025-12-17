@@ -2,6 +2,9 @@ package AnimalCareCentre.client.components;
 
 import javafx.scene.control.Button;
 
+/**
+ * Button used throughout the platform
+ */
 public class ACCButton extends Button {
 
   private String style = "-fx-background-color: #6F4426; " +

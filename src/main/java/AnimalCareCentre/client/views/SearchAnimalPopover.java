@@ -28,6 +28,9 @@ public class SearchAnimalPopover {
     this.nav = nav;
   }
 
+  /**
+   * Displays the search animal popover
+   */
   public void show(Button button) {
     ACCVBox content = buildContent();
     popover = new ACCPopover(content, "Search Animals");
@@ -35,6 +38,9 @@ public class SearchAnimalPopover {
     popover.show(button);
   }
 
+  /**
+   * Populates the popover
+   */
   private ACCVBox buildContent() {
     ACCVBox content = new ACCVBox();
     content.setPadding(new Insets(15, 15, 15, 15));
@@ -59,7 +65,6 @@ public class SearchAnimalPopover {
     pane.setPrefColumns(3);
     pane.getChildren().addAll(aniType, aniGender, adoType, type, gender, adoptionType);
 
-
     ACCButton search = new ACCButton("Search");
     search.setOnAction(e -> {
       String json = Utility.jsonString("keyword", searchField.getText(), "type", type.getValue(),
@@ -71,6 +76,9 @@ public class SearchAnimalPopover {
     return content;
   }
 
+  /**
+   * Searches for the animal
+   */
   private void searchAnimal(String json) {
     ApiResponse response = ApiClient.post("/shelteranimals/search", json);
     if (!response.isSuccess()) {
