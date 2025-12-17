@@ -38,7 +38,8 @@ public class ShelterAnimalService {
   }
 
   public List<ShelterAnimal> searchWithFilters(SearchAnimalDTO search) {
-    List<ShelterAnimal> animals = shelterAnimalRepository.searchWithFilters(search.getKeyword(), Status.AVAILABLE,
+    List<ShelterAnimal> animals = shelterAnimalRepository.searchWithFilters("%" + search.getKeyword() + "%",
+        Status.AVAILABLE,
         search.getType(), search.getGender(), search.getAdoptionType());
     animals.sort(Comparator.comparing(ShelterAnimal::getType).thenComparing(ShelterAnimal::getRace));
     return animals;

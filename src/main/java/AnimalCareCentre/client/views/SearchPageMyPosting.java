@@ -18,50 +18,45 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SearchPageMyPosting<T extends Displayable>{
+public class SearchPageMyPosting<T extends Displayable> {
 
+  private Navigator nav;
+  private Stage stage;
 
-        private Navigator nav;
-        private Stage stage;
+  public SearchPageMyPosting(Navigator nav, Stage stage, List<T> lst) {
+    this.nav = nav;
+    this.stage = stage;
+    show(lst);
+  }
 
-        public SearchPageMyPosting(Navigator nav, Stage stage, List<T> lst) {
-            this.nav = nav;
-            this.stage = stage;
-            show(lst);
+  private void show(List<T> lst) {
+    ACCScene scene = new ACCScene(stage, new ACCVBox());
+    new NavBar(nav.getLoggedRole(), nav, scene);
+
+    ACCGrid<T> grid;
+    grid = new ACCGrid<>(e -> nav.showLostAnimalPosting(e), this::fetchImagesForPage);
+
+    grid.add(lst);
+    SplitPane splitPane = new SplitPane();
+    splitPane.getItems().add(grid);
+    scene.addItems(grid);
+  }
+
+  private Map<Long, Image> fetchImagesForPage(List<T> pageItems) {
+    Map<Long, Image> images = new HashMap<>();
+
+    for (T item : pageItems) {
+      String imageUrl = item.getImagePath();
+      if (imageUrl != null && !imageUrl.isEmpty()) {
+        ApiResponse response = ApiClient.get(imageUrl);
+        Image image = Utility.parseImage(response);
+        if (image != null) {
+          images.put(item.getId(), image);
         }
+      }
+    }
 
-        private void show(List<T> lst) {
-            ACCScene scene = new ACCScene(stage, new ACCVBox());
-            new NavBar(nav.getLoggedRole(), nav, scene);
-
-            ACCGrid<T> grid;
-            grid = new ACCGrid<>(e -> nav.showLostAnimalPosting(e), this::fetchImagesForPage);
-
-
-            grid.add(lst);
-            SplitPane splitPane = new SplitPane();
-            splitPane.getItems().add(grid);
-            scene.addItems(grid);
-        }
-
-        private Map<Long, Image> fetchImagesForPage(List<T> pageItems) {
-            Map<Long, Image> images = new HashMap<>();
-
-            for (T item : pageItems) {
-                String imageUrl = item.getImagePath();
-                if (imageUrl != null && !imageUrl.isEmpty()) {
-                    ApiResponse response = ApiClient.get(imageUrl);
-                    Image image = Utility.parseImage(response);
-                    if (image != null) {
-                        images.put(item.getId(), image);
-                    }
-                }
-            }
-
-            return images;
-        }
-
+    return images;
+  }
 
 }
-
-

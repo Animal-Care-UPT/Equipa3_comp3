@@ -141,7 +141,6 @@ public class Utility {
     fileChooser.setTitle("Select Image");
     fileChooser.getExtensionFilters().add(
         new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.jpeg", "*.png"));
-
     return fileChooser.showOpenDialog(stage);
   }
 }

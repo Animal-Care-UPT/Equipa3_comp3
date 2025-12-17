@@ -81,7 +81,7 @@ public class MainMenu {
       }
 
       nav.setLoggedRole(response.getBody());
-      if (nav.getLoggedRole().equals("ROLE_SHELTER")) {
+      if (Navigator.getLoggedRole().equals("ROLE_SHELTER")) {
         ApiResponse shelterResponse = ApiClient.get("/shelters/isAvailable");
         if (!shelterResponse.isSuccess()) {
           Utility.showAlert(AlertType.ERROR, "Unauthorized", shelterResponse.getBody());
@@ -272,10 +272,7 @@ public class MainMenu {
         if (response.isSuccess()) {
           Utility.showAlert(AlertType.INFORMATION, "Success", "Account created with success!");
           Shelter shelter = Utility.parseResponse(response.getBody(), Shelter.class);
-          ApiResponse imageResponse = ApiClient.postWithFile("/shelters/" + shelter.id() + "/images", image[0]);
-          if (!imageResponse.isSuccess()) {
-            Utility.showAlert(AlertType.ERROR, "Error", imageResponse.getBody());
-          }
+          ApiClient.postWithFile("/shelters/" + shelter.id() + "/images", image[0]);
           nav.showMainMenu();
         } else {
           Utility.showAlert(AlertType.ERROR, "Error", response.getBody());

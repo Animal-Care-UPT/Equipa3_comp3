@@ -3,10 +3,12 @@ package AnimalCareCentre.server.service;
 import AnimalCareCentre.server.enums.AnimalType;
 import AnimalCareCentre.server.enums.AnimalColor;
 import AnimalCareCentre.server.enums.AnimalSize;
+<<<<<<< HEAD
+=======
 import AnimalCareCentre.server.enums.District;
 import AnimalCareCentre.server.model.Account;
+>>>>>>> main
 import AnimalCareCentre.server.model.LostAnimal;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 
 import AnimalCareCentre.server.repository.LostAnimalRepository;

@@ -79,14 +79,14 @@ public class NavBar {
     scene.setHeader(home, animals, lostFound, acc);
   }
 
-  private void shelterViewAnimals(){
-      ApiResponse response = ApiClient.get("/shelteranimals/search/self");
-      if (!response.isSuccess()) {
-          Utility.showAlert(Alert.AlertType.ERROR, "Error", response.getBody());
-      } else {
-          List<ShelterAnimal> animals = Utility.parseList(response.getBody(), ShelterAnimal.class);
-          nav.searchAnimal(animals);
-      }
+  private void shelterViewAnimals() {
+    ApiResponse response = ApiClient.get("/shelteranimals/search/self");
+    if (!response.isSuccess()) {
+      Utility.showAlert(Alert.AlertType.ERROR, "Error", response.getBody());
+    } else {
+      List<ShelterAnimal> animals = Utility.parseList(response.getBody(), ShelterAnimal.class);
+      nav.searchAnimal(animals);
+    }
 
   }
 

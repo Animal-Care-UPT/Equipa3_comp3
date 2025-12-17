@@ -43,7 +43,7 @@ public class SearchShelterPopover {
   }
 
   private void searchShelter(String keyword) {
-    if (nav.getLoggedRole().equals("ROLE_ADMIN")) {
+    if (Navigator.getLoggedRole().equals("ROLE_ADMIN")) {
       ApiResponse response = ApiClient.get("/shelters/all?keyword=" + keyword);
       if (!response.isSuccess()) {
         Utility.showAlert(AlertType.ERROR, "Error", response.getBody());

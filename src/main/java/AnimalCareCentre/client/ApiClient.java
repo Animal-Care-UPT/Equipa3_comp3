@@ -51,19 +51,20 @@ public class ApiClient {
       return new ApiResponse(false, e.getResponseBodyAsString(), e.getStatusCode().value());
     }
   }
-    public static ApiResponse getWithParam(String endpoint,String json) {
-        try {
 
-            HttpHeaders headers = createHeadersWithCookie(MediaType.APPLICATION_JSON);
-            HttpEntity<String> request = new HttpEntity<>(json,headers);
-            ResponseEntity<String> response = rest.exchange(BASE_URL + endpoint, HttpMethod.GET, request, String.class);
+  public static ApiResponse getWithParam(String endpoint, String json) {
+    try {
 
-            return new ApiResponse(true, response.getBody(), response.getStatusCode().value());
+      HttpHeaders headers = createHeadersWithCookie(MediaType.APPLICATION_JSON);
+      HttpEntity<String> request = new HttpEntity<>(json, headers);
+      ResponseEntity<String> response = rest.exchange(BASE_URL + endpoint, HttpMethod.GET, request, String.class);
 
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
-            return new ApiResponse(false, e.getResponseBodyAsString(), e.getStatusCode().value());
-        }
+      return new ApiResponse(true, response.getBody(), response.getStatusCode().value());
+
+    } catch (HttpClientErrorException | HttpServerErrorException e) {
+      return new ApiResponse(false, e.getResponseBodyAsString(), e.getStatusCode().value());
     }
+  }
 
   /**
    * Sends a PUT request
@@ -102,6 +103,9 @@ public class ApiClient {
    * Sends a POST request with an attached file
    */
   public static ApiResponse postWithFile(String endpoint, File file) {
+    if (file == null) {
+      return new ApiResponse(false, "Invalid File", 400);
+    }
     try {
 
       HttpHeaders headers = createHeadersWithCookie(MediaType.MULTIPART_FORM_DATA);

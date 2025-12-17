@@ -3,22 +3,20 @@ package AnimalCareCentre.client.records;
 import java.time.LocalDate;
 
 public record ShelterDonation(
-        Long id,
-        User user,
-        Shelter shelter,
-        float amount,
-        LocalDate donationDate,
-        String donationType
-) {
+    Long id,
+    String userName,
+    String shelterName,
+    float amount,
+    LocalDate donationDate,
+    String donationType) {
 
-    @Override
-    public String toString() {
-        return "\nDonation ID: " + id +
-                "\nUser: " + (user != null ? user.name() : "N/A") +
-                "\nShelter: " + (shelter != null ? shelter.name() : "N/A") +
-                "\nAmount: " + amount +
-                "\nDate: " + donationDate +
-                "\nType: " + donationType + "\n";
-    }
+  @Override
+  public String toString() {
+    return "\nDonation ID: " + id +
+        "\nUser: " + userName +
+        "\nShelter: " + shelterName +
+        "\nAmount: " + amount +
+        "\nDate: " + donationDate +
+        "\nType: " + donationType + "\n";
+  }
 }
-

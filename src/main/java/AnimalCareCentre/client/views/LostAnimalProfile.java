@@ -21,84 +21,69 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.List;
 
-
 public class LostAnimalProfile {
 
-    private Navigator nav;
-    private Stage stage;
-    private LostAnimal animal;
-    private ACCPopover popover;
+  private Navigator nav;
+  private Stage stage;
+  private LostAnimal animal;
+  private ACCPopover popover;
 
-    public LostAnimalProfile(Navigator nav, Stage stage, LostAnimal animal) {
-            this.nav = nav;
-            this.stage = stage;
-            this.animal = animal;
-            show();
-        }
+  public LostAnimalProfile(Navigator nav, Stage stage, LostAnimal animal) {
+    this.nav = nav;
+    this.stage = stage;
+    this.animal = animal;
+    show();
+  }
 
+  private void show() {
+    ACCScene scene = new ACCScene(stage, new ACCVBox());
+    new NavBar(nav.getLoggedRole(), nav, scene);
 
-    private void show() {
-        ACCScene scene = new ACCScene(stage, new ACCVBox());
-        new NavBar(nav.getLoggedRole(), nav, scene);
+    ACCHBox mainBox = new ACCHBox();
+    mainBox.setSpacing(0);
 
-        ACCHBox mainBox = new ACCHBox();
-        mainBox.setSpacing(0);
+    ACCVBox imgContainer = new ACCVBox();
+    imgContainer.setMinWidth(420);
+    imgContainer.setMinHeight(420);
+    ImageView imageView = new ImageView();
+    imageView.setFitWidth(400);
+    imageView.setFitHeight(400);
+    imageView.setPreserveRatio(true);
+    imgContainer.addItems(imageView);
 
-        ACCVBox imgContainer = new ACCVBox();
-        imgContainer.setMinWidth(420);
-        imgContainer.setMinHeight(420);
-        ImageView imageView = new ImageView();
-        imageView.setFitWidth(400);
-        imageView.setFitHeight(400);
-        imageView.setPreserveRatio(true);
-        imgContainer.addItems(imageView);
+    imageView.setOnMouseEntered(event -> {
+      imageView.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 15, 0, 0, 3); -fx-cursor: hand;");
 
-        imageView.setOnMouseEntered(event -> {
-            imageView.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 15, 0, 0, 3); -fx-cursor: hand;");
+      imageView.setFitWidth(420);
+      imageView.setFitHeight(420);
+    });
 
-            imageView.setFitWidth(420);
-            imageView.setFitHeight(420);
-        });
+    imageView.setOnMouseExited(event -> {
+      imageView.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 2);");
+      imageView.setFitWidth(400);
+      imageView.setFitHeight(400);
+      imageView.setCursor(Cursor.HAND);
+    });
 
-        imageView.setOnMouseExited(event -> {
-            imageView.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 2);");
-            imageView.setFitWidth(400);
-            imageView.setFitHeight(400);
-            imageView.setCursor(Cursor.HAND);
-        });
+    imageView.setOnMouseClicked(event -> {
+      // imgCarousel();
+    });
 
-        imageView.setOnMouseClicked(event -> {
-            //imgCarousel();
-        });
-
-        String imageUrl = animal.getImagePath();
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-            ApiResponse response = ApiClient.get(imageUrl);
-            Image image = Utility.parseImage(response);
-            if (image != null) {
-                imageView.setImage(image);
-                imageView.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 2);");
-            }
-        }
-
-        Label animalProfile = new Label(animal.toString());
-        animalProfile.setStyle("-fx-font-size: 16px; -fx-line-spacing: 5px;");
-
-
-
-
-
-
-        mainBox.addItems(imgContainer, animalProfile);
-        scene.addItems(mainBox);
+    String imageUrl = animal.getImagePath();
+    if (imageUrl != null && !imageUrl.isEmpty()) {
+      ApiResponse response = ApiClient.get(imageUrl);
+      Image image = Utility.parseImage(response);
+      if (image != null) {
+        imageView.setImage(image);
+        imageView.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 2);");
+      }
     }
 
+    Label animalProfile = new Label(animal.toString());
+    animalProfile.setStyle("-fx-font-size: 16px; -fx-line-spacing: 5px;");
+
+    mainBox.addItems(imgContainer, animalProfile);
+    scene.addItems(mainBox);
+  }
+
 }
-
-
-
-
-
-
-
-

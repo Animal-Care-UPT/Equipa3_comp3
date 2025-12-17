@@ -8,7 +8,6 @@ import AnimalCareCentre.server.service.AdoptionService;
 import AnimalCareCentre.server.service.ShelterAnimalService;
 import AnimalCareCentre.server.service.ShelterService;
 import AnimalCareCentre.server.service.UserService;
-import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
