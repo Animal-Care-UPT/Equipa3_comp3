@@ -10,11 +10,12 @@ import AnimalCareCentre.client.records.ShelterDonation;
 import AnimalCareCentre.client.records.Sponsorship;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.scene.control.*;
-import java.util.List;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
-
-
 import java.util.List;
 
 public class UserHomepage {
@@ -33,372 +34,323 @@ public class UserHomepage {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(nav.getLoggedRole(), nav, scene);
 
-      ACCMenuButton pendingRequests = new ACCMenuButton("Pending Requests");
-      pendingRequests.setOnAction(e -> pendingRequestPopover(pendingRequests));
-      ACCMenuButton adoptionsHistory  = new ACCMenuButton("Adoptions History");
-      adoptionsHistory.setOnAction(e -> adoptionsHistoryPopover(adoptionsHistory));
-      ACCMenuButton fostersHistory  = new ACCMenuButton("Fosters History");
-      fostersHistory.setOnAction(e -> fostersHistoryPopover(fostersHistory));
-      ACCMenuButton donationsHistory = new ACCMenuButton("Donation History");
-      donationsHistory.setOnAction(e-> donationsHistoryPopover(donationsHistory));
-      ACCMenuButton sponsorships = new ACCMenuButton("Sponsorships");
-      sponsorships.setOnAction(e-> sponsorshipsPopover(sponsorships));
+    ACCMenuButton pendingRequests = new ACCMenuButton("Pending Requests");
+    pendingRequests.setOnAction(e -> pendingRequestPopover(pendingRequests));
+    ACCMenuButton adoptionsHistory = new ACCMenuButton("Adoptions History");
+    adoptionsHistory.setOnAction(e -> adoptionsHistoryPopover(adoptionsHistory));
+    ACCMenuButton fostersHistory = new ACCMenuButton("Fosters History");
+    fostersHistory.setOnAction(e -> fostersHistoryPopover(fostersHistory));
+    ACCMenuButton donationsHistory = new ACCMenuButton("Donation History");
+    donationsHistory.setOnAction(e -> donationsHistoryPopover(donationsHistory));
+    ACCMenuButton sponsorships = new ACCMenuButton("Sponsorships");
+    sponsorships.setOnAction(e -> sponsorshipsPopover(sponsorships));
 
-      scene.addItems(pendingRequests, adoptionsHistory, donationsHistory, sponsorships, fostersHistory);
-
-
+    scene.addItems(pendingRequests, adoptionsHistory, donationsHistory, sponsorships, fostersHistory);
   }
 
-    private void pendingRequestPopover(ACCMenuButton button) {
-        TableView<Adoption> table = new TableView<>();
+  private void pendingRequestPopover(ACCMenuButton button) {
+    ACCTableView<Adoption> table = new ACCTableView<>();
 
-        TableColumn<Adoption, String> userColumn = new TableColumn<>("User");
-        userColumn.setCellValueFactory(cellData -> {
-            String userName = "";
-            if (cellData.getValue().user() != null) {
-                userName = cellData.getValue().user().name();
-            }
-            return new javafx.beans.property.SimpleStringProperty(userName);
+    TableColumn<Adoption, String> userColumn = new TableColumn<>("User");
+    userColumn.setCellValueFactory(cellData -> {
+      var user = cellData.getValue().user();
+      return new SimpleStringProperty(user != null ? user.name() : "");
+    });
+
+    TableColumn<Adoption, String> animalColumn = new TableColumn<>("Animal");
+    animalColumn
+        .setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().animal().getDisplayName()));
+
+    TableColumn<Adoption, String> typeColumn = new TableColumn<>("Type");
+    typeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
+        cellData.getValue().type() != null ? cellData.getValue().type().toString() : ""));
+
+    TableColumn<Adoption, Void> actionColumn = new TableColumn<>("Actions");
+    actionColumn.setCellFactory(param -> new TableCell<>() {
+      private final ACCButton cancelButton = new ACCButton("Cancel");
+
+      {
+        cancelButton.setOnAction(event -> {
+          Adoption adoption = getTableView().getItems().get(getIndex());
+          handleCancelRequest(adoption, table);
         });
+      }
 
-        TableColumn<Adoption, String> animalColumn = new TableColumn<>("Animal");
-        animalColumn.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().animal().getDisplayName()
-                )
-        );
-
-        TableColumn<Adoption, String> typeColumn = new TableColumn<>("Type");
-        typeColumn.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().type() != null ? cellData.getValue().type().toString() : ""
-                )
-        );
-
-        TableColumn<Adoption, Void> actionColumn = new TableColumn<>("Actions");
-        actionColumn.setCellFactory(param -> new TableCell<>() {
-            private final ACCButton cancelButton = new ACCButton("Cancel");
-
-            {
-                cancelButton.setOnAction(event -> {
-                    Adoption adoption = getTableView().getItems().get(getIndex());
-                    handleCancelRequest(adoption, table);
-                });
-
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(cancelButton);
-                }
-            }
-        });
-
-        table.getColumns().addAll(userColumn, animalColumn, typeColumn, actionColumn);
-        table.setPrefHeight(300);
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        table.widthProperty().addListener((obs, oldVal, newVal) -> {
-            double width = newVal.doubleValue();
-            double colWidth = width / 4; // Dividido por 4 agora
-            userColumn.setMinWidth(colWidth);
-            animalColumn.setMinWidth(colWidth);
-            typeColumn.setMinWidth(colWidth);
-            actionColumn.setMinWidth(colWidth);
-        });
-
-        ApiResponse response = ApiClient.get("/adoptions/user/pending");
-        if (response.isSuccess()) {
-            List<Adoption> adoptions = Utility.parseList(response.getBody(), Adoption.class);
-            table.setItems(javafx.collections.FXCollections.observableArrayList(adoptions));
+      @Override
+      protected void updateItem(Void item, boolean empty) {
+        super.updateItem(item, empty);
+        if (empty) {
+          setGraphic(null);
+        } else {
+          setGraphic(cancelButton);
         }
+      }
+    });
 
-        javafx.scene.control.ScrollPane scrollPane = new javafx.scene.control.ScrollPane(table);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-        scrollPane.setPrefSize(300, 650);
+    table.getColumns().addAll(userColumn, animalColumn, typeColumn, actionColumn);
+    table.setPrefHeight(300);
+    table.setColumnResizePolicy(ACCTableView.CONSTRAINED_RESIZE_POLICY);
 
-        popover = new ACCPopover(scrollPane, "Pending Requests");
-        popover.setPrefSize(1200, 900);
-        popover.show(stage);
+    table.widthProperty().addListener((obs, oldVal, newVal) -> {
+      double width = newVal.doubleValue();
+      double colWidth = width / 4;
+      userColumn.setMinWidth(colWidth);
+      animalColumn.setMinWidth(colWidth);
+      typeColumn.setMinWidth(colWidth);
+      actionColumn.setMinWidth(colWidth);
+    });
+
+    ApiResponse response = ApiClient.get("/adoptions/user/pending");
+    if (response.isSuccess()) {
+      List<Adoption> adoptions = Utility.parseList(response.getBody(), Adoption.class);
+      table.setItems(FXCollections.observableArrayList(adoptions));
     }
 
-    private void handleCancelRequest(Adoption adoption, TableView<Adoption> table) {
-        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmAlert.setTitle("Cancel Request");
-        confirmAlert.setHeaderText("Cancel Adoption Request");
-        confirmAlert.setContentText("Are you sure you want to cancel this adoption request?");
+    ScrollPane scrollPane = new ScrollPane(table);
+    scrollPane.setFitToWidth(true);
+    scrollPane.setFitToHeight(true);
+    scrollPane.setPrefSize(980, 650);
 
-        confirmAlert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                ApiResponse apiResponse = ApiClient.put("/adoptions/user/cancel", adoption.id().toString());
+    popover = new ACCPopover(scrollPane, "Pending Requests");
+    popover.setPrefSize(1200, 900);
+    popover.show(stage);
+  }
 
-                if (apiResponse.isSuccess()) {
-                    table.getItems().remove(adoption);
-                    Utility.showAlert(Alert.AlertType.INFORMATION, "Success", "Request cancelled successfully.");
-                } else {
-                    Utility.showAlert(Alert.AlertType.ERROR, "Error", apiResponse.getBody());
-                }
-            }
-        });
-    }
+  private void handleCancelRequest(Adoption adoption, ACCTableView<Adoption> table) {
+    Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    confirmAlert.setTitle("Cancel Request");
+    confirmAlert.setHeaderText("Cancel Adoption Request");
+    confirmAlert.setContentText("Are you sure you want to cancel this adoption request?");
 
-    private void adoptionsHistoryPopover(ACCMenuButton button) {
-        TableView<Adoption> table = new TableView<>();
+    confirmAlert.showAndWait().ifPresent(response -> {
+      if (response == ButtonType.OK) {
+        ApiResponse apiResponse = ApiClient.put("/adoptions/user/cancel", adoption.id().toString());
 
-        TableColumn<Adoption, String> userColumn = new TableColumn<>("User");
-        userColumn.setCellValueFactory(cellData -> {
-            String userName = "";
-            if (cellData.getValue().user() != null) {
-                userName = cellData.getValue().user().name();
-            }
-            return new javafx.beans.property.SimpleStringProperty(userName);
-        });
-
-        TableColumn<Adoption, String> animalColumn = new TableColumn<>("Animal");
-        animalColumn.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().animal().getDisplayName()
-                )
-        );
-
-        TableColumn<Adoption, String> dateColumn = new TableColumn<>("Adoption Date");
-        dateColumn.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().adoptionDate() != null ? cellData.getValue().adoptionDate().toString() : ""
-                )
-        );
-
-        table.getColumns().addAll(userColumn, animalColumn, dateColumn);
-        table.setPrefHeight(300);
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        table.widthProperty().addListener((obs, oldVal, newVal) -> {
-            double width = newVal.doubleValue();
-            double colWidth = width / 3;
-            userColumn.setMinWidth(colWidth);
-            animalColumn.setMinWidth(colWidth);
-            dateColumn.setMinWidth(colWidth);
-        });
-
-        ApiResponse response = ApiClient.get("/adoptions/user/adoptions/historic");
-        if (response.isSuccess()) {
-            List<Adoption> adoptions = Utility.parseList(response.getBody(), Adoption.class);
-            table.setItems(javafx.collections.FXCollections.observableArrayList(adoptions));
+        if (apiResponse.isSuccess()) {
+          table.getItems().remove(adoption);
+          Utility.showAlert(Alert.AlertType.INFORMATION, "Success", "Request cancelled successfully.");
+        } else {
+          Utility.showAlert(Alert.AlertType.ERROR, "Error", apiResponse.getBody());
         }
+      }
+    });
+  }
 
-        javafx.scene.control.ScrollPane scrollPane = new javafx.scene.control.ScrollPane(table);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-        scrollPane.setPrefSize(300, 650);
+  private void adoptionsHistoryPopover(ACCMenuButton button) {
+    ACCTableView<Adoption> table = new ACCTableView<>();
 
-        popover = new ACCPopover(scrollPane, "Adoptions History");
-        popover.setPrefSize(1200, 900);
-        popover.show(stage);
+    TableColumn<Adoption, String> userColumn = new TableColumn<>("User");
+    userColumn.setCellValueFactory(cellData -> {
+      var user = cellData.getValue().user();
+      return new SimpleStringProperty(user != null ? user.name() : "");
+    });
+
+    TableColumn<Adoption, String> animalColumn = new TableColumn<>("Animal");
+    animalColumn
+        .setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().animal().getDisplayName()));
+
+    TableColumn<Adoption, String> dateColumn = new TableColumn<>("Adoption Date");
+    dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
+        cellData.getValue().adoptionDate() != null ? cellData.getValue().adoptionDate().toString() : ""));
+
+    table.getColumns().addAll(userColumn, animalColumn, dateColumn);
+    table.setPrefHeight(300);
+    table.setColumnResizePolicy(ACCTableView.CONSTRAINED_RESIZE_POLICY);
+
+    table.widthProperty().addListener((obs, oldVal, newVal) -> {
+      double width = newVal.doubleValue();
+      double colWidth = width / 3;
+      userColumn.setMinWidth(colWidth);
+      animalColumn.setMinWidth(colWidth);
+      dateColumn.setMinWidth(colWidth);
+    });
+
+    ApiResponse response = ApiClient.get("/adoptions/user/adoptions/historic");
+    if (response.isSuccess()) {
+      List<Adoption> adoptions = Utility.parseList(response.getBody(), Adoption.class);
+      table.setItems(FXCollections.observableArrayList(adoptions));
     }
 
-    private void fostersHistoryPopover(ACCMenuButton button) {
-        TableView<Adoption> table = new TableView<>();
+    ScrollPane scrollPane = new ScrollPane(table);
+    scrollPane.setFitToWidth(true);
+    scrollPane.setFitToHeight(true);
+    scrollPane.setPrefSize(980, 650);
 
-        TableColumn<Adoption, String> userColumn = new TableColumn<>("User");
-        userColumn.setCellValueFactory(cellData -> {
-            String userName = "";
-            if (cellData.getValue().user() != null) {
-                userName = cellData.getValue().user().name();
-            }
-            return new javafx.beans.property.SimpleStringProperty(userName);
-        });
+    popover = new ACCPopover(scrollPane, "Adoptions History");
+    popover.setPrefSize(1200, 900);
+    popover.show(stage);
+  }
 
-        TableColumn<Adoption, String> animalColumn = new TableColumn<>("Animal");
-        animalColumn.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().animal().getDisplayName()
-                )
-        );
+  private void fostersHistoryPopover(ACCMenuButton button) {
+    ACCTableView<Adoption> table = new ACCTableView<>();
 
-        TableColumn<Adoption, String> dateColumn = new TableColumn<>("Started Fostering");
-        dateColumn.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
-                        cellData.getValue().adoptionDate() != null ? cellData.getValue().adoptionDate().toString() : ""
-                )
-        );
+    TableColumn<Adoption, String> userColumn = new TableColumn<>("User");
+    userColumn.setCellValueFactory(cellData -> {
+      var user = cellData.getValue().user();
+      return new SimpleStringProperty(user != null ? user.name() : "");
+    });
 
-        table.getColumns().addAll(userColumn, animalColumn, dateColumn);
-        table.setPrefHeight(300);
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    TableColumn<Adoption, String> animalColumn = new TableColumn<>("Animal");
+    animalColumn
+        .setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().animal().getDisplayName()));
 
-        table.widthProperty().addListener((obs, oldVal, newVal) -> {
-            double width = newVal.doubleValue();
-            double colWidth = width / 3;
-            userColumn.setMinWidth(colWidth);
-            animalColumn.setMinWidth(colWidth);
-            dateColumn.setMinWidth(colWidth);
-        });
+    TableColumn<Adoption, String> dateColumn = new TableColumn<>("Started Fostering");
+    dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
+        cellData.getValue().adoptionDate() != null ? cellData.getValue().adoptionDate().toString() : ""));
 
-        ApiResponse response = ApiClient.get("/adoptions/user/fosters/historic");
-        if (response.isSuccess()) {
-            List<Adoption> adoptions = Utility.parseList(response.getBody(), Adoption.class);
-            table.setItems(javafx.collections.FXCollections.observableArrayList(adoptions));
-        }
+    table.getColumns().addAll(userColumn, animalColumn, dateColumn);
+    table.setPrefHeight(300);
+    table.setColumnResizePolicy(ACCTableView.CONSTRAINED_RESIZE_POLICY);
 
-        javafx.scene.control.ScrollPane scrollPane = new javafx.scene.control.ScrollPane(table);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-        scrollPane.setPrefSize(300, 650);
+    table.widthProperty().addListener((obs, oldVal, newVal) -> {
+      double width = newVal.doubleValue();
+      double colWidth = width / 3;
+      userColumn.setMinWidth(colWidth);
+      animalColumn.setMinWidth(colWidth);
+      dateColumn.setMinWidth(colWidth);
+    });
 
-        popover = new ACCPopover(scrollPane, "Fosters History");
-        popover.setPrefSize(1200, 900);
-        popover.show(stage);
+    ApiResponse response = ApiClient.get("/adoptions/user/fosters/historic");
+    if (response.isSuccess()) {
+      List<Adoption> adoptions = Utility.parseList(response.getBody(), Adoption.class);
+      table.setItems(FXCollections.observableArrayList(adoptions));
     }
 
-    private void donationsHistoryPopover(ACCMenuButton button) {
-        TableView<ShelterDonation> table = new TableView<>();
+    ScrollPane scrollPane = new ScrollPane(table);
+    scrollPane.setFitToWidth(true);
+    scrollPane.setFitToHeight(true);
+    scrollPane.setPrefSize(980, 650);
 
-        TableColumn<ShelterDonation, String> dateColumn = new TableColumn<>("Date");
-        dateColumn.setCellValueFactory(cellData -> {
-            String date = "";
-            if (cellData.getValue().donationDate() != null) {
-                date = cellData.getValue().donationDate().toString();
-            }
-            return new javafx.beans.property.SimpleStringProperty(date);
-        });
+    popover = new ACCPopover(scrollPane, "Fosters History");
+    popover.setPrefSize(1200, 900);
+    popover.show(stage);
+  }
 
-        TableColumn<ShelterDonation, String> amountColumn = new TableColumn<>("Amount");
-        amountColumn.setCellValueFactory(cellData -> {
-            float amount = cellData.getValue().amount();
-            return new javafx.beans.property.SimpleStringProperty(String.format("%.2f", amount));
-        });
+  private void donationsHistoryPopover(ACCMenuButton button) {
+    ACCTableView<ShelterDonation> table = new ACCTableView<>();
 
-        TableColumn<ShelterDonation, String> shelterColumn = new TableColumn<>("Shelter");
-        shelterColumn.setCellValueFactory(cellData -> {
-            String shelterName = "";
-            if (cellData.getValue().shelter() != null) {
-                shelterName = cellData.getValue().shelter().name();
-            }
-            return new javafx.beans.property.SimpleStringProperty(shelterName);
-        });
+    TableColumn<ShelterDonation, String> dateColumn = new TableColumn<>("Date");
+    dateColumn.setCellValueFactory(cellData -> {
+      var date = cellData.getValue().donationDate();
+      return new SimpleStringProperty(date != null ? date.toString() : "");
+    });
 
-        table.getColumns().addAll(dateColumn, amountColumn, shelterColumn);
-        table.setPrefHeight(300);
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    TableColumn<ShelterDonation, String> amountColumn = new TableColumn<>("Amount");
+    amountColumn.setCellValueFactory(cellData -> {
+      float amount = cellData.getValue().amount();
+      return new SimpleStringProperty(String.format("%.2f", amount));
+    });
 
-        table.widthProperty().addListener((obs, oldVal, newVal) -> {
-            double width = newVal.doubleValue();
-            double colWidth = width / 3;
-            dateColumn.setMinWidth(colWidth);
-            amountColumn.setMinWidth(colWidth);
-            shelterColumn.setMinWidth(colWidth);
-        });
+    TableColumn<ShelterDonation, String> shelterColumn = new TableColumn<>("Shelter");
+    shelterColumn.setCellValueFactory(cellData -> {
+      var shelter = cellData.getValue().shelter();
+      return new SimpleStringProperty(shelter != null ? shelter.name() : "");
+    });
 
-        ApiResponse response = ApiClient.get("/donations/user/historic");
-        if (response.isSuccess()) {
-            List<ShelterDonation> donations = Utility.parseList(response.getBody(), ShelterDonation.class);
-            table.setItems(javafx.collections.FXCollections.observableArrayList(donations));
-        }
+    table.getColumns().addAll(dateColumn, amountColumn, shelterColumn);
+    table.setPrefHeight(300);
+    table.setColumnResizePolicy(ACCTableView.CONSTRAINED_RESIZE_POLICY);
 
-        javafx.scene.control.ScrollPane scrollPane = new javafx.scene.control.ScrollPane(table);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-        scrollPane.setPrefSize(300, 650);
+    table.widthProperty().addListener((obs, oldVal, newVal) -> {
+      double width = newVal.doubleValue();
+      double colWidth = width / 3;
+      dateColumn.setMinWidth(colWidth);
+      amountColumn.setMinWidth(colWidth);
+      shelterColumn.setMinWidth(colWidth);
+    });
 
-        popover = new ACCPopover(scrollPane, "Donations History");
-        popover.setPrefSize(1200, 900);
-        popover.show(stage);
+    ApiResponse response = ApiClient.get("/donations/user/historic");
+    if (response.isSuccess()) {
+      List<ShelterDonation> donations = Utility.parseList(response.getBody(), ShelterDonation.class);
+      table.setItems(FXCollections.observableArrayList(donations));
     }
 
-    private void sponsorshipsPopover(ACCMenuButton button) {
+    ScrollPane scrollPane = new ScrollPane(table);
+    scrollPane.setFitToWidth(true);
+    scrollPane.setFitToHeight(true);
+    scrollPane.setPrefSize(980, 650);
 
-        TableView<Sponsorship> table = new TableView<>();
+    popover = new ACCPopover(scrollPane, "Donations History");
+    popover.setPrefSize(1200, 900);
+    popover.show(stage);
+  }
 
-        TableColumn<Sponsorship, String> animalCol = new TableColumn<>("Animal");
-        animalCol.setCellValueFactory(c ->
-                new SimpleStringProperty(c.getValue().animalName())
-        );
+  private void sponsorshipsPopover(ACCMenuButton button) {
+    ACCTableView<Sponsorship> table = new ACCTableView<>();
 
-        TableColumn<Sponsorship, String> amountCol = new TableColumn<>("Amount");
-        amountCol.setCellValueFactory(c ->
-                new SimpleStringProperty(String.format("%.2f", c.getValue().amount())));
+    TableColumn<Sponsorship, String> animalCol = new TableColumn<>("Animal");
+    animalCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().animalName()));
 
-        TableColumn<Sponsorship, String> startCol = new TableColumn<>("Start Date");
-        startCol.setCellValueFactory(c ->
-                new SimpleStringProperty(c.getValue().startDate() != null ? c.getValue().startDate().toString() : ""));
+    TableColumn<Sponsorship, String> amountCol = new TableColumn<>("Amount");
+    amountCol.setCellValueFactory(c -> new SimpleStringProperty(String.format("%.2f", c.getValue().amount())));
 
-        TableColumn<Sponsorship, String> endCol = new TableColumn<>("End Date");
-        endCol.setCellValueFactory(c ->
-                new SimpleStringProperty(c.getValue().endDate() != null ? c.getValue().endDate().toString() : ""));
+    TableColumn<Sponsorship, String> startCol = new TableColumn<>("Start Date");
+    startCol.setCellValueFactory(
+        c -> new SimpleStringProperty(c.getValue().startDate() != null ? c.getValue().startDate().toString() : ""));
 
+    TableColumn<Sponsorship, String> endCol = new TableColumn<>("End Date");
+    endCol.setCellValueFactory(
+        c -> new SimpleStringProperty(c.getValue().endDate() != null ? c.getValue().endDate().toString() : ""));
 
-        TableColumn<Sponsorship, Void> actionCol = new TableColumn<>("Action");
-        actionCol.setCellFactory(col -> new TableCell<>() {
+    TableColumn<Sponsorship, Void> actionCol = new TableColumn<>("Action");
+    actionCol.setCellFactory(col -> new TableCell<>() {
+      private final ACCButton cancelButton = new ACCButton("Cancel");
 
-            private final ACCButton cancelButton = new ACCButton("Cancel");
+      {
+        cancelButton.setOnAction(e -> {
+          Sponsorship s = getTableView().getItems().get(getIndex());
 
+          if (s.sponsorshipId() == null) {
+            Utility.showAlert(Alert.AlertType.ERROR, "Error", "Invalid sponsorship ID");
+            return;
+          }
 
-            {
-                cancelButton.setOnAction(e -> {
-                    Sponsorship s = getTableView().getItems().get(getIndex());
+          Alert confirm = new Alert(
+              Alert.AlertType.CONFIRMATION,
+              "Cancel sponsorship for " + s.animalName() + "?",
+              ButtonType.YES,
+              ButtonType.NO);
 
-                    if (s.sponsorshipId() == null) {
-                        Utility.showAlert(Alert.AlertType.ERROR, "Error", "Invalid sponsorship ID");
-                        return;
-                    }
+          confirm.showAndWait().ifPresent(bt -> {
+            if (bt == ButtonType.YES) {
+              ApiResponse res = ApiClient.delete("/sponsorships/cancel?sponsorshipId=" + s.sponsorshipId());
 
-                    Alert confirm = new Alert(
-                            Alert.AlertType.CONFIRMATION,
-                            "Cancel sponsorship for " + s.animalName() + "?",
-                            ButtonType.YES,
-                            ButtonType.NO
-                    );
-
-                    confirm.showAndWait().ifPresent(bt -> {
-                        if (bt == ButtonType.YES) {
-
-                            ApiResponse res = ApiClient.delete(
-                                    "/sponsorships/cancel?sponsorshipId=" + s.sponsorshipId()
-                            );
-
-                            if (res.isSuccess()) {
-                                getTableView().getItems().remove(s);
-                                Utility.showAlert(Alert.AlertType.INFORMATION, "Success", "Sponsorship cancelled!");
-                            } else {
-                                Utility.showAlert(Alert.AlertType.ERROR, "Error", res.getBody());
-                            }
-                        }
-                    });
-                });
+              if (res.isSuccess()) {
+                getTableView().getItems().remove(s);
+                Utility.showAlert(Alert.AlertType.INFORMATION, "Success", "Sponsorship cancelled!");
+              } else {
+                Utility.showAlert(Alert.AlertType.ERROR, "Error", res.getBody());
+              }
             }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : cancelButton);
-            }
+          });
         });
+      }
 
-        table.getColumns().addAll(animalCol, amountCol, startCol, endCol, actionCol);
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        table.setPrefHeight(300);
+      @Override
+      protected void updateItem(Void item, boolean empty) {
+        super.updateItem(item, empty);
+        setGraphic(empty ? null : cancelButton);
+      }
+    });
 
-        ApiResponse response = ApiClient.get("/sponsorships/user/historic");
+    table.getColumns().addAll(animalCol, amountCol, startCol, endCol, actionCol);
+    table.setColumnResizePolicy(ACCTableView.CONSTRAINED_RESIZE_POLICY);
+    table.setPrefHeight(300);
 
-        if (response.isSuccess()) {
-            List<Sponsorship> sponsorships =
-                    Utility.parseList(response.getBody(), Sponsorship.class);
-            table.setItems(FXCollections.observableArrayList(sponsorships));
-        }
+    ApiResponse response = ApiClient.get("/sponsorships/user/historic");
 
-        ScrollPane scrollPane = new ScrollPane(table);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-
-        popover = new ACCPopover(scrollPane, "Sponsorships History");
-        popover.setPrefSize(1200, 900);
-        popover.show(stage);
+    if (response.isSuccess()) {
+      List<Sponsorship> sponsorships = Utility.parseList(response.getBody(), Sponsorship.class);
+      table.setItems(FXCollections.observableArrayList(sponsorships));
     }
 
+    ScrollPane scrollPane = new ScrollPane(table);
+    scrollPane.setFitToWidth(true);
+    scrollPane.setFitToHeight(true);
+    scrollPane.setPrefSize(980, 650);
 
+    popover = new ACCPopover(scrollPane, "Sponsorships History");
+    popover.setPrefSize(1200, 900);
+    popover.show(stage);
+  }
 }

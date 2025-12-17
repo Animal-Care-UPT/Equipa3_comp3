@@ -1,5 +1,6 @@
 package AnimalCareCentre.client.components;
 
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 public class ACCTableView<S> extends TableView<S> {
@@ -7,6 +8,19 @@ public class ACCTableView<S> extends TableView<S> {
   public ACCTableView() {
     super();
     applyStyles();
+    disableColumnReordering();
+  }
+
+  private void disableColumnReordering() {
+    getColumns().addListener((javafx.collections.ListChangeListener<TableColumn<S, ?>>) change -> {
+      while (change.next()) {
+        if (change.wasAdded()) {
+          for (TableColumn<S, ?> column : change.getAddedSubList()) {
+            column.setReorderable(false);
+          }
+        }
+      }
+    });
   }
 
   private void applyStyles() {
