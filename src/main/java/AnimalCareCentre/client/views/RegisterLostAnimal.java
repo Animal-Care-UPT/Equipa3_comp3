@@ -33,7 +33,7 @@ public class RegisterLostAnimal {
    */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
-    new NavBar(nav.getLoggedRole(), nav, scene);
+    new NavBar(Navigator.getLoggedRole(), nav, scene);
 
     final File[] image = { null };
     Label typeLabel = new Label("Animal type:");

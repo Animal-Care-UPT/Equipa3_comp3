@@ -65,7 +65,7 @@ public class LostAndFoundHomepage {
     splitPane.getItems().add(mapVbox);
     scene.addItems(splitPane);
 
-    new NavBar(nav.getLoggedRole(), nav, scene);
+    new NavBar(Navigator.getLoggedRole(), nav, scene);
   }
 
   /**
@@ -104,7 +104,7 @@ public class LostAndFoundHomepage {
   private List<LostAnimal> searchAnimalByLocation(District district) {
     ApiResponse response = ApiClient.get("/lostandfound/showByLocation?location=" + district.name());
     if (!response.isSuccess()) {
-      Utility.showAlert(Alert.AlertType.WARNING, "Error", response.getBody());
+      Utility.showAlert(Alert.AlertType.WARNING, "Warning", response.getBody());
       return null;
     } else {
       List<LostAnimal> animals = Utility.parseList(response.getBody(), LostAnimal.class);
@@ -142,7 +142,6 @@ public class LostAndFoundHomepage {
 
           ACCGrid<LostAnimal> grid = new ACCGrid<>(e -> nav.showLostAnimal(e), this::fetchImagesForPage);
           if (animalByLocation == null) {
-            Utility.showAlert(Alert.AlertType.ERROR, "No animals in this location", location.toString());
             return;
           }
           grid.add(animalByLocation);

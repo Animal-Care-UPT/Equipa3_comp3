@@ -40,7 +40,7 @@ public class LostAnimalProfile {
    */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
-    new NavBar(nav.getLoggedRole(), nav, scene);
+    new NavBar(Navigator.getLoggedRole(), nav, scene);
 
     ACCHBox mainBox = new ACCHBox();
     mainBox.setSpacing(0);

@@ -1,4 +1,3 @@
-
 package AnimalCareCentre.client.views;
 
 import AnimalCareCentre.client.ApiClient;
@@ -7,7 +6,6 @@ import AnimalCareCentre.client.Navigator;
 import AnimalCareCentre.client.Utility;
 import AnimalCareCentre.client.components.*;
 import AnimalCareCentre.client.records.LostAnimal;
-import AnimalCareCentre.client.records.ShelterAnimal;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -37,7 +35,7 @@ public class MyPostingView {
   private void show() {
     ACCVBox root = new ACCVBox();
     ACCScene scene = new ACCScene(stage, root);
-    new NavBar(nav.getLoggedRole(), nav, scene);
+    new NavBar(Navigator.getLoggedRole(), nav, scene);
 
     ACCHBox mainBox = new ACCHBox();
     mainBox.setSpacing(0);

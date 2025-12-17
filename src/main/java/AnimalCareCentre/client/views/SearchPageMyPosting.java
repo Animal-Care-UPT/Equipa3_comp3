@@ -34,7 +34,7 @@ public class SearchPageMyPosting<T extends Displayable> {
    */
   private void show(List<T> lst) {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
-    new NavBar(nav.getLoggedRole(), nav, scene);
+    new NavBar(Navigator.getLoggedRole(), nav, scene);
 
     ACCGrid<T> grid;
     grid = new ACCGrid<>(e -> nav.showLostAnimalPosting(e), this::fetchImagesForPage);

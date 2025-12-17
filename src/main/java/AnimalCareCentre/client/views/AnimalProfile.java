@@ -38,7 +38,7 @@ public class AnimalProfile {
   }
 
   /**
-   * Shows the animal profile
+   * Shows the animal's profile
    */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
