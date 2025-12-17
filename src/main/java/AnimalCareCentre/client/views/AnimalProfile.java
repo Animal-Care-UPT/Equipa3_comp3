@@ -139,6 +139,7 @@ public class AnimalProfile {
     ACCMenuButton status = new ACCMenuButton("Change Status");
     content.addItems(vacine, age, adoptType, status);
     popover = new ACCPopover(content, "Manage " + animal.name());
+    popover.setMinSize(600, 600);
     popover.show(stage);
 
     vacine.setOnAction(e -> {
@@ -238,6 +239,7 @@ public class AnimalProfile {
     carousel.setPadding(new Insets(20));
 
     popover = new ACCPopover(carousel, animal.name() + " - Images");
+    popover.setMinSize(600, 600);
     popover.show(stage);
   }
 
@@ -273,6 +275,7 @@ public class AnimalProfile {
     scroll.setPrefHeight(200);
 
     popover = new ACCPopover(scroll, "Sponsorships");
+    popover.setMinSize(600, 600);
     popover.show(stage);
 
   }
@@ -307,6 +310,7 @@ public class AnimalProfile {
     scroll.setFitToWidth(true);
     scroll.setPrefHeight(200);
     popover = new ACCPopover(scroll, "Adoptions/Fosters History");
+    popover.setMinSize(600, 600);
     popover.show(stage);
   }
 
@@ -330,6 +334,7 @@ public class AnimalProfile {
     content.addItems(confirmLabel, confirmButton, cancelButton);
 
     popover = new ACCPopover(content, "Confirm " + adoptionType);
+    popover.setMinSize(600, 600);
     popover.show(stage);
   }
 
@@ -402,6 +407,7 @@ public class AnimalProfile {
     content.addItems(titleLabel, amountLabel, amountField, submitButton, cancelButton);
 
     popover = new ACCPopover(content, "Confirm ");
+    popover.setMinSize(600, 600);
     popover.show(stage);
   }
 

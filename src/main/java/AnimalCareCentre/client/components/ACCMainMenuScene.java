@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -45,6 +46,8 @@ public class ACCMainMenuScene extends Scene {
    * is should be used every time there's a new scene of this type.
    */
   private void createPage() {
+    Region spacer = new Region();
+    spacer.setMinHeight(100);
     ImageView logo = createLogo();
     ACCHBox body = new ACCHBox();
     ImageView left = createLeftBorder();
@@ -62,7 +65,8 @@ public class ACCMainMenuScene extends Scene {
     HBox.setHgrow(content, Priority.ALWAYS);
     VBox.setVgrow(body, Priority.ALWAYS);
     logo.setPreserveRatio(true);
-    logo.fitHeightProperty().bind(stage.widthProperty().multiply(0.35));
+    logo.setFitWidth(900);
+    //logo.fitHeightProperty().bind(stage.widthProperty().multiply(0.35));
     logo.setSmooth(true);
     logo.setCache(true);
     left.setPreserveRatio(true);
@@ -72,7 +76,7 @@ public class ACCMainMenuScene extends Scene {
     body.setAlignment(javafx.geometry.Pos.CENTER);
     body.setFillHeight(true);
     body.addItems(left, content, right);
-    mainVbox.addItems(logo, body, footer);
+    mainVbox.addItems(spacer, logo, body, footer);
     VBox.setVgrow(body, Priority.ALWAYS);
   }
 

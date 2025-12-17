@@ -52,7 +52,7 @@ public class ShelterService {
   }
 
   public List<Shelter> searchAvailableShelters(String keyword) {
-    List<Shelter> shelters = shelterRepository.findByStatusAndKeyword(Status.AVAILABLE, keyword);
+    List<Shelter> shelters = shelterRepository.findByStatusAndKeyword(Status.AVAILABLE, "%" + keyword + "%");
     shelters.sort(Comparator.comparing(Shelter::getLocation).thenComparing(Shelter::getName));
     return shelters;
   }

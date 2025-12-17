@@ -161,6 +161,7 @@ public class ShelterProfile {
     scroll.setPrefHeight(200);
 
     popover = new ACCPopover(scroll, "Donations History");
+    popover.setMinSize(600, 600);
     popover.show(stage);
   }
 
@@ -179,6 +180,7 @@ public class ShelterProfile {
     carousel.setPadding(new Insets(20));
 
     popover = new ACCPopover(carousel, shelter.name() + " - Images");
+    popover.setMinSize(600, 600);
     popover.show(stage);
   }
 
@@ -229,6 +231,7 @@ public class ShelterProfile {
     content.addItems(titleLabel, instructionLabel, amountField, submitButton, cancelButton);
 
     popover = new ACCPopover(content, "Donate to Shelter");
+    popover.setMinSize(600, 600);
     popover.show(stage);
   }
 
@@ -298,6 +301,7 @@ public class ShelterProfile {
     content.addItems(selec, status, confirm, cancelButton);
 
     popover = new ACCPopover(content, "Change Shelter Status");
+    popover.setMinSize(600, 600);
     popover.show(stage);
 
   }
