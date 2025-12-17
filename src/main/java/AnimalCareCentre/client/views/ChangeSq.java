@@ -53,7 +53,7 @@ public class ChangeSq {
     });
 
     back.setOnAction(e -> {
-      nav.showMainMenu();
+      nav.home();
     });
 
   }
