@@ -89,6 +89,9 @@ public class ApiClient {
    * Sends a POST request with an attached file
    */
   public static ApiResponse postWithFile(String endpoint, File file) {
+    if (file == null) {
+      return new ApiResponse(false, "Invalid File", 400);
+    }
     try {
 
       HttpHeaders headers = createHeadersWithCookie(MediaType.MULTIPART_FORM_DATA);

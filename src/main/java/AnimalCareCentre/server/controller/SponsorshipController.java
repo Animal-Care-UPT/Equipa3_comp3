@@ -116,7 +116,7 @@ public class SponsorshipController {
      * @return
      */
   @PreAuthorize("hasRole('ADMIN')")
-  @GetMapping("/admin")
+  @GetMapping("/all")
   public ResponseEntity<?> listAllSponsorships(){
       List<Sponsorship> sponsorships = sponsorshipService.getAllSponsorships();
 

@@ -1,6 +1,5 @@
 package AnimalCareCentre.server.controller;
 
-
 import AnimalCareCentre.server.dto.ShelterDonationDTO;
 import AnimalCareCentre.server.model.Shelter;
 import AnimalCareCentre.server.model.ShelterDonation;
@@ -25,97 +24,101 @@ public class ShelterDonationController {
   private final UserService userService;
   private final ShelterService shelterService;
 
-  public ShelterDonationController(ShelterDonationService donationService,  UserService userService,  ShelterService shelterService) {
+  public ShelterDonationController(ShelterDonationService donationService, UserService userService,
+      ShelterService shelterService) {
 
-      this.donationService = donationService;
-      this.userService = userService;
-      this.shelterService = shelterService;
+    this.donationService = donationService;
+    this.userService = userService;
+    this.shelterService = shelterService;
   }
 
-    /**
-     * To create new donations to shelters
-     * @return
-     */
+  /**
+   * To create new donations to shelters
+   * 
+   * @return
+   */
   @PreAuthorize("hasRole('USER')")
   @PostMapping("/create")
-  public ResponseEntity<?>  newDonation(@Valid @RequestBody ShelterDonationDTO donationDTO){
+  public ResponseEntity<?> newDonation(@Valid @RequestBody ShelterDonationDTO donationDTO) {
 
-      String email = SecurityContextHolder.getContext().getAuthentication().getName();
-      User user = userService.findByEmail(email);
-      if(user==null){
-          return ResponseEntity.status(404).body("User not found!");
-      }
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    User user = userService.findByEmail(email);
+    if (user == null) {
+      return ResponseEntity.status(404).body("User not found!");
+    }
 
-      Long shelterId = donationDTO.getShelterId();
-      float donationAmount = donationDTO.getAmount();
+    Long shelterId = donationDTO.getShelterId();
+    float donationAmount = donationDTO.getAmount();
 
-      ShelterDonation shelterDonation = donationService.newShelterDonation(user, shelterId, donationAmount);
-      if(shelterDonation==null){
-          return ResponseEntity.status(404).body("Shelter not found!");
-      }
-      return ResponseEntity.status(200).body(shelterDonation);
+    ShelterDonation shelterDonation = donationService.newShelterDonation(user, shelterId, donationAmount);
+    if (shelterDonation == null) {
+      return ResponseEntity.status(404).body("Shelter not found!");
+    }
+    return ResponseEntity.status(200).body(shelterDonation);
   }
 
-    /**
-     * To allow a user to see their donations made.
-     * @return
-     */
+  /**
+   * To allow a user to see their donations made.
+   * 
+   * @return
+   */
   @PreAuthorize("hasRole('USER')")
   @GetMapping("/user/historic")
-  public ResponseEntity<?>  listUserDonations(){
+  public ResponseEntity<?> listUserDonations() {
 
-      String email = SecurityContextHolder.getContext().getAuthentication().getName();
-      User user = userService.findByEmail(email);
-      if(user==null){
-          return ResponseEntity.status(404).body("User not found!");
-      }
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    User user = userService.findByEmail(email);
+    if (user == null) {
+      return ResponseEntity.status(404).body("User not found!");
+    }
 
-      List<ShelterDonationDTO> donations = donationService.getUserDonations(user);
+    List<ShelterDonationDTO> donations = donationService.getUserDonations(user);
 
-      if(donations==null || donations.isEmpty()){
-          return ResponseEntity.status(404).body("No donations found!");
-      }
-      return ResponseEntity.status(200).body(donations);
+    if (donations == null || donations.isEmpty()) {
+      return ResponseEntity.status(404).body("No donations found!");
+    }
+    return ResponseEntity.status(200).body(donations);
   }
 
-    /**
-     * To allow a shelter to see their donations
-     * @return
-     */
+  /**
+   * To allow a shelter to see their donations
+   * 
+   * @return
+   */
   @PreAuthorize("hasRole('SHELTER')")
   @GetMapping("/shelter/donations")
-  public  ResponseEntity<?>  listShelterDonations(){
+  public ResponseEntity<?> listShelterDonations() {
 
-      String email = SecurityContextHolder.getContext().getAuthentication().getName();
-      Shelter shelter = shelterService.findByEmail(email);
-      if(shelter==null){
-          return ResponseEntity.status(404).body("Shelter not found!");
-      }
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    Shelter shelter = shelterService.findByEmail(email);
+    if (shelter == null) {
+      return ResponseEntity.status(404).body("Shelter not found!");
+    }
 
-      List<ShelterDonationDTO> donations = donationService.getShelterDonations(shelter);
+    List<ShelterDonationDTO> donations = donationService.getShelterDonations(shelter);
 
-      if(donations==null || donations.isEmpty()){
-          return ResponseEntity.status(404).body("No donations found!");
-      }
+    if (donations == null || donations.isEmpty()) {
+      return ResponseEntity.status(404).body("No donations found!");
+    }
 
-      return ResponseEntity.status(200).body(donations);
+    return ResponseEntity.status(200).body(donations);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
   @GetMapping("admin/{shelterId}")
-    public ResponseEntity<?> getShelterDonations(@PathVariable Long shelterId) {
-        Shelter shelter = shelterService.findById(shelterId);
-        if (shelter == null) {
-            return ResponseEntity.status(404).body("Shelter not found");
-        }
-
-        List<ShelterDonationDTO> donations = donationService.getShelterDonations(shelter);
-
-        if (donations.isEmpty()) {
-            return ResponseEntity.status(404).body("No donations found for this shelter");
-        }
-
-        return ResponseEntity.status(200).body(donations);
+  public ResponseEntity<?> getShelterDonations(@PathVariable Long shelterId) {
+    Shelter shelter = shelterService.findById(shelterId);
+    if (shelter == null) {
+      return ResponseEntity.status(404).body("Shelter not found");
     }
+
+    List<ShelterDonationDTO> donations = donationService.getShelterDonations(shelter);
+
+    if (donations.isEmpty()) {
+      return ResponseEntity.status(404).body("No donations found for this shelter");
+    }
+
+    return ResponseEntity.status(200).body(donations);
+  }
 
 }

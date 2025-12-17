@@ -243,8 +243,7 @@ public class UserHomepage {
 
     TableColumn<ShelterDonation, String> shelterColumn = new TableColumn<>("Shelter");
     shelterColumn.setCellValueFactory(cellData -> {
-      var shelter = cellData.getValue().shelter();
-      return new SimpleStringProperty(shelter != null ? shelter.name() : "");
+      return new SimpleStringProperty(cellData.getValue().shelterName());
     });
 
     table.getColumns().addAll(dateColumn, amountColumn, shelterColumn);
@@ -326,10 +325,18 @@ public class UserHomepage {
         });
       }
 
-      @Override
       protected void updateItem(Void item, boolean empty) {
         super.updateItem(item, empty);
-        setGraphic(empty ? null : cancelButton);
+        if (empty) {
+          setGraphic(null);
+          return;
+        }
+        Sponsorship sponsorship = getTableView().getItems().get(getIndex());
+        if (sponsorship.endDate() == null) {
+          setGraphic(cancelButton);
+        } else {
+          setGraphic(null);
+        }
       }
     });
 

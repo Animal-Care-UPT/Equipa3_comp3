@@ -15,7 +15,7 @@ public record Sponsorship(
   @Override
   public String toString() {
     return "\nSponsorship ID: " + sponsorshipId +
-            "\nUser ID: " + userId +
+        "\nUser ID: " + userId +
         "\nUser: " + (userName != null ? userName : "N/A") +
         "\nAnimal ID: " + animalId +
         "\nAnimal: " + (animalName != null ? animalName : "N/A") +
