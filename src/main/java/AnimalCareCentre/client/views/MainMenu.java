@@ -33,7 +33,7 @@ public class MainMenu {
    * Displays the main menu
    */
   private void show() {
-    ACCScene scene = new ACCScene(stage, new ACCVBox());
+    ACCMainMenuScene scene = new ACCMainMenuScene(stage, new ACCVBox());
 
     ACCMenuButton login = new ACCMenuButton("Login");
     ACCMenuButton create = new ACCMenuButton("Create Account");
@@ -57,7 +57,7 @@ public class MainMenu {
    * This method shows the login screen
    */
   public void login() {
-    ACCScene scene = new ACCScene(stage, new ACCVBox());
+    ACCMainMenuScene scene = new ACCMainMenuScene(stage, new ACCVBox());
     Label emailLabel = new Label("Email:");
     ACCTextField email = new ACCTextField();
     Label passLabel = new Label("Password:");
@@ -109,7 +109,7 @@ public class MainMenu {
    * This method shows the change password screen
    */
   public void changePassword() {
-    ACCScene scene = new ACCScene(stage, new ACCVBox());
+    ACCMainMenuScene scene = new ACCMainMenuScene(stage, new ACCVBox());
     Label emailLabel = new Label("Email:");
     ACCTextField email = new ACCTextField();
     ACCButton enter = new ACCButton("Enter");
@@ -155,7 +155,9 @@ public class MainMenu {
    * This method shows the create account screen
    */
   public void createAccount() {
-    ACCScene scene = new ACCScene(stage, new ACCVBox());
+    ACCMainMenuScene scene = new ACCMainMenuScene(stage, new ACCVBox());
+
+    // ACCScene scene = new ACCScene(stage, new ACCVBox());
     Label type = new Label("Account type:");
     ACCComboBox<String> accType = new ACCComboBox<>();
     accType.getItems().addAll("User", "Admin", "Shelter");
