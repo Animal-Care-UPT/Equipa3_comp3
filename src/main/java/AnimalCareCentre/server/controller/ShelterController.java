@@ -231,6 +231,7 @@ public class ShelterController {
 
       String imageUrl = "/shelters/" + shelter.getId() + "/images/" + index;
       shelterService.addImagePath(shelter, imageUrl);
+      shelterService.save(shelter);
 
       return ResponseEntity.ok("Image uploaded successfully");
 
