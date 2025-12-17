@@ -59,7 +59,6 @@ public class LostAndFoundHomepage {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     ACCVBox mapVbox = new ACCVBox();
     mapVbox.addItems(map);
-    mapVbox.setMaxHeight(300);
     splitPane.getItems().add(mapVbox);
     scene.addItems(splitPane);
 
@@ -95,7 +94,7 @@ public class LostAndFoundHomepage {
     private List<LostAnimal> searchAnimalByLocation(District district) {
         ApiResponse response = ApiClient.get("/lostandfound/showByLocation?location=" +district.name());
         if (!response.isSuccess()) {
-            Utility.showAlert(Alert.AlertType.ERROR, "Error", response.getBody());
+            Utility.showAlert(Alert.AlertType.WARNING, "Error", response.getBody());
             return null;
         } else {
             List<LostAnimal> animals = Utility.parseList(response.getBody(), LostAnimal.class);
@@ -142,6 +141,7 @@ public class LostAndFoundHomepage {
                   };
                   ACCVBox gridVbox= new ACCVBox();
                   gridVbox.addItems(grid);
+                  gridVbox.setMaxHeight(600);
                   splitPane.getItems().add(gridVbox);
                  }
 

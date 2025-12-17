@@ -90,7 +90,7 @@ public class RegisterLostAnimal {
           breed.getValue(), "size", size.getValue(), "gender", gender.getValue(),
           "age", age.getText(), "color", color.getValue(), "location", location.getValue(),"contact",contact.getText(), "description", desc.getText());
       registerAnimal(json, image);
-      nav.shelterHomepage();
+      nav.lostAndFoundMenu();
     });
 
     back.setOnAction(e -> nav.lostAndFoundMenu());

@@ -66,7 +66,7 @@ public class Navigator {
 
     public void showLostAnimalPosting(Displayable animal){
         LostAnimal lostAnimal = (LostAnimal) animal;
-        new LostAnimalPosting(this,stage,lostAnimal);
+        new MyPostingView(this,stage,lostAnimal);
     }
 
   public void showAnimal(Displayable animal) {
@@ -122,6 +122,6 @@ public class Navigator {
     }
 
     public void lostAnimalsByAccount(List<LostAnimal> lostAnimals) {
-      new SearchPage<>(this,stage,lostAnimals);
+      new SearchPageMyPosting<>(this,stage,lostAnimals);
     }
 }

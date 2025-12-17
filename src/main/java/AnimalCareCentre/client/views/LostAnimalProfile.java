@@ -4,20 +4,21 @@ import AnimalCareCentre.client.ApiClient;
 import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
 import AnimalCareCentre.client.Utility;
-import AnimalCareCentre.client.components.ACCMenuButton;
-import AnimalCareCentre.client.components.ACCPopover;
-import AnimalCareCentre.client.components.ACCScene;
-import AnimalCareCentre.client.components.ACCVBox;
+import AnimalCareCentre.client.components.*;
 import AnimalCareCentre.client.records.Adoption;
 import AnimalCareCentre.client.records.LostAnimal;
 import AnimalCareCentre.client.records.ShelterAnimal;
 import AnimalCareCentre.client.records.Sponsorship;
 import io.github.makbn.jlmap.listener.event.ClickEvent;
+import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.List;
 
 
@@ -35,57 +36,69 @@ public class LostAnimalProfile {
             show();
         }
 
+
     private void show() {
-          ACCVBox root = new ACCVBox();
-          ACCScene scene = new ACCScene(stage, root);
-          new NavBar(nav.getLoggedRole(), nav, scene);
+        ACCScene scene = new ACCScene(stage, new ACCVBox());
+        new NavBar(nav.getLoggedRole(), nav, scene);
 
-          Label animalProfile = new Label(animal.toString());
+        ACCHBox mainBox = new ACCHBox();
+        mainBox.setSpacing(0);
 
+        ACCVBox imgContainer = new ACCVBox();
+        imgContainer.setMinWidth(420);
+        imgContainer.setMinHeight(420);
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(400);
+        imageView.setFitHeight(400);
+        imageView.setPreserveRatio(true);
+        imgContainer.addItems(imageView);
 
+        imageView.setOnMouseEntered(event -> {
+            imageView.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 15, 0, 0, 3); -fx-cursor: hand;");
 
-          scene.addItems(animalProfile);
+            imageView.setFitWidth(420);
+            imageView.setFitHeight(420);
+        });
 
-    }
+        imageView.setOnMouseExited(event -> {
+            imageView.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 2);");
+            imageView.setFitWidth(400);
+            imageView.setFitHeight(400);
+            imageView.setCursor(Cursor.HAND);
+        });
 
-    private void sponsorshipPopover(ACCMenuButton button){
+        imageView.setOnMouseClicked(event -> {
+            //imgCarousel();
+        });
 
-        ApiResponse response = ApiClient.get("/sponsorships/animal/" + animal.id());
-
-        ACCVBox content = new ACCVBox();
-        content.setSpacing(8);
-
-        if(!response.isSuccess()){
-            Utility.showAlert(Alert.AlertType.ERROR, "Failed to load sponsorships", response.getBody());
-            return;
-        }
-        else{
-            List<Sponsorship> sponsors = Utility.parseList(response.getBody(), Sponsorship.class);
-
-            if(sponsors.isEmpty()){
-                content.addItems(new Label("This animal has no sponsors :( \n Become a sponsor today and help an animal :)"));
+        String imageUrl = animal.getImagePath();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            ApiResponse response = ApiClient.get(imageUrl);
+            Image image = Utility.parseImage(response);
+            if (image != null) {
+                imageView.setImage(image);
+                imageView.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 2);");
             }
-            else{
-                for(Sponsorship sponsor : sponsors){
-                    Label label = new Label( sponsor.userName() + "\nTotal: " + sponsor.amount() + "€\nSince: " + sponsor.startDate());
-                    label.setStyle("-fx-padding: 5; -fx-background-color: #f0f0f0; -fx-background-radius: 5;");
-                    content.addItems(label);
-                }
-            }
         }
-        ScrollPane scroll = new ScrollPane(content);
-        scroll.setFitToWidth(true);
-        scroll.setPrefHeight(200);
 
-        popover = new ACCPopover(scroll, "Sponsorships");
-        popover.show(button);
+        Label animalProfile = new Label(animal.toString());
+        animalProfile.setStyle("-fx-font-size: 16px; -fx-line-spacing: 5px;");
 
+
+
+
+
+
+        mainBox.addItems(imgContainer, animalProfile);
+        scene.addItems(mainBox);
     }
-
-
-
-
 
 }
+
+
+
+
+
+
 
 
