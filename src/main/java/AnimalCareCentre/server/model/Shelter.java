@@ -41,7 +41,6 @@ public class Shelter extends Account {
   @JsonManagedReference("shelter-donations")
   private List<ShelterDonation> donations = new ArrayList<>();
 
-
   public Shelter() {
   }
 
@@ -66,8 +65,21 @@ public class Shelter extends Account {
     this.status = status;
   }
 
-  public List<ShelterDonation> getDonations() { return donations; }
-  public void setDonations(List<ShelterDonation> donations) { this.donations = donations; }
+  public List<ShelterDonation> getDonations() {
+    return donations;
+  }
+
+  public void setDonations(List<ShelterDonation> donations) {
+    this.donations = donations;
+  }
+
+  public List<String> getImages() {
+    return images;
+  }
+
+  public void setImages(List<String> images) {
+    this.images = images;
+  }
 
   @Override
   public String toString() {

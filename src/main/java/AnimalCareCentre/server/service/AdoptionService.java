@@ -160,7 +160,7 @@ public class AdoptionService {
 
   public List<AdoptionDTO> getAdoptions() {
 
-    List<Adoption> adoptions = adoptionRepository.findByType(AdoptionType.FOR_ADOPTION);
+    List<Adoption> adoptions = adoptionRepository.findByTypeAndStatus(AdoptionType.FOR_ADOPTION, Status.ACCEPTED);
 
     return adoptions.stream().map(a -> {
       AdoptionDTO dto = new AdoptionDTO();
@@ -174,7 +174,7 @@ public class AdoptionService {
 
   public List<AdoptionDTO> getFosters() {
 
-    List<Adoption> adoptions = adoptionRepository.findByType(AdoptionType.FOR_FOSTER);
+    List<Adoption> adoptions = adoptionRepository.findByTypeAndStatus(AdoptionType.FOR_FOSTER, Status.ACCEPTED);
 
     return adoptions.stream().map(a -> {
       AdoptionDTO dto = new AdoptionDTO();

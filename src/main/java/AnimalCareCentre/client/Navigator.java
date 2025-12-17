@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 public class Navigator {
 
   private Stage stage;
-  private String loggedRole;
+  private static String loggedRole;
 
   public Navigator(Stage stage) {
     this.stage = stage;
@@ -71,27 +71,12 @@ public class Navigator {
 
   public void showAnimal(Displayable animal) {
       ShelterAnimal shelterAnimal = (ShelterAnimal) animal;
-
-      if(loggedRole.equals("ROLE_ADMIN")){
-          new AnimalProfile(this, stage, shelterAnimal);
-      }
-      else if(loggedRole.equals("ROLE_SHELTER")){
-          new AnimalProfile(this, stage, shelterAnimal);
-      }
-      else if(loggedRole.equals("ROLE_USER")){
-          new UserProfile(this, stage, shelterAnimal);
-      }
+      new AnimalProfile(this, stage, shelterAnimal);
   }
 
   public void showShelter(Displayable shelter) {
       Shelter shelterRecord = (Shelter) shelter;
-
-      if (loggedRole.equals("ROLE_ADMIN")) {
-          new AdminShelterProfile(this, stage, shelterRecord);
-      }
-      else if (loggedRole.equals("ROLE_USER")) {
-          new UserShelterProfile(this, stage, shelterRecord);
-      }
+      new ShelterProfile(this, stage, shelterRecord);
 
   }
 
@@ -113,7 +98,7 @@ public class Navigator {
     }
   }
 
-  public String getLoggedRole() {
+  public static String getLoggedRole() {
     return loggedRole;
   }
 

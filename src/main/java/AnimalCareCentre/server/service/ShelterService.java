@@ -62,4 +62,9 @@ public class ShelterService {
     shelters.sort(Comparator.comparing(Shelter::getLocation).thenComparing(Shelter::getName));
     return shelters;
   }
+
+  public void addImagePath(Shelter shelter, String imagePath) {
+    shelter.getImages().add(imagePath);
+    shelterRepository.save(shelter);
+  }
 }

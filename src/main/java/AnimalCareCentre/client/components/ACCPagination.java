@@ -49,7 +49,7 @@ public class ACCPagination extends Pagination {
 
             btn.setStyle(
                 "-fx-background-color: white; " +
-                    "-fx-border-color: #69462B; " +
+                    "-fx-border-color: #69462b; " +
                     "-fx-border-width: 1px; " +
                     "-fx-border-radius: 5px; " +
                     "-fx-background-radius: 5px; " +

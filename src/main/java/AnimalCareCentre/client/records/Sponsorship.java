@@ -3,19 +3,25 @@ package AnimalCareCentre.client.records;
 import java.time.LocalDate;
 
 public record Sponsorship(
+    Long sponsorshipId,
     Long userId,
     String userName,
     Long animalId,
     String animalName,
     Float amount,
-    LocalDate startDate) {
+    LocalDate startDate,
+    Float totalDonated,
+    LocalDate endDate) {
   @Override
   public String toString() {
-    return "\nUser ID: " + userId +
+    return "\nSponsorship ID: " + sponsorshipId +
+            "\nUser ID: " + userId +
         "\nUser: " + (userName != null ? userName : "N/A") +
         "\nAnimal ID: " + animalId +
         "\nAnimal: " + (animalName != null ? animalName : "N/A") +
         "\nAmount: $" + amount +
-        "\nStart Date: " + startDate + "\n";
+        "\nStart Date: " + startDate + "\n" +
+        "\nEnd Date : " + endDate + "\n" +
+        "\nTotal Donated: " + totalDonated + "\n";
   }
 }

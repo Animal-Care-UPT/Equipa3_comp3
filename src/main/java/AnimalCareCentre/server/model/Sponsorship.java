@@ -25,6 +25,9 @@ public class Sponsorship extends Donation {
   @Enumerated(EnumType.STRING)
   private Status status;
 
+  @Column(name = "sponsorship_id")
+  private Long sponsorshipId;
+
   @Column(name = "start_date")
   private LocalDate startDate;
 
@@ -114,6 +117,14 @@ public class Sponsorship extends Donation {
 
     public float getCalculatedTotalDonated() {
         return getPaymentsMade() * getAmount();
+    }
+
+    public Long getSponsorshipId() {
+        return sponsorshipId;
+    }
+
+    public void setSponsorshipId(Long sponsorshipId) {
+        this.sponsorshipId = sponsorshipId;
     }
 
     @Override

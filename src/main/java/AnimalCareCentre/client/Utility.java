@@ -2,6 +2,7 @@ package AnimalCareCentre.client;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,6 +106,30 @@ public class Utility {
 
       e.printStackTrace();
       return null;
+    }
+  }
+
+  /**
+   * Parses a list of images
+   */
+  public static List<Image> parseImageList(ApiResponse response) {
+    if (!response.isSuccess() || response.getBody() == null) {
+      return new ArrayList<>();
+    }
+    try {
+      List<String> base64Images = parseList(response.getBody(), String.class);
+      List<Image> images = new ArrayList<>();
+
+      for (String base64Image : base64Images) {
+        byte[] imageBytes = java.util.Base64.getDecoder().decode(base64Image);
+        images.add(new Image(new ByteArrayInputStream(imageBytes)));
+      }
+
+      return images;
+    } catch (Exception e) {
+      System.out.println("Failed to parse image list: " + e.getMessage());
+      e.printStackTrace();
+      return new ArrayList<>();
     }
   }
 
