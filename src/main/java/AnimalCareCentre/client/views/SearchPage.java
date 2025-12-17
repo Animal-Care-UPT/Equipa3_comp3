@@ -29,7 +29,7 @@ public class SearchPage<T extends Displayable> {
 
   private void show(List<T> lst) {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
-    new NavBar(nav.getLoggedRole(), nav, scene);
+    new NavBar(Navigator.getLoggedRole(), nav, scene);
 
     ACCGrid<T> grid;
     if (lst.get(0) instanceof ShelterAnimal) {

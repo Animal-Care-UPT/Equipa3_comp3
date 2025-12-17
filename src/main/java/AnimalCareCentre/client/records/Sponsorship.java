@@ -2,12 +2,15 @@ package AnimalCareCentre.client.records;
 
 import java.time.LocalDate;
 
+
 public record Sponsorship(
     Long sponsorshipId,
     Long userId,
+    User user,
     String userName,
     Long animalId,
     String animalName,
+    ShelterAnimal animal,
     Float amount,
     LocalDate startDate,
     Float totalDonated,

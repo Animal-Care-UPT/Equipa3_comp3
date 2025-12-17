@@ -39,7 +39,7 @@ public class AnimalProfile {
 
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
-    new NavBar(nav.getLoggedRole(), nav, scene);
+    new NavBar(Navigator.getLoggedRole(), nav, scene);
 
     ACCHBox mainBox = new ACCHBox();
     mainBox.setSpacing(0);
@@ -104,14 +104,14 @@ public class AnimalProfile {
     ACCMenuButton fosterButton = new ACCMenuButton("Foster");
     fosterButton.setOnAction(e -> requestAdoptionPopover(fosterButton, "FOSTER"));
 
-    if (nav.getLoggedRole().equals("ROLE_USER")) {
+    if (Navigator.getLoggedRole().equals("ROLE_USER")) {
       buttonsBox.addItems(sponsorButton);
       if (animal.adoptionType().equals(AdoptionType.FOR_FOSTER)) {
         buttonsBox.addItems(fosterButton);
       } else {
         buttonsBox.addItems(adoptButton);
       }
-    } else if (nav.getLoggedRole().equals("ROLE_SHELTER")) {
+    } else if (Navigator.getLoggedRole().equals("ROLE_SHELTER")) {
 
       buttonsBox.addItems(sponsorshipsButton, historyButton, addImg, manage);
 

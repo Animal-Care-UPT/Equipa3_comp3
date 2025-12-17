@@ -38,7 +38,7 @@ public class ShelterProfile {
 
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
-    new NavBar(nav.getLoggedRole(), nav, scene);
+    new NavBar(Navigator.getLoggedRole(), nav, scene);
 
     ACCHBox mainBox = new ACCHBox();
     mainBox.setSpacing(0);
@@ -84,8 +84,6 @@ public class ShelterProfile {
     ACCHBox buttonsBox = new ACCHBox();
 
 
-    Label label = new Label(shelter.toString());
-
     ACCMenuButton donationsButton = new ACCMenuButton("Donate");
     donationsButton.setOnAction((event) -> {
         newDonationPopover(donationsButton);
@@ -106,7 +104,7 @@ public class ShelterProfile {
     changeStatus.setOnAction(e -> changeShelterStatus());
     viewAnimals.setOnAction(e -> viewShelterAnimals());
 
-    if (nav.getLoggedRole().equals("ROLE_USER")) {
+    if (Navigator.getLoggedRole().equals("ROLE_USER")) {
       buttonsBox.addItems(donationsButton, viewAnimals);
     } else {
       buttonsBox.addItems(donationsHistoryButton, viewAnimals, changeStatus);

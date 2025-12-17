@@ -32,7 +32,7 @@ public class UserHomepage {
 
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
-    new NavBar(nav.getLoggedRole(), nav, scene);
+    new NavBar(Navigator.getLoggedRole(), nav, scene);
 
     ACCMenuButton pendingRequests = new ACCMenuButton("Pending Requests");
     pendingRequests.setOnAction(e -> pendingRequestPopover(pendingRequests));

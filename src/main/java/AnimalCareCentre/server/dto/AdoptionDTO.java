@@ -4,12 +4,12 @@ import java.time.LocalDate;
 
 import AnimalCareCentre.server.enums.*;
 import AnimalCareCentre.server.model.*;
-import jakarta.validation.constraints.NotNull;
 
 public class AdoptionDTO {
 
   private Long id;
   private User user;
+  private Shelter shelter;
   private ShelterAnimal animal;
   private LocalDate adoptionDate;
   private AdoptionType type;
@@ -18,6 +18,14 @@ public class AdoptionDTO {
 
   public Status getStatus() {
     return status;
+  }
+
+  public Shelter getShelter() {
+      return shelter;
+  }
+
+  public void setShelter(Shelter shelter) {
+      this.shelter = shelter;
   }
 
   public void setStatus(Status status) {
