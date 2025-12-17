@@ -6,6 +6,7 @@ import AnimalCareCentre.client.ApiResponse;
 import AnimalCareCentre.client.Navigator;
 import AnimalCareCentre.client.Utility;
 import AnimalCareCentre.client.components.ACCMenuButton;
+import AnimalCareCentre.client.components.ACCButton;
 import AnimalCareCentre.client.components.ACCTableView;
 import AnimalCareCentre.client.components.ACCPopover;
 import AnimalCareCentre.client.components.ACCScene;
@@ -70,7 +71,7 @@ public class AdminHomepage {
 
     TableColumn<Shelter, Void> buttonColumn = new TableColumn<>("Action");
     buttonColumn.setCellFactory(col -> new TableCell<Shelter, Void>() {
-      ACCMenuButton button = new ACCMenuButton("Aceitar");
+      ACCButton button = new ACCButton("Aceitar");
       {
         button.setOnAction(e -> {
           Shelter shelter = getTableRow().getItem();
