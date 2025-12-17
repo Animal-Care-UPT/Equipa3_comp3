@@ -2,6 +2,10 @@ package AnimalCareCentre.client.components;
 
 import javafx.scene.control.PasswordField;
 
+/**
+ * PasswordFields used throughout the platform
+ *
+ */
 public class ACCPasswordField extends PasswordField {
 
   public ACCPasswordField() {

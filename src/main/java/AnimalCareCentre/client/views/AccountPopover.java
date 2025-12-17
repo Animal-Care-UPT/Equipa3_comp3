@@ -21,6 +21,9 @@ public class AccountPopover {
     this.nav = nav;
   }
 
+  /**
+   * Shows the accounts popover
+   */
   public void show(Button button) {
     ACCVBox content = buildContent();
     popover = new ACCPopover(content, "Account");
@@ -28,6 +31,9 @@ public class AccountPopover {
     popover.show(button);
   }
 
+  /**
+   * Adds the content to the popover
+   */
   private ACCVBox buildContent() {
     ACCVBox content = new ACCVBox();
     content.setPadding(new Insets(15, 15, 15, 15));
@@ -57,6 +63,9 @@ public class AccountPopover {
     return content;
   }
 
+  /**
+   * Logs the user out
+   */
   private void logout() {
     ApiResponse response = ApiClient.post("/accounts/logout", "");
     ApiClient.clearSession();

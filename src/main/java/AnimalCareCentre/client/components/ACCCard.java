@@ -9,6 +9,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
+/**
+ * Card used on the different grids of the platform
+ *
+ */
 public class ACCCard<T extends Displayable> extends ACCVBox {
 
   public ACCCard(T item, Image image, Runnable onClickHandler) {

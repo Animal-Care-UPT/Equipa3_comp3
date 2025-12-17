@@ -4,6 +4,10 @@ import javafx.scene.control.Pagination;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Button;
 
+/**
+ * Pagination buttons used throughout the platform
+ *
+ */
 public class ACCPagination extends Pagination {
 
   public ACCPagination() {

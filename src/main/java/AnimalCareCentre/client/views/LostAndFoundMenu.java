@@ -9,6 +9,7 @@ import AnimalCareCentre.client.components.ACCVBox;
 import AnimalCareCentre.client.records.LostAnimal;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static AnimalCareCentre.client.Utility.parseList;
@@ -24,9 +25,12 @@ public class LostAndFoundMenu {
     show();
   }
 
+  /**
+   * Displays the lost and found menu
+   */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
-    new NavBar(nav.getLoggedRole(), nav, scene);
+    new NavBar(Navigator.getLoggedRole(), nav, scene);
     ACCMenuButton register = new ACCMenuButton("Register Lost Animal");
     ACCMenuButton homepage = new ACCMenuButton("Home Page");
     ACCMenuButton myPosting = new ACCMenuButton("My Postings");
@@ -38,6 +42,9 @@ public class LostAndFoundMenu {
     scene.addItems(register, homepage, myPosting);
   }
 
+  /**
+   * Gets my postings of lost animals
+   */
   private List<LostAnimal> myPostings() {
 
     ApiResponse response = ApiClient.get("/lostandfound/showanimalsbyaccount");
@@ -45,7 +52,7 @@ public class LostAndFoundMenu {
       List<LostAnimal> animals = parseList(response.getBody(), LostAnimal.class);
       return animals;
     }
-    return null;
+    return new ArrayList<LostAnimal>();
   }
 
 }

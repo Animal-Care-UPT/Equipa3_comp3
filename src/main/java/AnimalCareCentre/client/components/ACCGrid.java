@@ -13,6 +13,10 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
 
+/**
+ * Grid used throughout the platform's search pages
+ *
+ */
 public class ACCGrid<T extends Displayable> extends VBox {
   private static final int ITEMS_PER_PAGE = 6;
 

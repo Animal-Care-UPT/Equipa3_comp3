@@ -37,6 +37,9 @@ public class AnimalProfile {
     show();
   }
 
+  /**
+   * Shows the animal's profile
+   */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(Navigator.getLoggedRole(), nav, scene);
@@ -123,6 +126,10 @@ public class AnimalProfile {
     scene.addItems(mainBox, buttonsBox);
   }
 
+  /**
+   * Shows the popup with the different managing options for the animal (from
+   * shelter pov)
+   */
   private void manageAnimal() {
     ACCVBox content = new ACCVBox();
     content.setPadding(new Insets(15));
@@ -132,6 +139,7 @@ public class AnimalProfile {
     ACCMenuButton status = new ACCMenuButton("Change Status");
     content.addItems(vacine, age, adoptType, status);
     popover = new ACCPopover(content, "Manage " + animal.name());
+    popover.setMinSize(600, 600);
     popover.show(stage);
 
     vacine.setOnAction(e -> {
@@ -216,6 +224,9 @@ public class AnimalProfile {
 
   }
 
+  /**
+   * Displays the animal image carousel
+   */
   private void imgCarousel() {
     ApiResponse response = ApiClient.get("/shelteranimals/" + animal.id() + "/images");
     if (!response.isSuccess()) {
@@ -228,9 +239,13 @@ public class AnimalProfile {
     carousel.setPadding(new Insets(20));
 
     popover = new ACCPopover(carousel, animal.name() + " - Images");
+    popover.setMinSize(600, 600);
     popover.show(stage);
   }
 
+  /**
+   * Displays the popover to view the animal's sponsorship history
+   */
   private void sponsorshipPopover(ACCMenuButton button) {
 
     ApiResponse response = ApiClient.get("/sponsorships/animal/" + animal.id());
@@ -260,10 +275,14 @@ public class AnimalProfile {
     scroll.setPrefHeight(200);
 
     popover = new ACCPopover(scroll, "Sponsorships");
+    popover.setMinSize(600, 600);
     popover.show(stage);
 
   }
 
+  /**
+   * Displays the popup to display the animal's history of adoptions
+   */
   private void adoptionHistory(ACCMenuButton button) {
 
     ApiResponse response = ApiClient.get("/adoptions/animal/" + animal.id());
@@ -291,6 +310,7 @@ public class AnimalProfile {
     scroll.setFitToWidth(true);
     scroll.setPrefHeight(200);
     popover = new ACCPopover(scroll, "Adoptions/Fosters History");
+    popover.setMinSize(600, 600);
     popover.show(stage);
   }
 
@@ -314,9 +334,13 @@ public class AnimalProfile {
     content.addItems(confirmLabel, confirmButton, cancelButton);
 
     popover = new ACCPopover(content, "Confirm " + adoptionType);
+    popover.setMinSize(600, 600);
     popover.show(stage);
   }
 
+  /**
+   * Allows users to request to adopt the animal
+   */
   private void requestAdoption(String adoptionType) {
 
     String url = "/adoptions/request?animalId=" + animal.id() + "&type=" + adoptionType;
@@ -334,6 +358,9 @@ public class AnimalProfile {
 
   }
 
+  /**
+   * Displays the popover for the user to sponsor the animal
+   */
   private void newSponsorshipPopover(ACCMenuButton button) {
     ACCVBox content = new ACCVBox();
     content.setPadding(new Insets(15));
@@ -380,9 +407,13 @@ public class AnimalProfile {
     content.addItems(titleLabel, amountLabel, amountField, submitButton, cancelButton);
 
     popover = new ACCPopover(content, "Confirm ");
+    popover.setMinSize(600, 600);
     popover.show(stage);
   }
 
+  /**
+   * Allows users to request to sponsor the animal
+   */
   private void createSponsorship(float amount) {
     String url = "/sponsorships/create?animalId=" + animal.id() + "&amount=" + amount;
 
@@ -396,6 +427,9 @@ public class AnimalProfile {
 
   }
 
+  /**
+   * Adds an image to the animal
+   */
   private void addImage() {
     File image = Utility.selectImageFile(stage);
     ApiResponse response = ApiClient.postWithFile("/shelteranimals/" + animal.id() + "/images", image);

@@ -26,12 +26,12 @@ public record LostAnimal(long id, String name, AnimalType type, String race, Ani
 
   @Override
   public String getDisplayInfo() {
-    return "Type: " + type + "\nRace: " + race + "\nLocation: " + location;
+    return "Type: " + type + "\nLocation: " + location;
   }
 
   @Override
   public String getDescription() {
-    return "Contact: " + contact + "\nDescription: " + description;
+    return "Contact: " + contact;
   }
 
   @Override

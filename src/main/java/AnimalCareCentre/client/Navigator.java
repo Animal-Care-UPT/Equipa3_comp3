@@ -36,9 +36,13 @@ public class Navigator {
     new UserHomepage(this, stage);
   }
 
-  public void lostAndFoundHomepage(){new LostAndFoundHomepage(this,stage);}
+  public void lostAndFoundHomepage() {
+    new LostAndFoundHomepage(this, stage);
+  }
 
-    public void registerLostAnimal(){new RegisterLostAnimal(this,stage);}
+  public void registerLostAnimal() {
+    new RegisterLostAnimal(this, stage);
+  }
 
   public void adminHomepage() {
     new AdminHomepage(this, stage);
@@ -51,32 +55,33 @@ public class Navigator {
   public void searchAnimal(List<ShelterAnimal> animals) {
     new SearchPage<>(this, stage, animals);
   }
-    public void searchLostAnimal(List<LostAnimal> animals) {
-        new SearchPage<>(this, stage, animals);
-    }
+
+  public void searchLostAnimal(List<LostAnimal> animals) {
+    new SearchPage<>(this, stage, animals);
+  }
 
   public void searchShelter(List<Shelter> shelters) {
     new SearchPage<>(this, stage, shelters);
   }
 
-  public void showLostAnimal(Displayable animal){
-      LostAnimal lostAnimal = (LostAnimal) animal;
-      new LostAnimalProfile(this,stage,lostAnimal);
+  public void showLostAnimal(Displayable animal) {
+    LostAnimal lostAnimal = (LostAnimal) animal;
+    new LostAnimalProfile(this, stage, lostAnimal);
   }
 
-    public void showLostAnimalPosting(Displayable animal){
-        LostAnimal lostAnimal = (LostAnimal) animal;
-        new MyPostingView(this,stage,lostAnimal);
-    }
+  public void showLostAnimalPosting(Displayable animal) {
+    LostAnimal lostAnimal = (LostAnimal) animal;
+    new MyPostingView(this, stage, lostAnimal);
+  }
 
   public void showAnimal(Displayable animal) {
-      ShelterAnimal shelterAnimal = (ShelterAnimal) animal;
-      new AnimalProfile(this, stage, shelterAnimal);
+    ShelterAnimal shelterAnimal = (ShelterAnimal) animal;
+    new AnimalProfile(this, stage, shelterAnimal);
   }
 
   public void showShelter(Displayable shelter) {
-      Shelter shelterRecord = (Shelter) shelter;
-      new ShelterProfile(this, stage, shelterRecord);
+    Shelter shelterRecord = (Shelter) shelter;
+    new ShelterProfile(this, stage, shelterRecord);
 
   }
 
@@ -102,11 +107,11 @@ public class Navigator {
     return loggedRole;
   }
 
-    public void lostAndFoundMenu() {
-      new LostAndFoundMenu(this, stage);
-    }
+  public void lostAndFoundMenu() {
+    new LostAndFoundMenu(this, stage);
+  }
 
-    public void lostAnimalsByAccount(List<LostAnimal> lostAnimals) {
-      new SearchPageMyPosting<>(this,stage,lostAnimals);
-    }
+  public void lostAnimalsByAccount(List<LostAnimal> lostAnimals) {
+    new SearchPageMyPosting<>(this, stage, lostAnimals);
+  }
 }

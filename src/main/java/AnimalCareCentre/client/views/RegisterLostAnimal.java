@@ -28,9 +28,12 @@ public class RegisterLostAnimal {
     show();
   }
 
+  /**
+   * Displays the register lost animal page
+   */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
-    new NavBar(nav.getLoggedRole(), nav, scene);
+    new NavBar(Navigator.getLoggedRole(), nav, scene);
 
     final File[] image = { null };
     Label typeLabel = new Label("Animal type:");
@@ -120,10 +123,16 @@ public class RegisterLostAnimal {
     scene.addItems(vbox, register, back);
   }
 
+  /**
+   * Uses the method to get the image from the file system
+   */
   private File uploadImage() {
     return Utility.selectImageFile(stage);
   }
 
+  /**
+   * Registers a lost animal with a picture
+   */
   private void registerAnimal(String json, File[] image) {
     ApiResponse response = ApiClient.post("/lostandfound/create", json);
     if (response.isSuccess()) {

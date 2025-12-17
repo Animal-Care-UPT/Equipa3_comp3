@@ -2,6 +2,10 @@ package AnimalCareCentre.client.components;
 
 import javafx.scene.control.Button;
 
+/**
+ * Button with plain text used throughout the platform
+ *
+ */
 public class ACCTextButton extends Button {
   public ACCTextButton(String text) {
     super(text);

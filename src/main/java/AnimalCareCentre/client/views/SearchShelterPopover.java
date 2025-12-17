@@ -21,6 +21,9 @@ public class SearchShelterPopover {
     this.nav = nav;
   }
 
+  /**
+   * Displays the search shelter popover
+   */
   public void show(Button button) {
     ACCVBox content = buildContent();
     popover = new ACCPopover(content, "Search Shelters");
@@ -28,6 +31,9 @@ public class SearchShelterPopover {
     popover.show(button);
   }
 
+  /**
+   * Populates the content of the popover
+   */
   private ACCVBox buildContent() {
     ACCVBox content = new ACCVBox();
     content.setPadding(new Insets(15, 15, 15, 15));
@@ -42,6 +48,9 @@ public class SearchShelterPopover {
     return content;
   }
 
+  /**
+   * Searches for the shelters
+   */
   private void searchShelter(String keyword) {
     if (Navigator.getLoggedRole().equals("ROLE_ADMIN")) {
       ApiResponse response = ApiClient.get("/shelters/all?keyword=" + keyword);

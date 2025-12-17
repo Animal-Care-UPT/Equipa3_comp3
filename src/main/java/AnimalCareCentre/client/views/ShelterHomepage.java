@@ -28,6 +28,9 @@ public class ShelterHomepage {
     show();
   }
 
+  /**
+   * Displays the shelter homepage
+   */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(Navigator.getLoggedRole(), nav, scene);
@@ -47,6 +50,9 @@ public class ShelterHomepage {
     scene.addItems(register, viewPendingRequests, viewAcceptedRequests, viewDonations, addImage);
   }
 
+  /**
+   * Displays the popover with the pending adoption/foster requests
+   */
   private void viewPendingRequests() {
     ACCTableView<Adoption> table = new ACCTableView<>();
 
@@ -148,6 +154,9 @@ public class ShelterHomepage {
     popover.show(stage);
   }
 
+  /**
+   * Displays all the previously accepted requests
+   */
   private void viewAcceptedRequests() {
     ACCTableView<Adoption> table = new ACCTableView<>();
 
@@ -199,6 +208,9 @@ public class ShelterHomepage {
     popover.show(stage);
   }
 
+  /**
+   * Displays all the received donations
+   */
   private void viewDonations() {
     ACCTableView<ShelterDonation> table = new ACCTableView<>();
 
@@ -243,6 +255,9 @@ public class ShelterHomepage {
     popover.show(stage);
   }
 
+  /**
+   * Adds an image to the shelter
+   */
   private void addImage() {
     File image = Utility.selectImageFile(stage);
     ApiResponse response = ApiClient.postWithFile("/shelters/images/self", image);

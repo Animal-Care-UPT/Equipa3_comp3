@@ -37,6 +37,9 @@ public class RegisterAnimal {
     show();
   }
 
+  /**
+   * Displays the register animal page
+   */
   private void show() {
     ACCScene scene = new ACCScene(stage, new ACCVBox());
     new NavBar(Navigator.getLoggedRole(), nav, scene);
@@ -84,7 +87,8 @@ public class RegisterAnimal {
     register.setOnAction(e -> {
       String json = Utility.jsonString("type", type.getValue(), "name", name.getText(), "race",
           breed.getValue(), "size", size.getValue(), "gender", gender.getValue(),
-          "age", age.getText(), "color", color.getValue(), "adoptionType", adoptType.getValue(), "description", desc.getText());
+          "age", age.getText(), "color", color.getValue(), "adoptionType", adoptType.getValue(), "description",
+          desc.getText());
       registerAnimal(json, image);
       nav.shelterHomepage();
     });
@@ -116,10 +120,16 @@ public class RegisterAnimal {
     scene.addItems(vbox, register, back);
   }
 
+  /**
+   * Uses the utility method to get an image from the file system
+   */
   private File uploadImage() {
     return Utility.selectImageFile(stage);
   }
 
+  /**
+   * Registers an animal and adds an image
+   */
   private void registerAnimal(String json, File[] image) {
     ApiResponse response = ApiClient.post("/shelteranimals/register", json);
     if (response.isSuccess()) {

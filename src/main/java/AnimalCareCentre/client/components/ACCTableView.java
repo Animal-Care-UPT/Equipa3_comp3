@@ -3,7 +3,11 @@ package AnimalCareCentre.client.components;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-public class ACCTableView<S> extends TableView<S> {
+/**
+ * TableView used throughout the platform
+ *
+ */
+public class ACCTableView<T> extends TableView<T> {
 
   public ACCTableView() {
     super();
@@ -12,10 +16,10 @@ public class ACCTableView<S> extends TableView<S> {
   }
 
   private void disableColumnReordering() {
-    getColumns().addListener((javafx.collections.ListChangeListener<TableColumn<S, ?>>) change -> {
+    getColumns().addListener((javafx.collections.ListChangeListener<TableColumn<T, ?>>) change -> {
       while (change.next()) {
         if (change.wasAdded()) {
-          for (TableColumn<S, ?> column : change.getAddedSubList()) {
+          for (TableColumn<T, ?> column : change.getAddedSubList()) {
             column.setReorderable(false);
           }
         }

@@ -5,6 +5,10 @@ import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 
+/**
+ * Navigatino Bar Button used throughout the platform
+ *
+ */
 public class ACCNavButton extends Button {
 
   public ACCNavButton(String text) {
