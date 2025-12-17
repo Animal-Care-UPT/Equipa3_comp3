@@ -102,6 +102,7 @@ public class Utility {
       return new Image(new ByteArrayInputStream(imageBytes));
     } catch (Exception e) {
       System.out.println("Failed to parse image: " + e.getMessage());
+
       e.printStackTrace();
       return null;
     }

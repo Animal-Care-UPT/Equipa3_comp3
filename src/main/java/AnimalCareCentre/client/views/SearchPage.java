@@ -12,7 +12,10 @@ import AnimalCareCentre.client.components.ACCGrid;
 import AnimalCareCentre.client.components.ACCScene;
 import AnimalCareCentre.client.components.ACCVBox;
 import AnimalCareCentre.client.records.Displayable;
+import AnimalCareCentre.client.records.LostAnimal;
+import AnimalCareCentre.client.records.Shelter;
 import AnimalCareCentre.client.records.ShelterAnimal;
+import javafx.scene.control.Alert;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -35,8 +38,10 @@ public class SearchPage<T extends Displayable> {
     ACCGrid<T> grid;
     if (lst.get(0) instanceof ShelterAnimal) {
       grid = new ACCGrid<>(e -> nav.showAnimal(e), this::fetchImagesForPage);
-    } else {
+    } else if(lst.get(0) instanceof Shelter){
       grid = new ACCGrid<>(e -> nav.showShelter(e), this::fetchImagesForPage);
+    }else {
+        grid = new ACCGrid<>(e->nav.showLostAnimal(e),this::fetchImagesForPage);
     }
 
     grid.add(lst);

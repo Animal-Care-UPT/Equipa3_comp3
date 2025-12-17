@@ -121,9 +121,8 @@ public class LostAnimalController {
     return ResponseEntity.status(200).body(id);
 
   }
-    @PreAuthorize("hasRole('USER')")
-    @PostMapping("/{id}/images")
-    public ResponseEntity<?> uploadImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+  @PostMapping("/{id}/images")
+  public ResponseEntity<?> uploadImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
 
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("No file provided");
@@ -146,7 +145,7 @@ public class LostAnimalController {
             File destFile = new File(uploadDir, filename);
             FileUtils.copyInputStreamToFile(file.getInputStream(), destFile);
 
-            String imageUrl = "/lostanimals/" + id + "/images/" + index;
+            String imageUrl = "/lostandfound/" + id + "/images/" + index;
             lostAnimalService.addImagePath(animal, imageUrl);
 
             return ResponseEntity.ok("Image uploaded successfully");
@@ -154,7 +153,7 @@ public class LostAnimalController {
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Failed to upload image: " + e.getMessage());
         }
-    }
+  }
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}/images/{index}")
@@ -197,4 +196,4 @@ public class LostAnimalController {
         }
     }
 
-}
+    }

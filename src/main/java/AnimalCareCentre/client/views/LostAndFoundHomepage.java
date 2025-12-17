@@ -61,7 +61,6 @@ public class LostAndFoundHomepage {
     mapVbox.addItems(map);
     mapVbox.setMaxHeight(300);
     splitPane.getItems().add(mapVbox);
-    splitPane.setMaxWidth(900);
     scene.addItems(splitPane);
 
     new NavBar(nav.getLoggedRole(), nav, scene);
@@ -133,14 +132,16 @@ public class LostAndFoundHomepage {
 
                   ACCGrid<LostAnimal> grid = new ACCGrid<>(e->nav.showLostAnimal(e),this::fetchImagesForPage);
                   if(animalByLocation == null){
-                      Utility.showAlert(Alert.AlertType.ERROR,"No animals in this location","Unable to load lost animals for this location");
+                      Utility.showAlert(Alert.AlertType.ERROR,"No animals in this location", location.toString());
                       return;
                   }
                   grid.add(animalByLocation);
 
+                  if(splitPane.getItems().size() >1 ){
+                      splitPane.getItems().remove(1);
+                  };
                   ACCVBox gridVbox= new ACCVBox();
                   gridVbox.addItems(grid);
-                  gridVbox.setMaxHeight(400);
                   splitPane.getItems().add(gridVbox);
                  }
 
@@ -158,6 +159,7 @@ public class LostAndFoundHomepage {
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 ApiResponse response = ApiClient.get(imageUrl);
                 Image image = Utility.parseImage(response);
+
                 if (image != null) {
                     images.put(item.getId(), image);
                 }

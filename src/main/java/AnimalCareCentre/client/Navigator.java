@@ -64,6 +64,11 @@ public class Navigator {
       new LostAnimalProfile(this,stage,lostAnimal);
   }
 
+    public void showLostAnimalPosting(Displayable animal){
+        LostAnimal lostAnimal = (LostAnimal) animal;
+        new LostAnimalPosting(this,stage,lostAnimal);
+    }
+
   public void showAnimal(Displayable animal) {
       ShelterAnimal shelterAnimal = (ShelterAnimal) animal;
 
@@ -111,4 +116,12 @@ public class Navigator {
   public String getLoggedRole() {
     return loggedRole;
   }
+
+    public void lostAndFoundMenu() {
+      new LostAndFoundMenu(this, stage);
+    }
+
+    public void lostAnimalsByAccount(List<LostAnimal> lostAnimals) {
+      new SearchPage<>(this,stage,lostAnimals);
+    }
 }

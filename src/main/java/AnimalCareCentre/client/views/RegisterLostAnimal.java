@@ -93,7 +93,7 @@ public class RegisterLostAnimal {
       nav.shelterHomepage();
     });
 
-    back.setOnAction(e -> nav.shelterHomepage());
+    back.setOnAction(e -> nav.lostAndFoundMenu());
 
     age.setTextFormatter(new TextFormatter<>(change -> {
       String num = change.getControlNewText();
@@ -128,7 +128,7 @@ public class RegisterLostAnimal {
     ApiResponse response = ApiClient.post("/lostandfound/create", json);
     if (response.isSuccess()) {
       LostAnimal animal = Utility.parseResponse(response.getBody(), LostAnimal.class);
-      ApiResponse imageResponse = ApiClient.postWithFile("/lostanimals/" + animal.getId() + "/images", image[0]);
+      ApiResponse imageResponse = ApiClient.postWithFile("/lostandfound/" + animal.getId() + "/images", image[0]);
       if (!imageResponse.isSuccess()) {
         Utility.showAlert(AlertType.ERROR, "Error", imageResponse.getBody());
       }
