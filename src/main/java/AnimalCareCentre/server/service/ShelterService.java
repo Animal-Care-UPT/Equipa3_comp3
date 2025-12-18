@@ -21,6 +21,10 @@ public class ShelterService {
     this.passwordEncoder = passwordEncoder;
   }
 
+  public Shelter save(Shelter shelter) {
+    return shelterRepository.save(shelter);
+  }
+
   public Shelter findById(Long id) {
     return shelterRepository.findById(id).orElse(null);
   }
